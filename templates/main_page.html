@@ -10,7 +10,7 @@
     <div class="main_container">
         <div class="updates_container">
             <div class="block_title">
-                <h1>Последние переводы</h1>
+                <h2>Последние переводы</h2>
             </div>
             <div class="block_container">
                 {% for item in recent_manga %}
@@ -32,9 +32,9 @@
                                              — {{ chapter.ch_name }}
                                         {% endif %}
                                     </a>
-                                    <div class="chapter_date">
+{#                                    <div class="chapter_date">#}
 {#                                        <p>{{ chapter.add_date|date:"d.m.Y" }}</p>#}
-                                    </div>
+{#                                    </div>#}
                                 </div>
                                 {% endfor %}
                             </div>
@@ -45,13 +45,13 @@
         </div>
         <div class="news_container">
             <div class="block_title">
-                <h1>Новости студии</h1>
+                <h2>Новости студии</h2>
             </div>
             <div class="block_container">
                 {% for post in recent_post %}
                     <div class="post_block">
                         <div class="post_block_title">
-                            <a href="{% url 'post-page' post_slug=post.post_slug %}"><h1>{{ post.post_name }} ({{ post.add_date|date:"d.m.Y" }})</h1></a>
+                            <a href="{% url 'post-page' post_slug=post.post_slug %}">{{ post.post_name }} ({{ post.add_date|date:"d.m.Y" }})</a>
                         </div>
                         <div class="post_block_content">
                             <p>{{ post.get_short_content_safe }}</p>
@@ -61,4 +61,11 @@
             </div>
         </div>
     </div>
+    
+    <div class="tips_container">
+            <img src="{% static 'main_section/icons/qr_tips.svg' %}">
+            <div class="tips_link">
+                <a href="https://pay.cloudtips.ru/p/2d188ea4">Поддержать переводы и разработку</a>
+            </div>
+        </div>
 {% endblock %}

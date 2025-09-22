@@ -13,30 +13,35 @@
         
     {% endblock %}
 </head>
-<body>
+<body data-theme="light">
     {#  Контейнер всей страницы  #}
         {% block top_panel %}
             <link rel="stylesheet" href="{% static 'main_section/css/top_panel.css' %}">
             {#  Верхняя панель  #}
             <div class="top_panel_container">
                 <div class="site_name_container">
-                    <p>Студия Юрия Московцева</p>
+                    <h2>Студия Юрия Московцева</h2>
                 </div>
                 <div class="buttons_container">
-                    <div class="main_page_link">
+                    <div class="top_panel_button">
 {#                        <a href="#">Главная</a>#}
                         <a href="{% url 'home-page' %}">Главная</a>
                     </div>
-                    <div class="catalog_link">
+                    <div class="top_panel_button">
                         <a href="#">Каталог</a>
                     </div>
-                    <div class="info_link">
+                    <div class="top_panel_button">
                         <a href="{% url 'info' %}">Инфо</a>
                     </div>
                 </div>
                 <div class="profile_container">
                     {% if user.is_authenticated %}
-                        <button class="profile_menu_btn" onclick="toggleMenu()"><p>{{ user.username }}</p></button>
+                        <div class="profile_button_block">
+                            <button class="profile_menu_btn" onclick="toggleMenu()">
+                                <img src="{% static "main_section/icons/profile_icon.svg" %}">
+                                <p>{{ user.username }}</p>
+                            </button>
+                        </div>
                     {% else %}
                         <div class="login">
                             <a href="{% url 'login' %}">Войти</a>

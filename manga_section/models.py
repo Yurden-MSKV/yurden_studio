@@ -110,6 +110,17 @@ class Chapter(models.Model):
         else:
             return str(num)
 
+    def count_likes(self):
+        return self.likes.filter(is_like=True).count()
+
+    def count_all_rates(self):
+        return self.likes.count()
+
+    def rate_percentage(self):
+        if self.count_all_rates() > 0:
+            return round((self.count_likes() / self.count_all_rates()) * 100)
+        else:
+            return 0
 
 def chapter_image_path(instance, filename):
     return f'manga/chapters/images/{instance.chapter.id}/{filename}'

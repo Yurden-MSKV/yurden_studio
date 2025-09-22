@@ -14,7 +14,7 @@ from django.shortcuts import render, get_object_or_404
 def manga_page(request, slug):
     # Получаем мангу с предзагрузкой всех связанных данных
     manga = get_object_or_404(Manga.objects.prefetch_related(
-        'volumes__chapters',  # Тома и их главы
+        'volumes__chapters__likes',  # Тома и их главы
         'genres',
         'authors'
     ), manga_slug=slug)

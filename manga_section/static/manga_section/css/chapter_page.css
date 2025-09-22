@@ -1,45 +1,93 @@
 @font-face {
-    font-family: 'ClearSans';
-    src: url('../fonts/ClearSans-Regular.ttf') format('truetype');
+    font-family: 'Nunito';
+    src: url('../fonts/Nunito-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'ClearSans';
-    src: url('../fonts/ClearSans-Bold.ttf') format('truetype');
+    font-family: 'Nunito';
+    src: url('../fonts/Nunito-Bold.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'ClearSans';
-    src: url('../fonts/ClearSans-Italic.ttf') format('truetype');
-    font-weight: normal;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: 'ClearSans';
-    src: url('../fonts/ClearSans-Medium.ttf') format('truetype');
+    font-family: 'Nunito';
+    src: url('../fonts/Nunito-Medium.ttf') format('truetype');
     font-weight: 500;
     font-style: normal;
 }
 
-body, html {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    font-family: ClearSans, sans-serif;
-    background: #FAFAFA;
+[data-theme="light"] {
+    --background-color: #FFFFFF;
+    --text-color: #000000;
+    --top-panel-color: #D9D9D9;
+    --block-color: #D9D9D9;
+    --hover-color: #585858;
+    --hover-text-color: #FFFFFF;
+    --element-color: #BFBFBF;
 }
 
-.container {
-    display: block;
-    position: relative;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 10px 20px;
+/*[data-theme="dark"] {*/
+/*    --background-color: #504E76;*/
+/*    --text-color: #FFFFFF;*/
+/*}*/
+
+body, html {
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito';
+    background: var(--background-color);
+}
+
+a, p, h1, h2, h3 {
+    margin: 0;
+    padding: 0;
+    color: var(--text-color) !important;
+}
+
+a {
+    font-size: 16px;
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+h1 {
+    font-size: 23px;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
+h3 {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--text-color);
+    transition: color 2s ease;
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+
+.total_container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
 }
 
 /* Селектор режима чтения */
@@ -55,28 +103,38 @@ body, html {
     border: 2px solid #000000;
     border-radius: 5px;
     background: #FAFAFA;
-    font-family: ClearSans, sans-serif;
 }
 
 .back_to_manga {
-    position: fixed;
-    top: 20px;
-    right: calc(100% - 230px);
+    display: flex;
+    margin-top: 20px;
+    height: fit-content;
+    border-radius: 10px;
+    background-color: var(--block-color);
+}
+
+.back_to_manga:hover {
+    background-color: var(--hover-color);
+    transition: background-color 0.5s ease;
 }
 
 .back_to_manga a {
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: black;
-    padding: 2px 5px;
-    border-radius: 5px;
-    font-size: 18px;
+    padding: 4px 8px;
+    font-size: 16px;
     font-weight: 500;
 }
 
-.back_to_manga a:hover {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+.back_to_manga:hover a {
+    color: var(--hover-text-color) !important;
+    transition: color 0.5s ease;
+}
+
+.back_to_manga:hover img {
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(16deg) brightness(111%) contrast(102%);
+    transition: filter 0.5s ease;
 }
 
 .back_to_manga img {
@@ -85,13 +143,8 @@ body, html {
 
 .main_container {
     display: flex;
-    flex-direction: column;
-    width: fit-content;
-    margin: 0 auto;
-    /*border: 2px solid #000000;*/
-    /*border-radius: 5px;*/
-    border-left: 2px solid black;
-    border-right: 2px solid black;
+    width: 70vw;
+    justify-content: center;
 }
 
 /* Навигационная панель */
@@ -169,7 +222,7 @@ body, html {
     display: none;
     justify-content: center;
     /*gap: 10px;*/
-    max-height: 730px;
+    max-height: 100vh;
     /*margin: 20px 0;*/
 }
 
@@ -180,7 +233,7 @@ body, html {
 /* Контейнеры для отдельных страниц */
 .page-container {
     flex: 1;
-    height: 730px;
+    height: 100vh;
     display: flex;
     justify-content: center;
 }
@@ -192,7 +245,7 @@ body, html {
 }
 
 .spread-container img {
-    height: 730px
+    height: 100vh
 }
 
 /* Стили для изображений страниц */
@@ -221,7 +274,6 @@ body, html {
 .side_bar {
     display: flex;
     flex-direction: column;
-    position: fixed;
     top: 20px;
     left: calc(100% - 225px);
     align-items: center;
@@ -230,8 +282,9 @@ body, html {
     gap: 10px;
     /*border: 2px solid black;*/
     border-radius: 5px;
-    /*background: #FAFAFA;*/
     z-index: 900;
+    background-color: var(--block-color);
+    padding: 10px;
 }
 
 .current_ch {
@@ -294,7 +347,6 @@ body, html {
     flex-direction: column;
     align-items: center;
     gap: 2px;
-    margin-bottom: 10px;
 }
 
 .like-btn,
@@ -331,9 +383,11 @@ body, html {
 .rate_percentage {
     display: flex;
     justify-content: center;
+    margin-top: 2px;
 }
 
 .rate_percentage p {
+    line-height: 1;
     margin: 0;
     padding: 0px 0px 2px 0px;
 }

@@ -1,83 +1,120 @@
 @font-face {
-    font-family: 'ClearSans';
-    src: url('../fonts/ClearSans-Regular.ttf') format('truetype');
+    font-family: 'Nunito';
+    src: url('../fonts/Nunito-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'ClearSans';
-    src: url('../fonts/ClearSans-Bold.ttf') format('truetype');
+    font-family: 'Nunito';
+    src: url('../fonts/Nunito-Bold.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'ClearSans';
-    src: url('../fonts/ClearSans-Medium.ttf') format('truetype');
+    font-family: 'Nunito';
+    src: url('../fonts/Nunito-Medium.ttf') format('truetype');
     font-weight: 500;
     font-style: normal;
 }
+
+[data-theme="light"] {
+    --background-color: #FFFFFF;
+    --text-color: #000000;
+    --top-panel-color: #D9D9D9;
+    --block-color: #D9D9D9;
+    --hover-color: #585858;
+    --hover-text-color: #FFFFFF;
+    --element-color: #BFBFBF;
+}
+
+/*[data-theme="dark"] {*/
+/*    --background-color: #504E76;*/
+/*    --text-color: #FFFFFF;*/
+/*}*/
 
 body, html {
     width: 100%;
     margin: 0;
     padding: 0;
-    font-family: 'ClearSans';
+    font-family: 'Nunito';
+    background: var(--background-color);
 }
 
-.main_container {
-    display: flex;
-    flex-direction: column;
-    background: #FAFAFA;
-    width: 1000px;
-    height: fit-content;
-    margin: 10px auto;
-    border: 2px solid #000000;
-    border-radius: 5px;
+a, p, h1, h2, h3 {
+    margin: 0;
+    padding: 0;
+    color: var(--text-color) !important;
 }
 
-.main_container h1 {
-    font-size: 20px;
+a {
+    font-size: 16px;
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+h1 {
+    font-size: 23px;
+    font-weight: bold;
     margin: 0;
     padding: 0;
 }
 
-.main_container p, .main_container li {
+h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
+h3 {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--text-color);
+    transition: color 2s ease;
+    margin: 0;
+    padding: 0;
+}
+
+p {
     font-size: 16px;
     margin: 0;
     padding: 0;
 }
 
-.main_container a {
-    color: black;
-    text-decoration: none;
+.main_container {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--block-color);
+    width: 1000px;
+    height: fit-content;
+    margin: 10px auto;
+    /*border: 2px solid #000000;*/
+    border-radius: 10px;
 }
 
 .info_block {
     display: flex;
     flex-direction: column;
+    gap: 10px;
     height: fit-content;
 }
 
 .name_n_description {
     display: flex;
     flex-direction: column;
+    gap: 10px;
 }
 
 .name {
-    margin-top: 10px;
-    margin-left: 10px;
+    margin: 10px 0 0 15px;
     width: fit-content;
     padding: 0;
 }
 
-.name h1 {
-    font-size: 20px;
-}
-
 .description {
-    margin: 10px;
+    margin-left: 15px;
     width: fit-content;
 }
 
@@ -93,13 +130,13 @@ body, html {
     justify-content: center;
     box-sizing: border-box;
     margin-right: 10px;
-    background: #FEE2E2;
+    background-color: var(--element-color);
     border-radius: 15px;
     /*border: 1px solid black;*/
 }
 
 .genres_block p {
-    color: #991B1B;
+    /*color: #991B1B;*/
     font-weight: 500;
     margin-top: 0;
     width: fit-content;
@@ -117,7 +154,7 @@ body, html {
     width: 100%;
     height: fit-content;
     margin: 0 auto;
-    border-top: 2px solid black;
+    /*border-top: 2px solid black;*/
 }
 
 .volume_cover {
@@ -159,28 +196,54 @@ body, html {
 
 .volume_list {
     display: flex;
-    margin: 10px 0 10px 10px;
-    width: fit-content;
-    height: fit-content;
+
 }
 
-.volume_list ul {
+.volume_list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    width: fit-content;
+    margin: 10px 20px 10px 10px;
+    height: fit-content;
+    gap: 15px;
     padding: 0;
-    margin: 0;
 }
 
-.volume_list li {
-    list-style: none;
-    padding: 2px 5px;
+.chapter_element {
+    display: flex;
+    gap: 10px;
+}
+
+.chapter {
+    display: flex;
+    max-width: 440px;
+    background-color: var(--element-color);
+    border-radius: 10px;
+}
+
+.chapter:hover {
+    background-color: var(--hover-color);
+    transition: background-color 0.5s ease;
+}
+
+.chapter a {
+    padding: 4px 8px;
     width: fit-content;
-    /*border: 1px solid red;*/
-    border-radius: 5px;
 }
 
-.volume_list li:hover {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+.chapter a:hover {
+    color: var(--hover-text-color) !important;
+    transition: color 0.5s ease;
+}
+
+.chapter_rating {
+    display: flex;
+    margin: 0 165px 0 auto;
+    height: fit-content;
+    background-color: var(--element-color);
+    border-radius: 10px;
+}
+
+.chapter_rating p {
+    padding: 4px 8px;
+    width: fit-content;
 }

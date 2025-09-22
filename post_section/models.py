@@ -21,7 +21,7 @@ class Post(models.Model):
     def __str__(self):
         return self.post_name
 
-    def get_short_content(self, max_length=115):
+    def get_short_content(self, max_length=155):
         """
         Возвращает укороченное содержимое без изображений и с заменой &nbsp; на пробелы
         """
@@ -39,7 +39,7 @@ class Post(models.Model):
             return text_only[:max_length] + '...'
         return text_only
 
-    def get_short_content_safe(self, max_length=115):
+    def get_short_content_safe(self, max_length=155):
         """
         Безопасная версия для использования в шаблонах
         """

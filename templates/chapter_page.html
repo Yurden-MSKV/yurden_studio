@@ -1,12 +1,17 @@
-{#{% extends "top_panel.html" %}#}
-{% load custom_filters %}
 {% load static %}
+{% load custom_filters %}
 
-{% block title %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
     <title>{{ manga.manga_name }} - Глава {{ chapter.get_chapter_display }}</title>
-{% endblock %}
+</head>
 
-{% block content %}
+<body data-theme="light">
+
     <link rel="stylesheet" href="{% static 'manga_section/css/chapter_page.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
     
@@ -26,55 +31,13 @@
 {#            <option value="vertical" {% if reading_mode == 'vertical' %} selected {% endif %}>Полотно</option>#}
 {#        </select>#}
 {#    </div>#}
-    
+<div class="total_container">
     <div class="back_to_manga">
     <a href="{% url 'manga-page' slug=manga.manga_slug %}">
         <img src="{% static "manga_section/icons/arrow_back.svg" %}">
         На страницу манги
     </a>
     </div>
-    
-    <div class="side_bar">
-            <div class="current_ch">
-                <p>Глава {{ chapter.ch_number }}</p>
-            </div>
-            <div class="credits">
-                {% if chapter.interpreter.all %}
-                    <h1>Переводчик:</h1>
-                    {% for person in chapter.interpreter.all %}
-                        <a href="{{ person.link_for_offers }}"><h2>{{ person.staff_name }}</h2></a>{% if not forloop.last %}, {% endif %}
-                    {% endfor %}
-                {% endif %}
-                {% if chapter.editor.all %}
-                    <h1>Редактор:</h1>
-                    {% for person in chapter.editor.all %}
-                        <a href="{{ person.link_for_offers }}"><h2>{{ person.staff_name }}</h2></a>{% if not forloop.last %}, {% endif %}
-                    {% endfor %}
-                {% endif %}
-                {% if chapter.retoucher.all %}
-                    <h1>Ретушёр:</h1>
-                    {% for person in chapter.retoucher.all %}
-                        <a href="{{ person.link_for_offers }}"><h2>{{ person.staff_name }}</h2></a>{% if not forloop.last %}, {% endif %}
-                    {% endfor %}
-                {% endif %}
-                {% if chapter.typesetter.all %}
-                    <h1>Верстальщик:</h1>
-                    {% for person in chapter.typesetter.all %}
-                        <a href="{{ person.link_for_offers }}"><h2>{{ person.staff_name }}</h2></a>{% if not forloop.last %}, {% endif %}
-                    {% endfor %}
-                {% endif %}
-                {% if chapter.sfx_artist.all %}
-                    <h1>Художник по звукам:</h1>
-                    {% for person in chapter.sfx_artist.all %}
-                        <a href="{{ person.link_for_offers }}"><h2>{{ person.staff_name }}</h2></a>{% if not forloop.last %}, {% endif %}
-                    {% endfor %}
-                {% endif %}
-            </div>
-
-            <!-- Включаем partial напрямую -->
-            {% include 'partials/rating_block.html' with manga=manga chapter=chapter like_percentage=like_percentage user_rating=user_rating %}
-
-        </div>
     
     <div class="main_container">
 
@@ -140,6 +103,48 @@
     
     </div>
 
+    <div class="side_bar">
+            <div class="current_ch">
+                <p>Глава {{ chapter.ch_number }}</p>
+            </div>
+            <div class="credits">
+                {% if chapter.interpreter.all %}
+                    <h1>Переводчик:</h1>
+                    {% for person in chapter.interpreter.all %}
+                        <a href="{{ person.link_for_offers }}"><h2>{{ person.staff_name }}</h2></a>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% if chapter.editor.all %}
+                    <h1>Редактор:</h1>
+                    {% for person in chapter.editor.all %}
+                        <a href="{{ person.link_for_offers }}"><h2>{{ person.staff_name }}</h2></a>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% if chapter.retoucher.all %}
+                    <h1>Ретушёр:</h1>
+                    {% for person in chapter.retoucher.all %}
+                        <a href="{{ person.link_for_offers }}"><h2>{{ person.staff_name }}</h2></a>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% if chapter.typesetter.all %}
+                    <h1>Верстальщик:</h1>
+                    {% for person in chapter.typesetter.all %}
+                        <a href="{{ person.link_for_offers }}"><h2>{{ person.staff_name }}</h2></a>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% if chapter.sfx_artist.all %}
+                    <h1>Художник по звукам:</h1>
+                    {% for person in chapter.sfx_artist.all %}
+                        <a href="{{ person.link_for_offers }}"><h2>{{ person.staff_name }}</h2></a>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <!-- Включаем partial напрямую -->
+            {% include 'partials/rating_block.html' with manga=manga chapter=chapter like_percentage=like_percentage user_rating=user_rating %}
+
+        </div>
+</div>
         <!-- JavaScript для управления навигацией -->
     <script>
         let currentPairIndex = 0;
@@ -211,4 +216,6 @@
         updateDisplayedPair();
     </script>
     
-{% endblock %}
+
+</body>
+</html>
