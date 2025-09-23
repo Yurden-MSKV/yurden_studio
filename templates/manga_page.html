@@ -43,11 +43,13 @@
                         <div class="volume_list">
                                 {% for chapter in volume.chapters.all %}
                                     <div class="chapter_element">
-                                        <div class="chapter">
-                                            <a href="
-        {% url 'chapter-page' manga_slug=manga.manga_slug ch_number=chapter.get_chapter_display %}">
-                                                Глава {{ chapter.get_chapter_display}} — {{ chapter.ch_name }}
-                                            </a>
+                                        <div class="chapter_width">
+                                            <div class="chapter">
+                                                <a href="
+            {% url 'chapter-page' manga_slug=manga.manga_slug ch_number=chapter.get_chapter_display %}">
+                                                    Глава {{ chapter.get_chapter_display}} — {{ chapter.ch_name }}
+                                                </a>
+                                            </div>
                                         </div>
                                         <div class="chapter_rating">
                                             <p>{{ chapter.rate_percentage }}%</p>
