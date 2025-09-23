@@ -4,30 +4,49 @@ from django.utils.safestring import mark_safe
 register = template.Library()
 
 
+
+
 @register.filter
 def smart_break(text):
-    """Простая версия с четкой логикой"""
+    count = 37
+
+    """Разбивает текст перед словом, если символов > 40"""
     if not text:
         return ''
 
-    text = str(text).strip()
-    words = text.split()
+    original_text = str(text).strip()
 
-    if len(text) > 42:
-        # Ищем перед каким словом ставить перенос
-        length_so_far = 0
-        for i in range(len(words)):
-            length_so_far += len(words[i]) + (1 if i > 0 else 0)
+    # Если текст короткий - возвращаем как есть
+    if len(original_text) <= count:
+        return original_text
 
-            # Если превысили 42 символов и это не первое слово
-            if length_so_far > 42 and i > 0:
-                return mark_safe(' '.join(words[:i]) + '<br>' + ' '.join(words[i:]))
+    words = original_text.split()
 
-    # Условия для переноса
-    if len(words) > 4:
-        # Перенос после 4-го слова
-        return mark_safe(' '.join(words[:4]) + '<br>' + ' '.join(words[4:]))
+    # Ищем перед каким словом поставить перенос
+    current_position = 0
 
+    for i, word in enumerate(words):
+        # Находим позицию текущего слова в тексте
+        word_position = original_text.find(word, current_position)
+        if word_position == -1:
+            continue
 
+        # Если позиция начала слова превышает 40 символов и это не первое слово
+        if word_position > count and i > 0:
+            # Ставим перенос перед этим словом
+            break_position = word_position
+            first_line = original_text[:break_position].strip()
+            second_line = original_text[break_position:].strip()
+            return mark_safe(f'{first_line}<br>{second_line}')
 
-    return text
+        current_position = word_position + len(word)
+
+    # Если не нашли подходящего места, разбиваем по последнему пробелу до 40 символов
+    last_space_before_40 = original_text.rfind(' ', 0, count)
+    if last_space_before_40 != -1:
+        first_line = original_text[:last_space_before_40].strip()
+        second_line = original_text[last_space_before_40:].strip()
+        return mark_safe(f'{first_line}<br>{second_line}')
+
+    # Если нет пробелов вообще, оставляем как есть
+    return original_text
