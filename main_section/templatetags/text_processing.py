@@ -3,12 +3,20 @@ from django.utils.safestring import mark_safe
 
 register = template.Library()
 
-
-
-
 @register.filter
-def smart_break(text):
-    count = 41
+def smart_break(text, request=None):
+
+    home_count = 23
+    manga_count = 41
+    count = manga_count
+
+    # Если передан request, определяем путь
+    if request and hasattr(request, 'path'):
+        current_path = request.path
+        if current_path.startswith('/home/'):
+            count = home_count
+        elif current_path.startswith('/manga/'):
+            count = manga_count
 
     """Разбивает текст перед словом, если символов > 40"""
     if not text:
