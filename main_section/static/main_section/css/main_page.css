@@ -113,7 +113,7 @@ p {
 .block_title {
     display: flex;
     align-items: center;
-    margin: 5px auto 0 auto;
+    margin: 3px auto;
     width: fit-content;
     height: fit-content;
 }
