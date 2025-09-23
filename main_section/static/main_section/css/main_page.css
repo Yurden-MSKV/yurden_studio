@@ -19,6 +19,7 @@
     font-style: normal;
 }
 
+/* TODO: добавить с домашнего ноута переменную filter для svg иконок */
 [data-theme="light"] {
     --background-color: #FFFFFF;
     --text-color: #000000;
