@@ -1,30 +1,45 @@
 @font-face {
-    font-family: 'ClearSans';
-    src: url('../fonts/ClearSans-Regular.ttf') format('truetype');
+    font-family: 'Nunito';
+    src: url('../fonts/Nunito-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'ClearSans';
-    src: url('../fonts/ClearSans-Bold.ttf') format('truetype');
+    font-family: 'Nunito';
+    src: url('../fonts/Nunito-Bold.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'ClearSans';
-    src: url('../fonts/ClearSans-Medium.ttf') format('truetype');
+    font-family: 'Nunito';
+    src: url('../fonts/Nunito-Medium.ttf') format('truetype');
     font-weight: 500;
     font-style: normal;
 }
+
+[data-theme="light"] {
+    --background-color: #FFFFFF;
+    --text-color: #000000;
+    --top-panel-color: #D9D9D9;
+    --block-color: #D9D9D9;
+    --hover-color: #585858;
+    --hover-text-color: #FFFFFF;
+}
+
+/*[data-theme="dark"] {*/
+/*    --background-color: #504E76;*/
+/*    --text-color: #FFFFFF;*/
+/*}*/
 
 body, html {
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
-    font-family: 'ClearSans';
+    font-family: 'Nunito';
+    background: var(--background-color);
 }
 
 * {
@@ -35,7 +50,7 @@ body, html {
     display: flex;
     width: inherit;
     height: inherit;
-    border: 1px solid deepskyblue;
+    /*border: 1px solid deepskyblue;*/
 }
 
 .login_box {
@@ -46,8 +61,9 @@ body, html {
     height: fit-content;
     margin: auto;
     padding: 20px;
-    border: 2px solid black;
-    border-radius: 5px;
+    /*border: 2px solid black;*/
+    border-radius: 10px;
+    background-color: var(--block-color);
 }
 
 .login_box h2 {
@@ -70,7 +86,7 @@ body, html {
 .login_form input {
     padding: 5px 10px;
     border: 2px solid darkgray;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
 .login_form input:focus {
@@ -86,15 +102,27 @@ body, html {
 }
 
 .login_btn {
-    font: 17px 'ClearSans';
+    font: 17px 'Nunito';
     font-weight: bold;
     display: flex;
     justify-content: center;
     padding: 2px 5px;
     background: none;
     border: 2px solid darkgray;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
+}
+
+.login_btn:hover {
+    background-color: var(--hover-color);
+    border-color: var(--block-color);
+    color: var(--hover-text-color);
+    transition: background-color 0.5s ease,
+                border-bottom-color 0.5s ease,
+                border-top-color 0.5s ease,
+                border-left-color 0.5s ease,
+                border-right-color 0.5s ease,
+                color 0.5s ease;
 }
 
 .another_action {
@@ -113,5 +141,17 @@ body, html {
     color: black;
     padding: 2px 5px;
     border: 2px solid darkgray;
-    border-radius: 5px;
+    border-radius: 10px;
+}
+
+.another_action a:hover {
+    background-color: var(--hover-color);
+    border-color: var(--block-color);
+    color: var(--hover-text-color);
+    transition: background-color 0.5s ease,
+                border-bottom-color 0.5s ease,
+                border-top-color 0.5s ease,
+                border-left-color 0.5s ease,
+                border-right-color 0.5s ease,
+                color 0.5s ease;
 }
