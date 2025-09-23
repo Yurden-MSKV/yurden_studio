@@ -27,6 +27,8 @@
     --hover-color: #585858;
     --hover-text-color: #FFFFFF;
     --element-color: #BFBFBF;
+    --icon-color: invert(0%) sepia(0%) saturate(7500%) hue-rotate(251deg) brightness(93%) contrast(107%);;
+    --icon-hover-color: invert(100%) sepia(2%) saturate(9%) hue-rotate(16deg) brightness(103%) contrast(100%);;
 }
 
 /*[data-theme="dark"] {*/
