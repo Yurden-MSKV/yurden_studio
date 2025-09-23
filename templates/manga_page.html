@@ -1,4 +1,5 @@
 {% extends "top_panel.html" %}
+{% load text_processing %}
 {% load static %}
 
 {% block title %}
@@ -45,10 +46,7 @@
                                     <div class="chapter_element">
                                         <div class="chapter_width">
                                             <div class="chapter">
-                                                <a href="
-            {% url 'chapter-page' manga_slug=manga.manga_slug ch_number=chapter.get_chapter_display %}">
-                                                    Глава {{ chapter.get_chapter_display}} — {{ chapter.ch_name }}
-                                                </a>
+                                                <a href="{% url 'chapter-page' manga_slug=manga.manga_slug ch_number=chapter.get_chapter_display %}">Глава {{ chapter.get_chapter_display}} — {{ chapter.ch_name|smart_break }}</a>
                                             </div>
                                         </div>
                                         <div class="chapter_rating">
