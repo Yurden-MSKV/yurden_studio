@@ -8,7 +8,7 @@ register = template.Library()
 
 @register.filter
 def smart_break(text):
-    count = 37
+    count = 41
 
     """Разбивает текст перед словом, если символов > 40"""
     if not text:
