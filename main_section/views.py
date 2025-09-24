@@ -10,9 +10,15 @@ from main_section.forms import RegisterForm
 from manga_section.models import Chapter, Volume
 from post_section.models import Post
 
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+import json
+
 
 def index(request):
-    return render(request, 'top_panel.html')
+    # return render(request, 'top_panel.html')
+    return redirect('home-page')
 
 
 def register_view(request):
@@ -79,3 +85,52 @@ def info_page(request):
     }
 
     return render(request, 'post_page.html', context)
+
+
+@login_required
+def get_theme_preference(request):
+    """Получить сохранённую тему пользователя"""
+    try:
+        theme = request.user.profile.theme
+        return JsonResponse({
+            'status': 'success',
+            'theme': theme,
+            'username': request.user.username
+        })
+    except Exception as e:
+        # Если профиль не существует, создаём его
+        from .models import Profile
+        profile, created = Profile.objects.get_or_create(user=request.user)
+        return JsonResponse({
+            'status': 'success',
+            'theme': profile.theme,
+            'username': request.user.username
+        })
+
+
+@csrf_exempt
+@login_required
+def save_theme_preference(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            theme = data.get('theme')
+
+            if theme in ['auto', 'light', 'dark']:
+                # Сохраняем в профиль пользователя
+                request.user.profile.theme = theme
+                request.user.profile.save()
+
+                # Также сохраняем в localStorage на клиенте
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'Тема сохранена',
+                    'theme': theme
+                })
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Неверная тема'})
+
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)})
+
+    return JsonResponse({'status': 'error', 'message': 'Метод не разрешен'})

@@ -33,7 +33,7 @@ body, html {
 a, p, h1, h2, h3 {
     margin: 0;
     padding: 0;
-    color: var(--text-color) !important;
+    color: var(--text-color);
 }
 
 a {
@@ -218,7 +218,7 @@ p {
 
 .one_chapter {
     flex: 0 0 auto;
-    display: inline-block;
+    /*display: inline-block;*/
     width: auto;
     /*max-width: 100%;*/
     height: fit-content;
@@ -237,11 +237,13 @@ p {
 }
 
 .one_chapter a {
-    display: inline-block;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
     white-space: normal;
     font-size: 16px;
     font-weight: 500;
-    padding: 4px 6px;
+    padding: 4px 8px;
     box-sizing: border-box;
     text-decoration: none;
     color: var(--text-color);
@@ -251,6 +253,10 @@ p {
 .one_chapter a:hover {
     color: var(--hover-text-color) !important;
     transition: color 0.5s ease;
+}
+
+.number {
+    font-weight: bold;
 }
 
 .chapter_date {

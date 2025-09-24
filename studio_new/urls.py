@@ -33,4 +33,6 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
     path('logout/', main_section_views.custom_logout, name='logout'),
     path('info/', main_section_views.info_page, name='info'),
+path('api/save-theme/', main_section_views.save_theme_preference, name='save_theme'),
+path('api/get-theme/', main_section_views.get_theme_preference, name='get_theme'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

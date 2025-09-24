@@ -1,4 +1,5 @@
 {% extends "top_panel.html" %}
+{% load nbsp_filters %}
 {% load text_processing %}
 {% load static %}
 
@@ -28,9 +29,13 @@
                                 {% for chapter in item.chapters %}
                                 <div class="one_chapter">
                                     <a href="{% url 'chapter-page' manga_slug=item.manga.manga_slug ch_number=chapter.get_chapter_display %}">
-                                        Глава {{ chapter.get_chapter_display }}
+                                        <div class="number">
+                                            Глава {{ chapter.get_chapter_display }}
+                                        </div>
                                         {% if chapter.ch_name and chapter.ch_name.strip %}
-                                             — {{ chapter.ch_name|smart_break:request }}
+                                            <div class="name">
+                                                 {{ chapter.ch_name|add_nbsp|smart_break:request }}
+                                            </div>
                                         {% endif %}
                                     </a>
 {#                                    <div class="chapter_date">#}
@@ -55,7 +60,7 @@
                             <a href="{% url 'post-page' post_slug=post.post_slug %}">{{ post.post_name }} ({{ post.add_date|date:"d.m.Y" }})</a>
                         </div>
                         <div class="post_block_content">
-                            <p>{{ post.get_short_content_safe }}</p>
+                            <p>{{ post.get_short_content_safe|add_nbsp }}</p>
                         </div>
                     </div>
                 {% endfor %}
@@ -66,7 +71,7 @@
     <div class="tips_container">
             <img src="{% static 'main_section/icons/qr_tips.svg' %}">
             <div class="tips_link">
-                <a href="https://pay.cloudtips.ru/p/2d188ea4">Поддержать переводы и разработку</a>
+                <a href="https://pay.cloudtips.ru/p/2d188ea4">{{ 'Поддержать переводы и разработку'|add_nbsp }}</a>
             </div>
         </div>
 {% endblock %}

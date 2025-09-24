@@ -1,4 +1,5 @@
 {% extends "top_panel.html" %}
+{% load nbsp_filters %}
 {% load text_processing %}
 {% load static %}
 
@@ -15,7 +16,7 @@
                     <h1>{{ manga.manga_name }}</h1>
                 </div>
                 <div class="description">
-                    <p>{{ manga.description }}</p>
+                    <p>{{ manga.description|add_nbsp }}</p>
                 </div>
             </div>
             <div class="genres_block">
@@ -47,9 +48,14 @@
                                         <div class="chapter_width">
                                             <div class="chapter">
                                                 <a href="
-{% url 'chapter-page' manga_slug=manga.manga_slug ch_number=chapter.get_chapter_display %}">Глава 
-                                                    {{ chapter.get_chapter_display}} — 
-                                                    {{ chapter.ch_name|smart_break:request }}</a>
+{% url 'chapter-page' manga_slug=manga.manga_slug ch_number=chapter.get_chapter_display %}">
+                                                    <div class="ch_number">
+                                                    Глава {{ chapter.get_chapter_display}}
+                                                    </div>
+                                                    <div class="ch_name">
+                                                        {{ chapter.ch_name|add_nbsp|smart_break:request }}
+                                                    </div>
+                                                </a>
                                             </div>
                                         </div>
                                         <div class="chapter_rating">

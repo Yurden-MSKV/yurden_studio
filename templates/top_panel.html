@@ -4,6 +4,60 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+
+    <script>
+    // Мгновенное применение темы до полной загрузки страницы
+    (function() {
+        function getInitialTheme() {
+            try {
+                const savedState = localStorage.getItem('themeState');
+                if (savedState && ['auto', 'light', 'dark'].includes(savedState)) {
+                    return savedState;
+                }
+            } catch (e) {
+                // Игнорируем ошибки localStorage
+            }
+            return 'auto';
+        }
+        
+        function applyInitialTheme() {
+            const themeState = getInitialTheme();
+            let actualTheme = 'light';
+            
+            if (themeState === 'auto') {
+                const hour = new Date().getHours();
+                actualTheme = (hour >= 19 || hour < 7) ? 'dark' : 'light';
+            } else {
+                actualTheme = themeState;
+            }
+            
+            // Немедленно применяем класс к body
+            document.body.classList.add(actualTheme + '-theme');
+        }
+        
+        // Применяем тему как можно раньше
+        if (document.body) {
+            applyInitialTheme();
+        } else {
+            // Если body ещё не загружен, ждём его
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.addedNodes) {
+                        for (let i = 0; i < mutation.addedNodes.length; i++) {
+                            if (mutation.addedNodes[i].tagName === 'BODY') {
+                                applyInitialTheme();
+                                observer.disconnect();
+                                break;
+                            }
+                        }
+                    }
+                });
+            });
+            
+            observer.observe(document.documentElement, { childList: true, subtree: true });
+        }
+    })();
+    </script>
     
     {% block htmx_code %}
 
@@ -13,7 +67,7 @@
         
     {% endblock %}
 </head>
-<body data-theme="light">
+<body>
     {#  Контейнер всей страницы  #}
         {% block top_panel %}
             <link rel="stylesheet" href="{% static 'main_section/css/top_panel.css' %}">
@@ -61,6 +115,13 @@
                         </div>
                     {% endif %}
                     <div class="menu_item">
+                        <button id="themeToggle" class="theme-toggle" aria-label="Переключить тему">
+                            <span class="theme-icon light-icon"><img src="{% static 'main_section/icons/light_mode.svg' %}"> Светлая</span>
+                            <span class="theme-icon dark-icon"><img src="{% static 'main_section/icons/dark_mode.svg' %}"> Тёмная</span>
+                            <span class="theme-icon auto-icon show"><img src="{% static 'main_section/icons/time_mode.svg' %}"> Авто</span>
+                        </button>
+                    </div>
+                    <div class="menu_item">
                         <a href="{% url 'logout' %}"><img src="{% static 'main_section/icons/logout.svg' %}"><p>Выйти</p></a>
                     </div>
                 </div>
@@ -87,6 +148,8 @@
             }
         });
     </script>
+    
+    <script src="{% static 'js/theme.js' %}"></script>
     
 {#<script src="{% static 'main_section/js/top_panel.js' %}"></script>#}
 

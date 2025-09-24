@@ -74,7 +74,7 @@ body, html {
 .top_panel_button {
     display: flex;
     border-radius: 10px;
-    transition: background-color 1s ease, color 2s ease;
+    transition: var(--tran-back);
 }
 
 .top_panel_button a {
@@ -82,32 +82,17 @@ body, html {
     font-size: 18px;
     font-weight: bold;
     color: var(--text-color);
+    /*transition: var(--tran-font);*/
 }
 
 .top_panel_button:hover {
     background-color: var(--hover-color);
-    transition: background-color 0.5s ease;
+    transition: var(--tran-back);
 }
 
 .top_panel_button a:hover {
     color: var(--hover-text-color) !important;
-    transition: color 0.5s ease;
-}
-
-.main_page_link {
-    display: flex;
-    border-radius: 10px;
-    transition: all 0.5s ease;
-}
-
-.main_page_link a {
-    margin: auto 0;
-    padding: 4px 8px;
-    text-decoration: none;
-}
-
-.main_page_link:hover h3 {
-    color: var(--hover-text-color) !important;
+    transition: var(--tran-font);
 }
 
 .profile_container {
@@ -126,7 +111,7 @@ body, html {
 
 .profile_button_block {
     border-radius: 10px;
-    transition: background-color 0.5s ease;
+    transition: var(--tran-back);
 }
 
 .profile_button_block button {
@@ -148,17 +133,17 @@ body, html {
 
 .profile_button_block:hover {
     background-color: var(--hover-color);
-    transition: background-color 0.5s ease;
+    transition: var(--tran-back);
 }
 
 .profile_button_block:hover button img {
     filter: var(--icon-hover-color);
-    transition: filter 0.5s ease;
+    transition: var(--tran-icon);
 }
 
 .profile_button_block:hover button p {
     color: var(--hover-text-color) !important;
-    transition: color 0.5s ease;
+    transition: var(--tran-font);
 }
 
 .profile_container button {
@@ -204,6 +189,23 @@ body, html {
     padding: 3px 6px;
     border-radius: 10px;
     background-color: var(--block-color);
+    transition: var(--tran-back);
+}
+
+.menu_item:hover {
+    background-color: var(--hover-color);
+    transition: var(--tran-back);
+}
+
+.menu_item:hover a p {
+    color: var(--hover-text-color);
+    transition: color 0.5s ease;
+}
+
+.menu_item:hover a img {
+    filter: var(--icon-hover-color);
+    transition: filter 0.5s ease;
+
 }
 
 .menu_item a {
@@ -213,7 +215,42 @@ body, html {
 }
 
 .menu_item a img {
-    width: 24px
+    width: 24px;
+    filter: var(--icon-color);
+    align-items: center;
+}
+
+.menu_item button {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.theme-icon {
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    font: 16px 'Nunito';
+    color: var(--text-color);
+}
+
+.theme-icon.show {
+    display: flex;
+}
+
+.theme-icon img {
+    filter: var(--icon-color);
+    margin-right: 1px;
+}
+
+.menu_item:hover span img {
+    filter: var(--icon-hover-color);
+    transition: filter 0.5s ease;
+}
+
+.menu_item:hover span {
+    color: var(--hover-text-color);
+    transition: color 0.5s ease;
 }
 
 .login {

@@ -220,6 +220,9 @@ p {
 }
 
 .chapter a {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
     padding: 4px 8px;
     width: fit-content;
 }
@@ -227,6 +230,10 @@ p {
 .chapter a:hover {
     color: var(--hover-text-color) !important;
     transition: color 0.5s ease;
+}
+
+.ch_number {
+    font-weight: bold;
 }
 
 .chapter_rating {

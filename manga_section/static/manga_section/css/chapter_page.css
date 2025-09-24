@@ -348,24 +348,26 @@ p {
     width: fit-content;
     height: fit-content;
     cursor: pointer;
+
 }
 
 .like-btn img,
 .dislike-btn img {
     width: 16px;
-    transition: filter 0.2s ease;
+    filter: var(--icon-color);
     margin: 0;
     padding: 0;
+
 }
 
 .like-btn:hover img,
 .like-btn.active img {
-    filter: invert(65%) sepia(65%) saturate(7270%) hue-rotate(70deg) brightness(97%) contrast(101%);
+    filter: invert(40%) sepia(99%) saturate(433%) hue-rotate(121deg) brightness(94%) contrast(101%);
 }
 
 .dislike-btn:hover img,
 .dislike-btn.active img {
-    filter: invert(13%) sepia(92%) saturate(5323%) hue-rotate(6deg) brightness(78%) contrast(120%);
+    filter: invert(37%) sepia(65%) saturate(1293%) hue-rotate(321deg) brightness(98%) contrast(96%);
 }
 
 .rate_percentage {

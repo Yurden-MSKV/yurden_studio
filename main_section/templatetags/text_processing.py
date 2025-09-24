@@ -18,7 +18,7 @@ def smart_break(text, request=None):
         elif current_path.startswith('/manga/'):
             count = manga_count
 
-    """Разбивает текст перед словом, если символов > 40"""
+    """Разбивает текст перед словом, если символов > count"""
     if not text:
         return ''
 

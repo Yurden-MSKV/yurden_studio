@@ -10,7 +10,7 @@
     <title>{{ manga.manga_name }} - Глава {{ chapter.get_chapter_display }}</title>
 </head>
 
-<body data-theme="light">
+<body>
 
     <link rel="stylesheet" href="{% static 'manga_section/css/chapter_page.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
@@ -216,6 +216,7 @@
         updateDisplayedPair();
     </script>
     
+    <script src="{% static 'js/theme.js' %}"></script>
 
 </body>
 </html>

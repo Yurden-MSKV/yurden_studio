@@ -53,6 +53,7 @@ body, html {
     /*border: 2px solid black;*/
     border-radius: 10px;
     background-color: var(--block-color);
+    transition: var(--tran-back);
 }
 
 .login_box h1 {
@@ -100,18 +101,23 @@ body, html {
     display: flex;
     justify-content: center;
     padding: 2px 5px;
-    background: none;
+    background-color: var(--block-color);
     border: 2px solid darkgray;
     border-radius: 10px;
-    cursor: pointer;
+    /*cursor: pointer;*/
     color: var(--text-color);
+    transition: var(--tran-back),
+                border-bottom-color 0.5s ease,
+                border-top-color 0.5s ease,
+                border-left-color 0.5s ease,
+                border-right-color 0.5s ease;
 }
 
 .login_btn:hover {
     background-color: var(--hover-color);
     border-color: var(--block-color);
     color: var(--hover-text-color);
-    transition: background-color 0.5s ease,
+    transition: var(--tran-back),
                 border-bottom-color 0.5s ease,
                 border-top-color 0.5s ease,
                 border-left-color 0.5s ease,
@@ -121,6 +127,7 @@ body, html {
 
 .another_action {
     margin: 5px auto 0 auto;
+    transition: var(--tran-back);
 }
 
 .another_action p {
@@ -136,13 +143,18 @@ body, html {
     padding: 2px 5px;
     border: 2px solid darkgray;
     border-radius: 10px;
+    transition: var(--tran-back),
+                border-bottom-color 0.5s ease,
+                border-top-color 0.5s ease,
+                border-left-color 0.5s ease,
+                border-right-color 0.5s ease;
 }
 
 .another_action a:hover {
     background-color: var(--hover-color);
     border-color: var(--block-color);
     color: var(--hover-text-color);
-    transition: background-color 0.5s ease,
+    transition: var(--tran-back),
                 border-bottom-color 0.5s ease,
                 border-top-color 0.5s ease,
                 border-left-color 0.5s ease,

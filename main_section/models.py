@@ -15,3 +15,38 @@ class ChapterLike(models.Model):
 
     def __str__(self):
         return f"{self.user.username}: {'Лайк' if self.is_like else 'Дизлайк'} главе {self.chapter.ch_name}"
+
+
+class Profile(models.Model):
+    THEME_CHOICES = [
+        ('auto', 'Авто (по времени)'),
+        ('light', 'Светлая'),
+        ('dark', 'Тёмная'),
+    ]
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    theme = models.CharField(
+        max_length=10,
+        choices=THEME_CHOICES,
+        default='auto'
+    )
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.get_theme_display()}"
+
+
+# Сигнал для автоматического создания профиля при создании пользователя
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
