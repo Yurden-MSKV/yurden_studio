@@ -153,6 +153,7 @@ p {
 .volume_cover img {
     display: block;
     height: 300px;
+    border-radius: 10px;
 }
 
 .volume_content {
