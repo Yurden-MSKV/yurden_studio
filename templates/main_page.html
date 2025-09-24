@@ -34,7 +34,7 @@
                                         </div>
                                         {% if chapter.ch_name and chapter.ch_name.strip %}
                                             <div class="name">
-                                                 {{ chapter.ch_name|add_nbsp|smart_break:request }}
+                                                 {{ chapter.ch_name|smart_break:request|add_nbsp|safe }}
                                             </div>
                                         {% endif %}
                                     </a>

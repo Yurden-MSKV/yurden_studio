@@ -28,6 +28,7 @@ urlpatterns = [
     path('home/', main_section_views.main_page, name='home-page'),
     path('manga/', include('manga_section.urls')),
     path('post/', include('post_section.urls')),
+    path('polls/', include('poll_section.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('register/', main_section_views.register_view, name='register'),
     path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),

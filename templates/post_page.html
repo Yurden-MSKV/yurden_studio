@@ -24,6 +24,13 @@
             
             <div class="post_content">
                 <p>{{ post.content|safe }}</p>
+                
+                {% if post.polls.exists %}
+                    {% with poll=post.polls.first %}
+                        {% include 'poll_section/poll_block.html' with poll=poll %}
+                    {% endwith %}
+                {% endif %}
+                
             </div>
         </div>
     </div>

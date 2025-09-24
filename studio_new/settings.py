@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'main_section',
     'manga_section',
     'post_section',
+    'poll_section',
     'ckeditor',
     'ckeditor_uploader',
     # 'livereload'

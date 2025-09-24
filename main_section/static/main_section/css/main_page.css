@@ -146,6 +146,7 @@ p {
 .block_img img {
     display: block;
     width: 90px;
+    border-radius: 5px;
     /*border: 1px solid red;*/
 }
 

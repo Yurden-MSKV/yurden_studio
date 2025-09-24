@@ -53,7 +53,7 @@
                                                     Глава {{ chapter.get_chapter_display}}
                                                     </div>
                                                     <div class="ch_name">
-                                                        {{ chapter.ch_name|add_nbsp|smart_break:request }}
+                                                        {{ chapter.ch_name|add_nbsp|smart_break:request|safe }}
                                                     </div>
                                                 </a>
                                             </div>

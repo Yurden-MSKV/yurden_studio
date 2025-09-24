@@ -69,7 +69,7 @@ class Chapter(models.Model):
                               on_delete=models.CASCADE,
                               related_name='chapters',
                               verbose_name='Манга')
-    ch_number = models.PositiveIntegerField(verbose_name='Номер')
+    ch_number = models.FloatField(verbose_name='Номер')
     ch_name = models.CharField(max_length=100,
                                verbose_name='Название')
     add_date = models.DateTimeField(auto_now_add=True,

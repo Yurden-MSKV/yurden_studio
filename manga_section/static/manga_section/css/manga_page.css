@@ -135,6 +135,7 @@ p {
 .chapters_block {
     display: flex;
     flex-direction: column;
+    gap: 10px;
 }
 
 .volume_container {
