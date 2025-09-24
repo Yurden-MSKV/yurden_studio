@@ -262,7 +262,7 @@ p {
 .side_bar {
     display: flex;
     flex-direction: column;
-    top: 20px;
+    margin-top: 20px;
     left: calc(100% - 225px);
     align-items: center;
     width: fit-content;
