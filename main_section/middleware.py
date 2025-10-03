@@ -7,14 +7,17 @@ class AuthRequiredMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        # URL, которые доступны без авторизации
+        # Публичные URL
         public_urls = [
             reverse('login'),
             reverse('register'),
             reverse('logout'),
             '/admin/login/',
-            # добавьте другие публичные URL
         ]
+
+        # ⚠️ ВАЖНО: Исключаем статические и медиа файлы из проверки аутентификации
+        if request.path.startswith('/static/') or request.path.startswith('/media/'):
+            return self.get_response(request)
 
         if not request.user.is_authenticated and request.path not in public_urls:
             return redirect('login')
