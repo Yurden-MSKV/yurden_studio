@@ -37,3 +37,6 @@ urlpatterns = [
 path('api/save-theme/', main_section_views.save_theme_preference, name='save_theme'),
 path('api/get-theme/', main_section_views.get_theme_preference, name='get_theme'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
