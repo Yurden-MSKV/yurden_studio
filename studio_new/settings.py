@@ -30,9 +30,10 @@ SECRET_KEY = config('SECRET_KEY')
 # DEBUG = config('DEBUG', cast=bool, default=False)
 DEBUG = config('DEBUG')
 
-CSRF_TRUSTED_ORIGINS = [
-    'http://94.19.74.144:8080',
-]
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', cast=lambda v: [s.strip() for s in v.split(',')])
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
 
