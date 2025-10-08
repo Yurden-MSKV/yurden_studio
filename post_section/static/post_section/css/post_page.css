@@ -183,6 +183,7 @@ p {
 }
 
 .menu_block a img {
+    filter: var(--icon-color);
     width: 24px
 }
 
@@ -197,7 +198,7 @@ p {
 }
 
 .menu_block:hover a img {
-    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(16deg) brightness(111%) contrast(102%);
+    filter: var(--icon-hover-color);
     transition: filter 0.5s ease;
 }
 
