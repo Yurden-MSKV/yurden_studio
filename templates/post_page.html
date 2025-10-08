@@ -72,8 +72,8 @@
                                         </div>
                                         <div class="result-block">
                                             <div class="result-bar">
-                                                <div class="result-fill {% if user_vote and user_vote.choice.id == result.choice_id %}user-vote-fill{% endif %}"
-                                                     style="width: {{ result.percentage }}%">
+                                                <div class="result-fill {% if user_vote and user_vote.choice.id == result.choice_id %}user-vote-fill{% endif %} {% if result.percentage == 0 %}zero-percent{% endif %}"
+                                                     {% if result.percentage > 0 %}style="width: {{ result.percentage }}%"{% endif %}>
                                                 </div>
                                             </div>
                                             <div class="result-percent">

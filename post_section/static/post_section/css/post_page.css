@@ -249,7 +249,7 @@ p {
 .results {
     margin: 0 10px;
     /*padding: 20px;*/
-    border: 1px solid #ddd;
+    /*border: 1px solid #ddd;*/
     border-radius: 8px;
     /*background: #f9f9f9;*/
 }
@@ -281,35 +281,37 @@ p {
 }
 
 .result-bar {
-    background: #e0e0e0;
+    background: var(--background-color); /* Фон для всей полоски */
+    border: 1px solid var(--element-color);
     border-radius: 4px;
     height: 25px;
     overflow: hidden;
     width: 400px;
+    position: relative;
 }
 
 .result-fill {
     background: var(--element-color);
     height: 100%;
-    color: white;
-    padding: 0 10px;
-    font-size: 12px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
     transition: width 0.5s ease-in-out;
     box-sizing: border-box;
+    min-width: 0;
+    /* width устанавливается через style attribute из HTML */
 }
 
 /* Стили для выделения выбора пользователя */
 .user-vote-fill {
     background: var(--hover-color) !important;
-    color: var(--hover-text-color) !important;
-    font-weight: bold;
 }
 
 .result-percent {
     font-size: 14px;
+    color: var(--text-color);
+    min-width: 50px;
+    /*text-align: right;*/
 }
 
 .result-text {
@@ -318,6 +320,7 @@ p {
     margin-bottom: 5px;
     font-size: 14px;
     width: 400px;
+    color: var(--text-color)
 }
 
 /* Убедимся, что кнопка отмены правильно стилизована */
@@ -365,8 +368,12 @@ p {
     margin: 10px 0;
 }
 
-/* Гарантируем правильное отображение текста в прогресс-барах */
-.result-fill span {
-    color: inherit;
-    font-weight: inherit;
+.result-fill.zero-percent {
+    opacity: 0;
+    width: 0% !important;
+}
+
+/* Все остальные полоски должны быть видимыми */
+.result-fill:not(.zero-percent) {
+    opacity: 1;
 }

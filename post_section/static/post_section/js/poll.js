@@ -3,6 +3,12 @@
 let userVoted = window.userVoted || false;
 let userChoiceId = window.userChoiceId || null;
 
+// Функция для форматирования процентов (одна цифра после запятой)
+function formatPercentage(percentage) {
+    // Округляем до одной цифры после запятой
+    return parseFloat(percentage).toFixed(1);
+}
+
 // Функция голосования
 function vote(choiceId) {
     console.log('Голосую за:', choiceId);
@@ -41,9 +47,10 @@ function vote(choiceId) {
             // Обновляем интерфейс БЕЗ перезагрузки
             userVoted = true;
             userChoiceId = choiceId;
-            // Просто переключаем видимость блоков
+            // Обновляем результаты и переключаем видимость
+            updateResults(data.results, data.total_votes, choiceId);
             switchToResults();
-            resetButtons(); // Сбрасываем состояние кнопок голосования
+            resetButtons();
         } else {
             alert('Ошибка: ' + data.error);
             resetButtons();
@@ -90,9 +97,10 @@ function cancelVote() {
             // Обновляем интерфейс БЕЗ перезагрузки
             userVoted = false;
             userChoiceId = null;
-            // Переключаем обратно на кнопки голосования
+            // Обновляем результаты и переключаем видимость
+            updateResults(data.results, data.total_votes, null);
             switchToVoteButtons();
-            resetCancelButton(); // Сбрасываем состояние кнопки отмены
+            resetCancelButton();
         } else {
             alert('Ошибка: ' + data.error);
             resetCancelButton();
@@ -103,6 +111,64 @@ function cancelVote() {
         alert('Ошибка при отмене голоса');
         resetCancelButton();
     });
+}
+
+// Обновляем результаты опроса
+function updateResults(results, totalVotes, userChoiceId) {
+    const resultsContainer = document.getElementById('results');
+    if (!resultsContainer) return;
+
+    console.log('Обновление результатов:', { results, totalVotes, userChoiceId });
+
+    // Если есть голоса, показываем результаты, иначе показываем "нет голосов"
+    if (totalVotes > 0) {
+        // Создаем HTML для результатов
+        let resultsHTML = `
+            <div class="static-results">
+        `;
+
+        results.forEach(result => {
+            const isUserChoice = userChoiceId && result.choice_id == userChoiceId;
+            const formattedPercentage = formatPercentage(result.percentage);
+
+            resultsHTML += `
+                <div class="result-item">
+                    <div class="result-text">
+                        <span>${result.choice_text}${isUserChoice ? ' [твой выбор]' : ''}</span>
+                        <span>Голосов: ${result.vote_count}</span>
+                    </div>
+                    <div class="result-block">
+                        <div class="result-bar">
+                            <div class="result-fill ${isUserChoice ? 'user-vote-fill' : ''} ${parseFloat(result.percentage) === 0 ? 'zero-percent' : ''}"
+                                 style="width: ${formattedPercentage}%">
+                            </div>
+                        </div>
+                        <div class="result-percent">
+                            ${formattedPercentage}%
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        // Добавляем кнопку отмены если пользователь голосовал
+        if (userChoiceId) {
+            resultsHTML += `
+                <button type="button" class="cancel-btn" onclick="cancelVote()">
+                    ✖ Отменить мой голос
+                </button>
+            `;
+        }
+
+        resultsHTML += `</div>`;
+
+        // Обновляем содержимое блока результатов
+        resultsContainer.innerHTML = resultsHTML;
+
+    } else {
+        // Нет голосов - показываем сообщение
+        resultsContainer.innerHTML = '<p>Пока нет голосов. Будьте первым!</p>';
+    }
 }
 
 // Переключаем на блок с результатами
