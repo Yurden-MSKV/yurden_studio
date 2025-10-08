@@ -137,7 +137,7 @@ p {
 }
 
 .post_content p {
-    margin: 0;
+    margin-left: 10px;
     padding: 0;
     /*border: 1px solid red;*/
 }
@@ -174,7 +174,7 @@ p {
 .menu_block a {
     display: flex;
     flex-direction: row;
-    padding: 3px 4px 3px 6px;
+    padding: 3px 4px 3px 8px;
     align-items: center;
 }
 
@@ -199,4 +199,174 @@ p {
 .menu_block:hover a img {
     filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(16deg) brightness(111%) contrast(102%);
     transition: filter 0.5s ease;
+}
+
+.poll-container {
+    margin-top: 30px;
+    /*border: 1px solid deepskyblue;*/
+}
+
+.poll-container h2 {
+    margin-left: 10px !important;
+}
+
+/* Гарантируем, что кнопки голосования всегда в столбик */
+#vote-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 20px 10px;
+    gap: 8px;
+}
+
+.vote-btn {
+    padding: 5px 10px;
+    background: var(--element-color);
+    color: var(--text-color);
+    font: bold 16px "Nunito";
+    width: fit-content;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.vote-btn:hover {
+    background: var(--hover-color);
+    color: var(--hover-text-color);
+    /*transform: translateY(-2px);*/
+}
+.vote-btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.user-vote {
+    background: #2196F3 !important;
+    border: 2px solid #1976D2;
+}
+
+.results {
+    margin: 0 10px;
+    /*padding: 20px;*/
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    /*background: #f9f9f9;*/
+}
+
+/* Убедимся, что результаты тоже в столбик */
+.static-results {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-left: 10px;
+}
+
+.results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.result-item {
+    /*margin: 15px 0;*/
+    width: fit-content;
+}
+
+.result-block {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+.result-bar {
+    background: #e0e0e0;
+    border-radius: 4px;
+    height: 25px;
+    overflow: hidden;
+    width: 400px;
+}
+
+.result-fill {
+    background: var(--element-color);
+    height: 100%;
+    color: white;
+    padding: 0 10px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    transition: width 0.5s ease-in-out;
+    box-sizing: border-box;
+}
+
+/* Стили для выделения выбора пользователя */
+.user-vote-fill {
+    background: var(--hover-color) !important;
+    color: var(--hover-text-color) !important;
+    font-weight: bold;
+}
+
+.result-percent {
+    font-size: 14px;
+}
+
+.result-text {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-size: 14px;
+    width: 400px;
+}
+
+/* Убедимся, что кнопка отмены правильно стилизована */
+.cancel-btn {
+    background: var(--element-color);
+    color: var(--text-color);
+    font: bold 14px "Nunito";
+    border: none;
+    width: fit-content;
+    padding: 5px 10px;
+    margin-top: 5px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background 0.3s, color 0.3s;
+    align-self: flex-start;
+}
+.cancel-btn:hover {
+    background: var(--hover-color);
+    color: var(--hover-text-color);
+}
+
+.auth-warning {
+    background: #fff3cd;
+    padding: 10px;
+    border: 1px solid #ffeaa7;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.loading {
+    color: #666;
+    font-style: italic;
+}
+
+/* Дополнительные гарантии для правильного отображения */
+.vote-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+/* Убедимся, что все элементы опроса имеют правильные отступы */
+.poll-container > * {
+    margin: 10px 0;
+}
+
+/* Гарантируем правильное отображение текста в прогресс-барах */
+.result-fill span {
+    color: inherit;
+    font-weight: inherit;
 }

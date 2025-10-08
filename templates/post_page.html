@@ -7,6 +7,17 @@
 
 {% block content %}
 
+    <script src="{% static 'post_section/js/poll.js' %}"></script>
+    
+    <script>
+        window.userVoted = {% if user_vote %}true{% else %}false{% endif %};
+        window.userChoiceId = {% if user_vote %}{{ user_vote.choice.id }}{% else %}null{% endif %};
+        console.log('Initial state:', { 
+            userVoted: window.userVoted, 
+            userChoiceId: window.userChoiceId 
+        });
+    </script>
+
     <link rel="stylesheet" href="{% static 'post_section/css/post_page.css' %}">
     <div class="main_container">
         <div class="post_container">
@@ -25,16 +36,70 @@
             <div class="post_content">
                 <p>{{ post.content|safe }}</p>
                 
-                {% if post.polls.exists %}
-                    {% with poll=post.polls.first %}
-                        {% include 'poll_section/poll_block.html' with poll=poll %}
-                    {% endwith %}
+                {% if poll %}
+                    <div id="poll-container" class="poll-container">
+                        <h2>{{ poll.question }}</h2>
+
+                        <!-- Предупреждение для неавторизованных -->
+                        {% if not user.is_authenticated %}
+                        <div class="auth-warning">
+                            ⚠️ Для голосования необходимо <a href="/admin/login/">войти в систему</a>
+                        </div>
+                        {% endif %}
+
+                        <!-- Блок с кнопками голосования -->
+                        <div id="vote-buttons" class="vote-buttons"
+                             {% if user_vote %}style="display: none;"{% endif %}>
+                            {% for choice in choices %}
+                            <button type="button" class="vote-btn" data-choice-id="{{ choice.id }}"
+                                    {% if not user.is_authenticated %}disabled{% endif %}>
+                                {{ choice.choice_text }}
+                            </button>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Блок для результатов -->
+                        <div id="results" class="results" {% if not user_vote %}style="display: none;"{% endif %}>
+                            {% if user_vote or results_data.total_votes > 0 %}
+                                <!-- Показываем статические результаты при первой загрузке -->
+                                <div class="static-results">
+                                    {% for result in results_data.results %}
+                                    <div class="result-item">
+                                        <div class="result-text">
+                                            <span>{{ result.choice_text }}
+                                                {% if user_vote and user_vote.choice.id == result.choice_id %} [твой выбор]{% endif %}</span>
+                                            <span>Голосов: {{ result.vote_count }}</span>
+                                        </div>
+                                        <div class="result-block">
+                                            <div class="result-bar">
+                                                <div class="result-fill {% if user_vote and user_vote.choice.id == result.choice_id %}user-vote-fill{% endif %}"
+                                                     style="width: {{ result.percentage }}%">
+                                                </div>
+                                            </div>
+                                            <div class="result-percent">
+                                                {{ result.percentage }}%
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+
+                                    {% if user_vote %}
+                                        <button type="button" class="cancel-btn" onclick="cancelVote()">
+                                            ✖ Отменить мой голос
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                <p>Пока нет голосов. Будьте первым!</p>
+                            {% endif %}
+                        </div>
+                    </div>
                 {% endif %}
-                
+
             </div>
         </div>
     </div>
-    
+
     {% if user.username == 'yurden' %}
         <div class="side_bar">
             <div class="menu_block">
@@ -42,4 +107,5 @@
             </div>
         </div>
     {% endif %}
+
 {% endblock %}

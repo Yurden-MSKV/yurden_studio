@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Question, Choice
+from .models import Poll, Choice
 
 
 class ChoiceInline(admin.TabularInline):  # Более компактный вид
@@ -7,12 +7,9 @@ class ChoiceInline(admin.TabularInline):  # Более компактный ви
     extra = 2
 
 
-@admin.register(Question)
-class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('question_text', 'pub_date', 'post', 'has_choices')
-    list_filter = ('pub_date', 'post')
-    search_fields = ('question_text',)
-    list_editable = ('post',)  # Можно быстро менять привязку к посту из списка
+@admin.register(Poll)
+class PollAdmin(admin.ModelAdmin):
+    list_display = ('post', 'question')
 
     # Поле только для чтения - показывает есть ли варианты ответа
     def has_choices(self, obj):
@@ -26,7 +23,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
 @admin.register(Choice)
 class ChoiceAdmin(admin.ModelAdmin):
-    list_display = ('choice_text', 'question', 'votes', 'related_post')
+    list_display = ('poll', 'choice_text')
 
     # Показывает к какому посту привязан опрос
     def related_post(self, obj):
