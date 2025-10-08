@@ -115,6 +115,7 @@ p {
 }
 
 .post_views img {
+    filter: var(--icon-color);
     height: 25px;
     /*border: 1px solid red;*/
 }
