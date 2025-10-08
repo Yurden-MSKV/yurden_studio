@@ -7,17 +7,6 @@
 
 {% block content %}
 
-    <script src="{% static 'post_section/js/poll.js' %}"></script>
-    
-    <script>
-        window.userVoted = {% if user_vote %}true{% else %}false{% endif %};
-        window.userChoiceId = {% if user_vote %}{{ user_vote.choice.id }}{% else %}null{% endif %};
-        console.log('Initial state:', { 
-            userVoted: window.userVoted, 
-            userChoiceId: window.userChoiceId 
-        });
-    </script>
-
     <link rel="stylesheet" href="{% static 'post_section/css/post_page.css' %}">
     <div class="main_container">
         <div class="post_container">
@@ -36,6 +25,7 @@
             <div class="post_content">
                 <p>{{ post.content|safe }}</p>
                 
+                <!-- Блок опроса будет рендериться только если poll существует -->
                 {% if poll %}
                     <div id="poll-container" class="poll-container">
                         <h2>{{ poll.question }}</h2>
@@ -94,7 +84,45 @@
                             {% endif %}
                         </div>
                     </div>
+
+                    <script src="{% static 'post_section/js/poll.js' %}"></script>
+                    <script>
+                        // Инициализируем опрос только если он есть на странице
+                        window.userVoted = {% if user_vote %}true{% else %}false{% endif %};
+                        window.userChoiceId = {% if user_vote %}{{ user_vote.choice.id }}{% else %}null{% endif %};
+                        
+                        document.addEventListener('DOMContentLoaded', function() {
+                            if (document.getElementById('poll-container')) {
+                                initializePoll();
+                            }
+                        });
+
+                        function initializePoll() {
+                            console.log('Poll JS загружен', { 
+                                userVoted: window.userVoted, 
+                                userChoiceId: window.userChoiceId 
+                            });
+
+                            // Сохраняем оригинальные тексты кнопок
+                            document.querySelectorAll('.vote-btn').forEach(button => {
+                                button.setAttribute('data-original-text', button.textContent);
+
+                                // Назначаем обработчики клика
+                                button.addEventListener('click', function() {
+                                    if (!this.disabled) {
+                                        const choiceId = this.getAttribute('data-choice-id');
+                                        console.log('Клик по кнопке:', choiceId);
+                                        vote(parseInt(choiceId));
+                                    }
+                                });
+                            });
+
+                            // Убедимся, что кнопка отмены в правильном состоянии при загрузке
+                            resetCancelButton();
+                        }
+                    </script>
                 {% endif %}
+                <!-- Конец блока опроса -->
 
             </div>
         </div>
