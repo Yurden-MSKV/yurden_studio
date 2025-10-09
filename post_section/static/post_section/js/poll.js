@@ -1,253 +1,244 @@
 // static/post_section/js/poll.js
 
-let userVoted = window.userVoted || false;
-let userChoiceId = window.userChoiceId || null;
-
-// Функция для форматирования процентов (одна цифра после запятой)
-function formatPercentage(percentage) {
-    // Округляем до одной цифры после запятой
-    return parseFloat(percentage).toFixed(1);
-}
-
-// Функция голосования
-function vote(choiceId) {
-    console.log('Голосую за:', choiceId);
-
-    // Показываем загрузку
-    const voteButtons = document.querySelectorAll('.vote-btn');
-    voteButtons.forEach(btn => {
-        btn.disabled = true;
-        if (btn.getAttribute('data-choice-id') === choiceId.toString()) {
-            btn.textContent = 'Голосую...';
-        }
-    });
-
-    // Отправляем AJAX запрос
-    fetch(window.location.href, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRFToken': getCookie('csrftoken')
-        },
-        body: JSON.stringify({
-            action: 'vote',
-            choice_id: choiceId
-        })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Ответ сервера:', data);
-        if (data.success) {
-            // Обновляем интерфейс БЕЗ перезагрузки
-            userVoted = true;
-            userChoiceId = choiceId;
-            // Обновляем результаты и переключаем видимость
-            updateResults(data.results, data.total_votes, choiceId);
-            switchToResults();
-            resetButtons();
-        } else {
-            alert('Ошибка: ' + data.error);
-            resetButtons();
-        }
-    })
-    .catch(error => {
-        console.error('Ошибка:', error);
-        alert('Ошибка при голосовании');
-        resetButtons();
-    });
-}
-
-// Функция отмены голоса
-function cancelVote() {
-    console.log('Отменяю голос');
-
-    // Показываем загрузку
-    const cancelBtn = document.querySelector('.cancel-btn');
-    if (cancelBtn) {
-        cancelBtn.textContent = 'Отменяю...';
-        cancelBtn.disabled = true;
+class PollManager {
+    constructor() {
+        this.userVoted = window.pollData.userVoted;
+        this.userChoiceId = window.pollData.userChoiceId;
+        this.init();
     }
 
-    fetch(window.location.href, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRFToken': getCookie('csrftoken')
-        },
-        body: JSON.stringify({
-            action: 'cancel'
-        })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+    init() {
+        console.log('Poll initialized');
+        this.bindEvents();
+        this.applyWidthsFromDataAttributes(); // Применяем ширины при загрузке
+    }
+
+    bindEvents() {
+        document.querySelectorAll('.vote-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                if (!button.disabled) {
+                    this.vote(parseInt(button.dataset.choiceId));
+                }
+            });
+        });
+    }
+
+    // НОВАЯ ФУНКЦИЯ: Применяем ширины из data-атрибутов
+    applyWidthsFromDataAttributes() {
+        document.querySelectorAll('.progress-fill[data-width]').forEach(bar => {
+            const width = bar.getAttribute('data-width');
+            if (width) {
+                // Используем CSS переменную как fallback
+                bar.style.setProperty('--progress-width', width + '%');
+                // И прямое назначение
+                bar.style.width = width + '%';
+
+                console.log('Applied width:', width + '%', 'to element:', bar);
+            }
+        });
+    }
+
+    async vote(choiceId) {
+        console.log('Voting for:', choiceId);
+        this.setButtonsState(true, 'Голосую...', choiceId);
+
+        try {
+            const response = await fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': this.getCSRFToken()
+                },
+                body: JSON.stringify({
+                    action: 'vote',
+                    choice_id: choiceId
+                })
+            });
+
+            if (!response.ok) throw new Error('Network error');
+            const data = await response.json();
+
+            if (data.success) {
+                this.userVoted = true;
+                this.userChoiceId = choiceId;
+                this.showResults(data.results, data.total_votes);
+            } else {
+                alert('Ошибка: ' + data.error);
+                this.setButtonsState(false);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Ошибка при голосовании');
+            this.setButtonsState(false);
         }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Ответ сервера:', data);
-        if (data.success) {
-            // Обновляем интерфейс БЕЗ перезагрузки
-            userVoted = false;
-            userChoiceId = null;
-            // Обновляем результаты и переключаем видимость
-            updateResults(data.results, data.total_votes, null);
-            switchToVoteButtons();
-            resetCancelButton();
-        } else {
-            alert('Ошибка: ' + data.error);
-            resetCancelButton();
+    }
+
+    async cancelVote() {
+        console.log('Canceling vote');
+        const cancelBtn = document.querySelector('.cancel-vote-btn');
+        if (cancelBtn) {
+            cancelBtn.textContent = 'Отменяю...';
+            cancelBtn.disabled = true;
         }
-    })
-    .catch(error => {
-        console.error('Ошибка:', error);
-        alert('Ошибка при отмене голоса');
-        resetCancelButton();
-    });
-}
 
-// Обновляем результаты опроса
-function updateResults(results, totalVotes, userChoiceId) {
-    const resultsContainer = document.getElementById('results');
-    if (!resultsContainer) return;
+        try {
+            const response = await fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': this.getCSRFToken()
+                },
+                body: JSON.stringify({
+                    action: 'cancel'
+                })
+            });
 
-    console.log('Обновление результатов:', { results, totalVotes, userChoiceId });
+            if (!response.ok) throw new Error('Network error');
+            const data = await response.json();
 
-    // Если есть голоса, показываем результаты, иначе показываем "нет голосов"
-    if (totalVotes > 0) {
-        // Создаем HTML для результатов
-        let resultsHTML = `
-            <div class="static-results">
-        `;
+            if (data.success) {
+                this.userVoted = false;
+                this.userChoiceId = null;
+                this.showVoteButtons(data.results, data.total_votes);
+            } else {
+                alert('Ошибка: ' + data.error);
+                this.resetCancelButton();
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Ошибка при отмене голоса');
+            this.resetCancelButton();
+        }
+    }
+
+    showResults(results, totalVotes) {
+        const voteSection = document.getElementById('vote-section');
+        const resultsSection = document.getElementById('results-section');
+
+        let resultsHTML = '<div class="results-container">';
 
         results.forEach(result => {
-            const isUserChoice = userChoiceId && result.choice_id == userChoiceId;
-            const formattedPercentage = formatPercentage(result.percentage);
+            const isUserChoice = this.userChoiceId && result.choice_id == this.userChoiceId;
+            const percentage = totalVotes > 0 ? parseFloat(result.percentage).toFixed(1) : 0;
 
             resultsHTML += `
-                <div class="result-item">
-                    <div class="result-text">
-                        <span>${result.choice_text}${isUserChoice ? ' [твой выбор]' : ''}</span>
-                        <span>Голосов: ${result.vote_count}</span>
+                <div class="result-row">
+                    <div class="result-info">
+                        <span class="choice-text">${result.choice_text}</span>
+                        <span class="vote-count">${result.vote_count} голосов</span>
                     </div>
-                    <div class="result-block">
-                        <div class="result-bar">
-                            <div class="result-fill ${isUserChoice ? 'user-vote-fill' : ''} ${parseFloat(result.percentage) === 0 ? 'zero-percent' : ''}"
-                                 style="width: ${formattedPercentage}%">
+                    <div class="result-visual">
+                        <div class="progress-bar">
+                            <div class="progress-fill ${isUserChoice ? 'user-choice' : ''}" 
+                                 data-width="${percentage}">
+                                <span class="progress-text">${percentage}%</span>
                             </div>
                         </div>
-                        <div class="result-percent">
-                            ${formattedPercentage}%
-                        </div>
                     </div>
+                    ${isUserChoice ? '<div class="user-badge">[твой выбор]</div>' : ''}
                 </div>
             `;
         });
 
-        // Добавляем кнопку отмены если пользователь голосовал
-        if (userChoiceId) {
-            resultsHTML += `
-                <button type="button" class="cancel-btn" onclick="cancelVote()">
-                    ✖ Отменить мой голос
-                </button>
-            `;
+        resultsHTML += `
+            <button type="button" class="cancel-vote-btn" onclick="pollManager.cancelVote()">
+                ✖ Отменить мой голос
+            </button>
+        </div>`;
+
+        resultsSection.innerHTML = resultsHTML;
+        voteSection.style.display = 'none';
+        resultsSection.style.display = 'block';
+        this.setButtonsState(false);
+
+        // Применяем ширины после создания DOM
+        setTimeout(() => this.applyWidthsFromDataAttributes(), 100);
+    }
+
+    showVoteButtons(results, totalVotes) {
+        const voteSection = document.getElementById('vote-section');
+        const resultsSection = document.getElementById('results-section');
+
+        if (totalVotes > 0) {
+            let resultsHTML = '<div class="results-container">';
+
+            results.forEach(result => {
+                const percentage = totalVotes > 0 ? parseFloat(result.percentage).toFixed(1) : 0;
+
+                resultsHTML += `
+                    <div class="result-row">
+                        <div class="result-info">
+                            <span class="choice-text">${result.choice_text}</span>
+                            <span class="vote-count">${result.vote_count} голосов</span>
+                        </div>
+                        <div class="result-visual">
+                            <div class="progress-bar">
+                                <div class="progress-fill" data-width="${percentage}">
+                                    <span class="progress-text">${percentage}%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            resultsHTML += '</div>';
+            resultsSection.innerHTML = resultsHTML;
+        } else {
+            resultsSection.innerHTML = '<p>Пока нет голосов. Будьте первым!</p>';
         }
 
-        resultsHTML += `</div>`;
+        voteSection.style.display = 'block';
+        resultsSection.style.display = 'none';
+        this.resetCancelButton();
 
-        // Обновляем содержимое блока результатов
-        resultsContainer.innerHTML = resultsHTML;
-
-    } else {
-        // Нет голосов - показываем сообщение
-        resultsContainer.innerHTML = '<p>Пока нет голосов. Будьте первым!</p>';
+        // Применяем ширины после создания DOM
+        setTimeout(() => this.applyWidthsFromDataAttributes(), 100);
     }
-}
 
-// Переключаем на блок с результатами
-function switchToResults() {
-    const resultsDiv = document.getElementById('results');
-    const voteButtonsDiv = document.getElementById('vote-buttons');
-
-    voteButtonsDiv.style.display = 'none';
-    resultsDiv.style.display = 'block';
-    console.log('Переключили на результаты');
-
-    // Сбрасываем состояние кнопки отмены на случай, если она была в состоянии загрузки
-    resetCancelButton();
-}
-
-// Переключаем на блок с кнопками голосования
-function switchToVoteButtons() {
-    const resultsDiv = document.getElementById('results');
-    const voteButtonsDiv = document.getElementById('vote-buttons');
-
-    voteButtonsDiv.style.display = 'flex';
-    resultsDiv.style.display = 'none';
-    resetButtons();
-    console.log('Переключили на кнопки голосования');
-}
-
-// Вспомогательные функции
-function resetButtons() {
-    document.querySelectorAll('.vote-btn').forEach(button => {
-        button.disabled = false;
-        const originalText = button.getAttribute('data-original-text');
-        if (originalText) {
-            button.textContent = originalText;
-        }
-    });
-}
-
-function resetCancelButton() {
-    const cancelBtn = document.querySelector('.cancel-btn');
-    if (cancelBtn) {
-        cancelBtn.textContent = '✖ Отменить мой голос';
-        cancelBtn.disabled = false;
-    }
-}
-
-// Функция для CSRF токена
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
-// Инициализация при загрузке страницы
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Poll JS загружен', { userVoted, userChoiceId });
-
-    // Сохраняем оригинальные тексты кнопок
-    document.querySelectorAll('.vote-btn').forEach(button => {
-        button.setAttribute('data-original-text', button.textContent);
-
-        // Назначаем обработчики клика
-        button.addEventListener('click', function() {
-            if (!this.disabled) {
-                const choiceId = this.getAttribute('data-choice-id');
-                console.log('Клик по кнопке:', choiceId);
-                vote(parseInt(choiceId));
+    setButtonsState(disabled, loadingText = null, activeChoiceId = null) {
+        document.querySelectorAll('.vote-btn').forEach(button => {
+            button.disabled = disabled;
+            if (loadingText && parseInt(button.dataset.choiceId) === activeChoiceId) {
+                button.textContent = loadingText;
+            } else if (!disabled) {
+                button.textContent = button.dataset.originalText || button.textContent;
             }
         });
-    });
+    }
 
-    // Убедимся, что кнопка отмены в правильном состоянии при загрузке
-    resetCancelButton();
+    resetCancelButton() {
+        const cancelBtn = document.querySelector('.cancel-vote-btn');
+        if (cancelBtn) {
+            cancelBtn.textContent = '✖ Отменить мой голос';
+            cancelBtn.disabled = false;
+        }
+    }
+
+    getCSRFToken() {
+        const cookieValue = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('csrftoken='))
+            ?.split('=')[1];
+        return cookieValue || '';
+    }
+}
+
+function cancelVote() {
+    if (window.pollManager) {
+        window.pollManager.cancelVote();
+    }
+}
+
+function initPoll() {
+    window.pollManager = new PollManager();
+}
+
+// Применяем ширины при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('poll-container')) {
+        initPoll();
+    }
 });

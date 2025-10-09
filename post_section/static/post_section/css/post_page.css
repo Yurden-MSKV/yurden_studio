@@ -21,11 +21,6 @@
     font-style: normal;
 }
 
-/*[data-theme="dark"] {*/
-/*    --background-color: #504E76;*/
-/*    --text-color: #FFFFFF;*/
-/*}*/
-
 body, html {
     width: 100%;
     margin: 0;
@@ -64,7 +59,6 @@ h3 {
     font-size: 18px;
     font-weight: bold;
     color: var(--text-color);
-    transition: color 2s ease;
     margin: 0;
     padding: 0;
 }
@@ -78,11 +72,9 @@ p {
 .main_container {
     display: flex;
     flex-direction: column;
-    background: #FAFAFA;
     width: 1000px;
     height: fit-content;
     margin: 10px auto;
-    /*border: 2px solid #000000;*/
     border-radius: 10px;
     background-color: var(--block-color);
 }
@@ -90,7 +82,6 @@ p {
 .post_header {
     display: flex;
     flex-direction: row;
-    /*border: 1px solid red;*/
 }
 
 .post_title {
@@ -102,7 +93,6 @@ p {
     margin: 0;
     padding: 0;
     width: fit-content;
-    /*border: 1px solid red;*/
 }
 
 .post_views {
@@ -111,13 +101,10 @@ p {
     align-items: center;
     gap: 3px;
     margin: 0 20px 0 auto;
-    /*border: 1px solid red;*/
 }
 
 .post_views img {
-    filter: var(--icon-color);
     height: 25px;
-    /*border: 1px solid red;*/
 }
 
 .post_views p {
@@ -140,7 +127,6 @@ p {
 .post_content p {
     margin-left: 10px;
     padding: 0;
-    /*border: 1px solid red;*/
 }
 
 .post_content p:empty {
@@ -159,7 +145,7 @@ p {
 .side_bar {
     display: flex;
     flex-direction: column;
-    position: fixed; /* Абсолютное позиционирование */
+    position: fixed;
     top: calc(95px);
     right: calc(50% + 500px + 10px);
     align-items: center;
@@ -184,7 +170,6 @@ p {
 }
 
 .menu_block a img {
-    filter: var(--icon-color);
     width: 24px
 }
 
@@ -199,149 +184,17 @@ p {
 }
 
 .menu_block:hover a img {
-    filter: var(--icon-hover-color);
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(16deg) brightness(111%) contrast(102%);
     transition: filter 0.5s ease;
 }
 
+/* Стили для опроса */
 .poll-container {
-    margin-top: 30px;
-    /*border: 1px solid deepskyblue;*/
+    margin: 30px 10px 10px 10px;
 }
 
 .poll-container h2 {
-    margin-left: 10px !important;
-}
-
-/* Гарантируем, что кнопки голосования всегда в столбик */
-#vote-buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin: 20px 10px;
-    gap: 8px;
-}
-
-.vote-btn {
-    padding: 5px 10px;
-    background: var(--element-color);
-    color: var(--text-color);
-    font: bold 16px "Nunito";
-    width: fit-content;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-.vote-btn:hover {
-    background: var(--hover-color);
-    color: var(--hover-text-color);
-    /*transform: translateY(-2px);*/
-}
-.vote-btn:disabled {
-    background: #cccccc;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.user-vote {
-    background: #2196F3 !important;
-    border: 2px solid #1976D2;
-}
-
-.results {
-    margin: 0 10px;
-    /*padding: 20px;*/
-    /*border: 1px solid #ddd;*/
-    border-radius: 8px;
-    /*background: #f9f9f9;*/
-}
-
-/* Убедимся, что результаты тоже в столбик */
-.static-results {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-left: 10px;
-}
-
-.results-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.result-item {
-    /*margin: 15px 0;*/
-    width: fit-content;
-}
-
-.result-block {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    align-items: center;
-}
-
-.result-bar {
-    background: var(--background-color); /* Фон для всей полоски */
-    border: 1px solid var(--element-color);
-    border-radius: 4px;
-    height: 25px;
-    overflow: hidden;
-    width: 400px;
-    position: relative;
-}
-
-.result-fill {
-    background: var(--element-color);
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    transition: width 0.5s ease-in-out;
-    box-sizing: border-box;
-    min-width: 0;
-    /* width устанавливается через style attribute из HTML */
-}
-
-/* Стили для выделения выбора пользователя */
-.user-vote-fill {
-    background: var(--hover-color) !important;
-}
-
-.result-percent {
-    font-size: 14px;
-    color: var(--text-color);
-    min-width: 50px;
-    /*text-align: right;*/
-}
-
-.result-text {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 5px;
-    font-size: 14px;
-    width: 400px;
-    color: var(--text-color)
-}
-
-/* Убедимся, что кнопка отмены правильно стилизована */
-.cancel-btn {
-    background: var(--element-color);
-    color: var(--text-color);
-    font: bold 14px "Nunito";
-    border: none;
-    width: fit-content;
-    padding: 5px 10px;
-    margin-top: 5px;
-    cursor: pointer;
-    border-radius: 10px;
-    transition: background 0.3s, color 0.3s;
-    align-self: flex-start;
-}
-.cancel-btn:hover {
-    background: var(--hover-color);
-    color: var(--hover-text-color);
+    margin-bottom: 20px;
 }
 
 .auth-warning {
@@ -350,32 +203,180 @@ p {
     border: 1px solid #ffeaa7;
     border-radius: 4px;
     margin: 10px 0;
+    color: #856404;
 }
 
-.loading {
-    color: #666;
-    font-style: italic;
+.auth-warning a {
+    color: #856404 !important;
+    text-decoration: underline;
 }
 
-/* Дополнительные гарантии для правильного отображения */
+/* Кнопки голосования */
 .vote-buttons {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
+    gap: 10px;
+    margin: 20px 0;
 }
 
-/* Убедимся, что все элементы опроса имеют правильные отступы */
-.poll-container > * {
-    margin: 10px 0;
+.vote-btn {
+    padding: 8px 16px;
+    background: var(--element-color);
+    color: var(--text-color);
+    font: bold 16px "Nunito";
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    width: fit-content;
+    text-align: left;
 }
 
-.result-fill.zero-percent {
-    opacity: 0;
-    width: 0% !important;
+.vote-btn:hover {
+    background: var(--hover-color);
+    color: var(--hover-text-color);
 }
 
-/* Все остальные полоски должны быть видимыми */
-.result-fill:not(.zero-percent) {
-    opacity: 1;
+.vote-btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    color: #666;
 }
+
+/* Результаты */
+.results-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.result-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px 0;
+}
+
+.result-info {
+    display: flex;
+    flex-direction: column;
+    /*min-width: 200px;*/
+}
+
+.choice-text {
+    color: var(--text-color);
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.vote-count {
+    font-size: 12px;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+.result-visual {
+    flex: 1;
+    max-width: 400px;
+    position: relative;
+}
+
+.progress-bar {
+    background: var(--background-color);
+    border-radius: 8px;
+    height: 30px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--element-color);
+    width: 100%;
+}
+
+.progress-fill {
+    background: var(--element-color);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    transition: width 0.5s ease-in-out;
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 0% !important;
+    max-width: 100% !important;
+}
+
+.progress-fill.user-choice {
+    background: var(--hover-color);
+}
+
+.progress-text {
+    color: var(--text-color);
+    font-size: 12px;
+    font-weight: bold;
+    /*padding: 0 10px;*/
+    white-space: nowrap;
+    position: relative;
+    z-index: 2;
+}
+
+.user-badge {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--hover-color);
+    white-space: nowrap;
+}
+
+/* Кнопка отмены */
+.cancel-vote-btn {
+    background: var(--element-color);
+    color: var(--text-color);
+    font: bold 14px "Nunito";
+    border: none;
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+    width: fit-content;
+}
+
+.cancel-vote-btn:hover {
+    background: var(--hover-color);
+    color: var(--hover-text-color);
+}
+
+.progress-fill {
+    background: var(--element-color);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    transition: width 0.5s ease-in-out;
+    width: 0%; /* Значение по умолчанию */
+}
+
+/* Автоматическое применение ширины из data-атрибута */
+.progress-fill[data-width] {
+    width: attr(data-width %, 0%);
+}
+
+/* Fallback для браузеров, которые не поддерживают attr() в CSS */
+.progress-fill {
+    width: var(--progress-width, 0%);
+}
+
+.width-0 { width: 0% !important; }
+.width-10 { width: 10% !important; }
+.width-20 { width: 20% !important; }
+.width-30 { width: 30% !important; }
+.width-33 { width: 33.3% !important; }
+.width-40 { width: 40% !important; }
+.width-50 { width: 50% !important; }
+.width-60 { width: 60% !important; }
+.width-66 { width: 66.7% !important; }
+.width-70 { width: 70% !important; }
+.width-80 { width: 80% !important; }
+.width-90 { width: 90% !important; }
+.width-100 { width: 100% !important; }
