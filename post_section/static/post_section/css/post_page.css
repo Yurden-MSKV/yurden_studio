@@ -104,6 +104,7 @@ p {
 }
 
 .post_views img {
+    filter: var(--icon-color);
     height: 25px;
 }
 
@@ -170,6 +171,7 @@ p {
 }
 
 .menu_block a img {
+    filter: var(--icon-color);
     width: 24px
 }
 
