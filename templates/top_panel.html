@@ -73,7 +73,7 @@
 <body>
     {#  Контейнер всей страницы  #}
         {% block top_panel %}
-            {% if not request.is_mobile %}
+            {% if request.is_mobile %}
                 <link rel="stylesheet" href="{% static 'main_section/css/top_panel-mobile.css' %}">
                 <link rel="stylesheet" href="{% static 'css/text-mobile.css' %}">
 
@@ -154,8 +154,8 @@
                 </script>
 
             {% else %}
-                <link rel="stylesheet" href="{% static 'main_section/css/top_panel-mobile.css' %}">
-                <link rel="stylesheet" href="{% static 'css/text-mobile.css' %}">
+                <link rel="stylesheet" href="{% static 'main_section/css/top_panel.css' %}">
+                <link rel="stylesheet" href="{% static 'css/text.css' %}">
 
                 {#  Верхняя панель  #}
                 <div class="top_panel_container">

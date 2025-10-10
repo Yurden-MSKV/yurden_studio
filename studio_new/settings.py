@@ -81,6 +81,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'main_section.middleware.AuthRequiredMiddleware',
+    'studio_new.middleware.MobileDetectionMiddleware',
     # 'livereload.middleware.LiveReloadScript',
 ]
 
@@ -108,6 +109,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'studio_new.context_processors.mobile_context',
             ],
         },
     },
