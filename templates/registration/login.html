@@ -6,9 +6,17 @@
     <title>Вход</title>
 </head>
 <body>
-    <div class="main_container">
-        <div class="login_box">
+    <div class="main_container {% if request.is_mobile %}mobile{% else %}desktop{% endif %}">
+    
+        {% if request.is_mobile %}
+            <link rel="stylesheet" href="{% static 'main_section/css/login-mobile.css' %}">
+            <link rel="stylesheet" href="{% static 'css/text-mobile.css' %}">
+        {% else %}
             <link rel="stylesheet" href="{% static 'main_section/css/login.css' %}">
+            <link rel="stylesheet" href="{% static 'css/text.css' %}">
+        {% endif %}
+    
+        <div class="login_box">
             <h1>Вход в аккаунт</h1>
             
             {% if form.errors %}
@@ -18,13 +26,13 @@
             <form method="post" class="login_form">
                 {% csrf_token %}
                 
-                <div>
-                    <label for="id_username">Никнейм:</label>
+                <div class="input_block">
+                    <label for="id_username">Никнейм</label>
                     {{ form.username }}
                 </div>
                 
-                <div>
-                    <label for="id_password">Пароль:</label>
+                <div class="input_block">
+                    <label for="id_password">Пароль</label>
                     {{ form.password }}
                 </div>
                 
