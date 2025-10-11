@@ -14,15 +14,10 @@ body, html {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    /*justify-content: space-between;*/
-    /*padding: 0 15px;*/
-    /*background: #FAFAFA;*/
     width: 100vw;
     height: fit-content;
     margin-top: 80px;
-    /*margin: 0 auto;*/
-    /*border: 2px solid #000000;*/
-    border-radius: 5px;
+    /*border-radius: 5px;*/
 }
 
 .updates_container {

@@ -8,66 +8,139 @@
 {% endblock %}
 
 {% block content %}
-    <link rel="stylesheet" href="{% static 'manga_section/css/manga_page.css' %}">
-    <div class="main_container">
-        <div class="info_block">
-            <div class="name_n_description">
-                <div class="name">
-                    <h1>{{ manga.manga_name }}</h1>
+
+    {% if request.is_mobile %}
+
+        <link rel="stylesheet" href="{% static 'manga_section/css/manga_page-mobile.css' %}">
+        <div class="main_container">
+            <div class="info_block">
+                <div class="name_n_description">
+                    <div class="name">
+                        <h2>{{ manga.manga_name }}</h2>
+                    </div>
+                    <div class="description">
+                        <p>{{ manga.description|add_nbsp }}</p>
+                    </div>
                 </div>
-                <div class="description">
-                    <p>{{ manga.description|add_nbsp }}</p>
+                <div class="genres_block">
+                    {% for genre in genres %}
+                        <div class="genre">
+                            <p>{{ genre.genre_name }}</p>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
-            <div class="genres_block">
-                {% for genre in genres %}
-                    <div class="genre">
-                        <p>{{ genre.genre_name }}</p>
+            <div class="chapters_block">
+                {% for volume in volumes %}
+                    <div class="volume_container">
+                        <div class="volume_cover">
+                            <img src="{{ volume.vol_cover.url }}">
+                        </div>
+                        <div class="volume_content">
+                            <div class="number_n_desc">
+                                <div class="volume_number">
+                                    <h2>Том {{ volume.vol_number }}</h2>
+                                </div>
+                                <div class="volume_desc">
+                                    <p>{{ volume.volume_description }}</p>
+                                </div>
+                            </div>
+                            <div class="volume_list">
+                                    {% for chapter in volume.chapters.all %}
+                                        <div class="chapter_element">
+                                            <div class="chapter_width">
+                                                <div class="chapter">
+                                                    <a href="
+    {% url 'chapter-page' manga_slug=manga.manga_slug ch_number=chapter.get_chapter_display %}">
+                                                        <div class="ch_number">
+                                                        <p>Глава {{ chapter.get_chapter_display}}</p>
+                                                        </div>
+                                                        <div class="ch_name">
+                                                            <p>
+                                                                {{ chapter.ch_name|add_nbsp|safe }}</p>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="chapter_rating">
+                                                <p>{{ chapter.rate_percentage }}%</p>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                            </div>
+                        </div>
                     </div>
                 {% endfor %}
             </div>
         </div>
-        <div class="chapters_block">
-            {% for volume in volumes %}
-                <div class="volume_container">
-                    <div class="volume_cover">
-                        <img src="{{ volume.vol_cover.url }}">
+
+    {% else %}
+
+        <link rel="stylesheet" href="{% static 'manga_section/css/manga_page.css' %}">
+        <link rel="stylesheet" href="{% static '/css/text.css' %}">
+        <div class="main_container">
+            <div class="info_block">
+                <div class="name_n_description">
+                    <div class="name">
+                        <h1>{{ manga.manga_name }}</h1>
                     </div>
-                    <div class="volume_content">
-                        <div class="number_n_desc">
-                            <div class="volume_number">
-                                <h2>Том {{ volume.vol_number }}</h2>
-                            </div>
-{#                            <div class="volume_desc">#}
-{#                                <p>{{ volume.volume_description }}</p>#}
-{#                            </div>#}
-                        </div>
-                        <div class="volume_list">
-                                {% for chapter in volume.chapters.all %}
-                                    <div class="chapter_element">
-                                        <div class="chapter_width">
-                                            <div class="chapter">
-                                                <a href="
-{% url 'chapter-page' manga_slug=manga.manga_slug ch_number=chapter.get_chapter_display %}">
-                                                    <div class="ch_number">
-                                                    Глава {{ chapter.get_chapter_display}}
-                                                    </div>
-                                                    <div class="ch_name">
-                                                        {{ chapter.ch_name|add_nbsp|smart_break:request|safe }}
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="chapter_rating">
-                                            <p>{{ chapter.rate_percentage }}%</p>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                        </div>
+                    <div class="description">
+                        <p>{{ manga.description|add_nbsp }}</p>
                     </div>
                 </div>
-            {% endfor %}
+                <div class="genres_block">
+                    {% for genre in genres %}
+                        <div class="genre">
+                            <p>{{ genre.genre_name }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="chapters_block">
+                {% for volume in volumes %}
+                    <div class="volume_container">
+                        <div class="volume_cover">
+                            <img src="{{ volume.vol_cover.url }}">
+                        </div>
+                        <div class="volume_content">
+                            <div class="number_n_desc">
+                                <div class="volume_number">
+                                    <h2>Том {{ volume.vol_number }}</h2>
+                                </div>
+    {#                            <div class="volume_desc">#}
+    {#                                <p>{{ volume.volume_description }}</p>#}
+    {#                            </div>#}
+                            </div>
+                            <div class="volume_list">
+                                    {% for chapter in volume.chapters.all %}
+                                        <div class="chapter_element">
+                                            <div class="chapter_width">
+                                                <div class="chapter">
+                                                    <a href="
+    {% url 'chapter-page' manga_slug=manga.manga_slug ch_number=chapter.get_chapter_display %}">
+                                                        <div class="ch_number">
+                                                        Глава {{ chapter.get_chapter_display}}
+                                                        </div>
+                                                        <div class="ch_name">
+                                                            {{ chapter.ch_name|add_nbsp|smart_break:request|safe }}
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="chapter_rating">
+                                                <p>{{ chapter.rate_percentage }}%</p>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
-    </div>
+
+    {% endif %}
+
+
 
 {% endblock %}
