@@ -68,7 +68,7 @@ body::-webkit-scrollbar, html::-webkit-scrollbar {
 
 .page-shadow {
     width: 100vw;
-    height: 100vh;
+    height: 100%;
     /*height: calc(100vh - 20px);*/
     height: calc(100vh);
     position: fixed;
