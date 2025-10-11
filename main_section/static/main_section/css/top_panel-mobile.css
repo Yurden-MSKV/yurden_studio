@@ -9,9 +9,15 @@ body, html {
     width: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     font-family: 'Nunito';
     background: var(--background-color);
+}
+
+body::-webkit-scrollbar, html::-webkit-scrollbar {
+    display: none;
 }
 
 .top_panel_container {
