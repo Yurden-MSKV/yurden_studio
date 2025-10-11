@@ -1,52 +1,13 @@
 {% extends "admin/change_form.html" %}
-{% load i18n admin_urls static %}
+{% load i18n admin_urls static admin_modify %}
 
-{% block extrahead %}
-{{ block.super }}
-<style>
-/* Используем CSS-переменные Django для совместимости с темами */
-.upload-section {
-    background: var(--body-bg);
-    border: 1px solid var(--border-color);
-    padding: 15px;
-    margin: 20px 0;
-    border-radius: 4px;
-}
-
-.upload-button {
-    background: var(--primary);
-    color: var(--primary-fg);
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 4px;
-    font-weight: 500;
-    font-size: 14px;
-}
-
-.upload-button:hover {
-    background: var(--primary-dark);
-}
-
-.upload-help {
-    color: var(--body-quiet-color);
-    font-size: 13px;
-    margin: 5px 0;
-    line-height: 1.4;
-}
-
-.upload-label {
-    font-weight: 600;
-    margin-bottom: 10px;
-    display: block;
-    color: var(--body-fg);
-}
-</style>
+{% block field_sets %}
+{% for fieldset in adminform %}
+  {% include "admin/includes/fieldset.html" %}
+{% endfor %}
 {% endblock %}
 
 {% block after_field_sets %}
-{{ block.super }}
-
 <div class="module aligned upload-section">
     <h2>📁 Массовая загрузка страниц (Очередь)</h2>
     <div class="form-row">
@@ -72,10 +33,10 @@
                     <span>Общий прогресс:</span>
                     <span id="progress-percent">0%</span>
                 </div>
-                <div id="overall-progress" style="width: 100%; height: 20px; background: var(--border-color); border-radius: 10px;">
-                    <div id="overall-progress-bar" style="height: 100%; background: var(--primary); border-radius: 10px; width: 0%; transition: width 0.3s;"></div>
+                <div id="overall-progress" style="width: 100%; height: 20px; background: #f0f0f0; border-radius: 10px;">
+                    <div id="overall-progress-bar" style="height: 100%; background: #79aec8; border-radius: 10px; width: 0%; transition: width 0.3s;"></div>
                 </div>
-                <div id="current-file" style="margin-top: 8px; font-size: 13px; color: var(--body-quiet-color);">
+                <div id="current-file" style="margin-top: 8px; font-size: 13px; color: #666;">
                     Готов к загрузке...
                 </div>
             </div>
@@ -92,6 +53,16 @@
         <input type="submit" value="💾 Сохранить главу" name="_save" class="upload-button">
     </div>
 </div>
+
+<!-- Оставляем стандартные inline -->
+{{ block.super }}
+{% endblock %}
+
+{% block inline_field_sets %}
+{% for inline_admin_formset in inline_admin_formsets %}
+    {% include inline_admin_formset.opts.template %}
+{% endfor %}
+{% endblock %}
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -112,6 +83,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     fileInput.addEventListener('change', function(e) {
         const files = Array.from(this.files);
+        // Ограничиваем до 50 файлов
+        if (files.length > 50) {
+            alert('Максимальное количество файлов: 50. Будут загружены первые 50 файлов.');
+            files = files.slice(0, 50);
+        }
         uploadQueue = files;
         renderQueueList();
         
@@ -141,10 +117,10 @@ document.addEventListener('DOMContentLoaded', function() {
         uploadQueue.forEach((file, index) => {
             const item = document.createElement('div');
             item.className = 'file-item';
-            item.style.cssText = 'padding: 8px; margin: 4px 0; border: 1px solid var(--border-color); border-radius: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 13px;';
+            item.style.cssText = 'padding: 8px; margin: 4px 0; border: 1px solid #e0e0e0; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; background: white;';
             item.innerHTML = `
                 <span>${file.name} (${formatFileSize(file.size)})</span>
-                <span class="file-status" id="status-${index}" style="font-weight: 500;">⏳ Ожидание</span>
+                <span class="file-status" id="status-${index}" style="font-weight: 500; color: #666;">⏳ Ожидание</span>
             `;
             queueItems.appendChild(item);
         });
@@ -180,8 +156,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const file = uploadQueue[currentUploadIndex];
         const statusElement = document.getElementById(`status-${currentUploadIndex}`);
         
-        statusElement.textContent = '📤 Загружается...';
-        statusElement.style.color = '#79aec8';
+        if (statusElement) {
+            statusElement.textContent = '📤 Загружается...';
+            statusElement.style.color = '#79aec8';
+        }
         
         currentFile.textContent = `Загружается: ${file.name}`;
         
@@ -192,8 +170,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         uploadSingleFile(file, currentUploadIndex)
             .then((data) => {
-                statusElement.textContent = '✅ Успешно';
-                statusElement.style.color = '#4CAF50';
+                if (statusElement) {
+                    statusElement.textContent = '✅ Успешно';
+                    statusElement.style.color = '#4CAF50';
+                }
                 currentUploadIndex++;
                 
                 // Обновляем прогресс после успешной загрузки
@@ -201,11 +181,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 progressBar.style.width = newProgress + '%';
                 progressPercent.textContent = Math.round(newProgress) + '%';
                 
-                setTimeout(uploadNextFile, 300); // Небольшая задержка между файлами
+                setTimeout(uploadNextFile, 300);
             })
             .catch((error) => {
-                statusElement.textContent = '❌ Ошибка';
-                statusElement.style.color = '#f44336';
+                if (statusElement) {
+                    statusElement.textContent = '❌ Ошибка';
+                    statusElement.style.color = '#f44336';
+                }
                 console.error('Ошибка загрузки:', error);
                 currentUploadIndex++;
                 setTimeout(uploadNextFile, 300);
@@ -217,9 +199,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const formData = new FormData();
             formData.append('file', file);
             formData.append('file_index', index);
-            formData.append('chapter_id', '{{ original.id }}'); // ID текущей главы
+            formData.append('chapter_id', '{{ original.id }}');
             
-            // Используем CSRF токен Django
             const csrftoken = getCookie('csrftoken');
             
             fetch('upload-chapter-images/', {
@@ -249,7 +230,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Вспомогательные функции
     function formatFileSize(bytes) {
         if (bytes === 0) return '0 Bytes';
         const k = 1024;
@@ -317,11 +297,4 @@ document.addEventListener('DOMContentLoaded', function() {
     padding: 10px;
     background: white;
 }
-#overall-progress {
-    background: #f0f0f0 !important;
-}
-#overall-progress-bar {
-    background: #79aec8 !important;
-}
 </style>
-{% endblock %}
