@@ -48,7 +48,7 @@
 {{ block.super }}
 
 <div class="module aligned upload-section">
-    <h2>📁 Массовая загрузка страниц</h2>
+    <h2>📁 Массовая загрузка страниц (Очередь)</h2>
     <div class="form-row">
         <div class="fieldBox">
             <label for="id_images" class="upload-label">
@@ -56,16 +56,221 @@
             </label>
             <div style="margin-bottom: 15px;">
                 <input type="file" name="images" id="id_images" multiple
-                       class="vTextField" style="padding: 8px;">
+                       class="vTextField" style="padding: 8px;"
+                       accept="image/jpeg,image/png,image/gif,image/webp">
             </div>
-            <p class="upload-help">• Удерживайте Ctrl (Cmd на Mac) для выбора нескольких файлов</p>
-            <p class="upload-help">• Файлы будут автоматически пронумерованы по порядку</p>
+            
+            <!-- Контейнер очереди -->
+            <div id="queue-list" style="margin: 15px 0; display: none;">
+                <h4 style="margin-bottom: 10px;">📋 Очередь загрузки (<span id="queue-count">0</span> файлов):</h4>
+                <div id="queue-items" style="max-height: 200px; overflow-y: auto;"></div>
+            </div>
+            
+            <!-- Прогресс загрузки -->
+            <div id="progress-container" style="display: none; margin: 15px 0;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>Общий прогресс:</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div id="overall-progress" style="width: 100%; height: 20px; background: var(--border-color); border-radius: 10px;">
+                    <div id="overall-progress-bar" style="height: 100%; background: var(--primary); border-radius: 10px; width: 0%; transition: width 0.3s;"></div>
+                </div>
+                <div id="current-file" style="margin-top: 8px; font-size: 13px; color: var(--body-quiet-color);">
+                    Готов к загрузке...
+                </div>
+            </div>
+            
+            <p class="upload-help">• Можно выбрать до 50 файлов за раз</p>
+            <p class="upload-help">• Файлы загружаются по одному в автоматическом режиме</p>
             <p class="upload-help">• Поддерживаются форматы: JPG, PNG, GIF, WEBP</p>
         </div>
     </div>
     <div class="submit-row" style="border: none; background: transparent; margin-top: 20px;">
-        <input type="submit" value="🚀 Загрузить выбранные файлы" name="upload_images"
-               class="upload-button default">
+        <button type="button" id="start-upload-btn" class="upload-button default" style="display: none;">
+            🚀 Начать загрузку (<span id="file-count">0</span> файлов)
+        </button>
+        <input type="submit" value="💾 Сохранить главу" name="_save" class="upload-button">
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('id_images');
+    const startBtn = document.getElementById('start-upload-btn');
+    const queueList = document.getElementById('queue-list');
+    const queueItems = document.getElementById('queue-items');
+    const queueCount = document.getElementById('queue-count');
+    const fileCount = document.getElementById('file-count');
+    const progressContainer = document.getElementById('progress-container');
+    const progressBar = document.getElementById('overall-progress-bar');
+    const progressPercent = document.getElementById('progress-percent');
+    const currentFile = document.getElementById('current-file');
+    
+    let uploadQueue = [];
+    let currentUploadIndex = 0;
+    let isUploading = false;
+
+    fileInput.addEventListener('change', function(e) {
+        const files = Array.from(this.files);
+        uploadQueue = files;
+        renderQueueList();
+        
+        if (files.length > 0) {
+            startBtn.style.display = 'inline-block';
+            fileCount.textContent = files.length;
+        } else {
+            startBtn.style.display = 'none';
+        }
+    });
+
+    startBtn.addEventListener('click', function() {
+        if (isUploading) return;
+        startUpload();
+    });
+
+    function renderQueueList() {
+        queueItems.innerHTML = '';
+        queueCount.textContent = uploadQueue.length;
+        
+        if (uploadQueue.length > 0) {
+            queueList.style.display = 'block';
+        } else {
+            queueList.style.display = 'none';
+        }
+        
+        uploadQueue.forEach((file, index) => {
+            const item = document.createElement('div');
+            item.className = 'file-item';
+            item.style.cssText = 'padding: 8px; margin: 4px 0; border: 1px solid var(--border-color); border-radius: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 13px;';
+            item.innerHTML = `
+                <span>${file.name} (${formatFileSize(file.size)})</span>
+                <span class="file-status" id="status-${index}" style="font-weight: 500;">⏳ Ожидание</span>
+            `;
+            queueItems.appendChild(item);
+        });
+    }
+
+    function startUpload() {
+        if (uploadQueue.length === 0 || isUploading) return;
+        
+        isUploading = true;
+        startBtn.disabled = true;
+        startBtn.textContent = '⏳ Загрузка...';
+        progressContainer.style.display = 'block';
+        currentUploadIndex = 0;
+        
+        uploadNextFile();
+    }
+
+    function uploadNextFile() {
+        if (currentUploadIndex >= uploadQueue.length) {
+            // Загрузка завершена
+            currentFile.textContent = '✅ Все файлы загружены!';
+            startBtn.textContent = '✅ Загрузка завершена';
+            isUploading = false;
+            return;
+        }
+        
+        const file = uploadQueue[currentUploadIndex];
+        const statusElement = document.getElementById(`status-${currentUploadIndex}`);
+        
+        statusElement.textContent = '📤 Загружается...';
+        statusElement.style.color = 'var(--primary)';
+        
+        currentFile.textContent = `Загружается: ${file.name}`;
+        
+        // Обновляем общий прогресс
+        const overallProgress = (currentUploadIndex / uploadQueue.length) * 100;
+        progressBar.style.width = overallProgress + '%';
+        progressPercent.textContent = Math.round(overallProgress) + '%';
+        
+        uploadSingleFile(file, currentUploadIndex)
+            .then((data) => {
+                statusElement.textContent = '✅ Успешно';
+                statusElement.style.color = 'var(--success)';
+                currentUploadIndex++;
+                
+                // Обновляем прогресс после успешной загрузки
+                const newProgress = (currentUploadIndex / uploadQueue.length) * 100;
+                progressBar.style.width = newProgress + '%';
+                progressPercent.textContent = Math.round(newProgress) + '%';
+                
+                setTimeout(uploadNextFile, 300); // Небольшая задержка между файлами
+            })
+            .catch((error) => {
+                statusElement.textContent = '❌ Ошибка';
+                statusElement.style.color = 'var(--error)';
+                currentUploadIndex++;
+                setTimeout(uploadNextFile, 300);
+            });
+    }
+
+    function uploadSingleFile(file, index) {
+        return new Promise((resolve, reject) => {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('file_index', index);
+            formData.append('chapter_id', '{{ original.id }}'); // ID текущей главы
+            
+            // Используем CSRF токен Django
+            const csrftoken = getCookie('csrftoken');
+            
+            fetch('{% url "admin:upload_chapter_images" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Ошибка загрузки');
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    resolve(data);
+                } else {
+                    reject(new Error(data.error || 'Ошибка загрузки'));
+                }
+            })
+            .catch(error => {
+                reject(error);
+            });
+        });
+    }
+
+    // Вспомогательные функции
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+</script>
+
+<style>
+.file-status { transition: all 0.3s ease; }
+:root {
+    --success: #4CAF50;
+    --error: #f44336;
+}
+</style>
 {% endblock %}

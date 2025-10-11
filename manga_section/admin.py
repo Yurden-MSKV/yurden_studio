@@ -4,9 +4,14 @@ from django.utils.html import format_html
 from django import forms
 from django.core.files.uploadedfile import UploadedFile
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib import messages
 from django.db import models
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.decorators import method_decorator
+from django.urls import path
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 from manga_section.models import (Genre, Author, Manga, Volume, Chapter, ChapterImage, Staff)
@@ -80,6 +85,7 @@ class ChapterImageInline(admin.TabularInline):
 
     preview.short_description = 'Предпросмотр'
 
+
 class VolumeInline(admin.TabularInline):
     model = Volume
     extra = 1
@@ -87,6 +93,7 @@ class VolumeInline(admin.TabularInline):
 
     def has_header(self, request, obj=None):
         return False
+
 
 @admin.register(Manga)
 class MangaAdmin(admin.ModelAdmin):
@@ -144,8 +151,67 @@ class ChapterAdmin(admin.ModelAdmin):
 
     inlines = [ChapterImageInline]
 
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('upload-chapter-images/', self.upload_chapter_images, name='upload_chapter_images'),
+        ]
+        return custom_urls + urls
+
+    @method_decorator(staff_member_required)
+    @method_decorator(require_POST)
+    @method_decorator(csrf_exempt)
+    def upload_chapter_images(self, request):
+        """AJAX обработчик для загрузки изображений главы"""
+        try:
+            if 'file' not in request.FILES:
+                return JsonResponse({'success': False, 'error': 'Файл не предоставлен'}, status=400)
+
+            file = request.FILES['file']
+            chapter_id = request.POST.get('chapter_id')
+            file_index = request.POST.get('file_index')
+
+            if not chapter_id:
+                return JsonResponse({'success': False, 'error': 'ID главы не указан'}, status=400)
+
+            # Получаем главу
+            chapter = Chapter.objects.get(id=chapter_id)
+
+            # Определяем следующий номер страницы
+            existing_pages = ChapterImage.objects.filter(chapter=chapter)
+            if existing_pages.exists():
+                next_page_number = existing_pages.aggregate(
+                    models.Max('page_number')
+                )['page_number__max'] + 1
+            else:
+                next_page_number = 1
+
+            # Создаем страницу в главе
+            page = ChapterImage.objects.create(
+                chapter=chapter,
+                page_number=next_page_number,
+                page_image=file,
+                title=f"Страница {next_page_number}"
+            )
+
+            return JsonResponse({
+                'success': True,
+                'page_id': page.id,
+                'file_name': file.name,
+                'page_number': next_page_number,
+                'message': 'Файл успешно загружен'
+            })
+
+        except Chapter.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Глава не найдена'}, status=404)
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            }, status=500)
+
     def response_change(self, request, obj):
-        """Обрабатываем массовую загрузку изображений"""
+        """Обрабатываем массовую загрузку изображений (старый метод)"""
         if 'upload_images' in request.POST:
             # Обрабатываем загруженные файлы
             files = request.FILES.getlist('images')
