@@ -1,27 +1,6 @@
 @import url('../../../../static/css/themes.css');
-@import url('../../../../static/css/text.css');
+@import url('../../../../static/css/text-mobile.css');
 
-
-@font-face {
-    font-family: 'Nunito';
-    src: url('../fonts/Nunito-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Nunito';
-    src: url('../fonts/Nunito-Bold.ttf') format('truetype');
-    font-weight: bold;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Nunito';
-    src: url('../fonts/Nunito-Medium.ttf') format('truetype');
-    font-weight: 500;
-    font-style: normal;
-}
 
 body, html {
     width: 100%;
@@ -31,54 +10,17 @@ body, html {
     background: var(--background-color);
 }
 
-a, p, h1, h2, h3 {
-    margin: 0;
-    padding: 0;
-    color: var(--text-color);
-}
-
-a {
-    text-decoration: none;
-    color: var(--text-color);
-}
-
-h1 {
-    font-size: 23px;
-    font-weight: bold;
-    margin: 0;
-    padding: 0;
-}
-
-h2 {
-    font-size: 20px;
-    font-weight: bold;
-    margin: 0;
-    padding: 0;
-}
-
-h3 {
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--text-color);
-    transition: color 2s ease;
-    margin: 0;
-    padding: 0;
-}
-
-p {
-    font-size: 17px;
-    margin: 0;
-    padding: 0;
-}
-
 .main_container {
     display: flex;
-    justify-content: space-between;
-    padding: 0 15px;
+    flex-direction: column;
+    gap: 15px;
+    /*justify-content: space-between;*/
+    /*padding: 0 15px;*/
     /*background: #FAFAFA;*/
-    width: 1000px;
+    width: 100vw;
     height: fit-content;
-    margin: 0 auto;
+    margin-top: 10px;
+    /*margin: 0 auto;*/
     /*border: 2px solid #000000;*/
     border-radius: 5px;
 }
@@ -91,9 +33,10 @@ p {
     background-color: var(--block-color);
 }
 
-.news_container {
-    width: 495px;
+.contain_block {
+    width: 95vw;
     height: fit-content;
+    margin: 0 auto;
     /*margin: 10px 10px 10px 0;*/
     /*border: 2px solid #000000;*/
     border-radius: 15px;
@@ -146,7 +89,7 @@ p {
 
 .block_img img {
     display: block;
-    width: 90px;
+    width: 170px;
     border-radius: 5px;
     /*border: 1px solid red;*/
 }
@@ -174,7 +117,7 @@ p {
 }
 
 .block_text p {
-    font-size: 15px;
+    /*font-size: 15px;*/
     margin-left: auto;
     margin-bottom: 0;
     width: fit-content;
@@ -190,11 +133,6 @@ p {
     border-radius: 10px;
 }
 
-.block_info:hover {
-    background-color: var(--hover-color);
-    transition: background-color 0.5s ease;
-}
-
 .block_info a {
     font-size: 20px;
     font-weight: bold;
@@ -203,11 +141,6 @@ p {
     margin: 0;
     padding: 2px 5px;
     border-radius: 5px;
-}
-
-.block_info a:hover {
-    color: var(--hover-text-color) !important;
-    transition: color 0.5s ease;
 }
 
 .block_chapters {
@@ -232,29 +165,18 @@ p {
     cursor: pointer;
 }
 
-.one_chapter:hover {
-    /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);*/
-    background-color: var(--hover-color);
-    transition: background-color 0.5s ease;
-}
-
 .one_chapter a {
     display: flex;
     flex-direction: row;
     gap: 10px;
     white-space: normal;
-    font-size: 16px;
+    /*font-size: 16px;*/
     font-weight: 500;
     padding: 4px 8px;
     box-sizing: border-box;
     text-decoration: none;
     color: var(--text-color);
     /*width: 100%;*/
-}
-
-.one_chapter a:hover {
-    color: var(--hover-text-color) !important;
-    transition: color 0.5s ease;
 }
 
 .number {
@@ -275,14 +197,9 @@ p {
 }
 
 .post_block_title {
-    margin: 10px 0 10px 10px;
+    margin: 10px 15px;
     width: fit-content;
     border-radius: 5px;
-}
-
-.post_block_title:hover {
-    background-color: var(--hover-color);
-    transition: background-color 0.5s ease;
 }
 
 .post_block_title a {
@@ -290,13 +207,8 @@ p {
     font-weight: bold;
     text-decoration: none;
     color: var(--text-color);
-    padding: 2px 5px;
+    /*padding: 2px 5px;*/
     margin: 0;
-}
-
-.post_block_title a:hover {
-    color: var(--hover-text-color) !important;
-    transition: color 0.5s ease;
 }
 
 .post_block_title h1 {
@@ -314,7 +226,7 @@ p {
 .post_block_content p {
     margin: 0;
     padding: 0;
-    font-size: 16px;
+    /*font-size: 16px;*/
 }
 
 .tips_container {

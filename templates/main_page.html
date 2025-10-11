@@ -9,70 +9,145 @@
 {% endblock %}
 
 {% block content %}
-    <link rel="stylesheet" href="{% static 'main_section/css/main_page.css' %}">
-    <div class="main_container">
-        <div class="updates_container">
-            <div class="block_title">
-                <h2>Последние переводы</h2>
-            </div>
-            <div class="block_container">
-                {% for item in recent_manga %}
-                    <div class="block">
-                        <div class="block_img">
-                            <img src={{ item.cover.url }}>
-                        </div>
-                        <div class="block_text">
-                            <div class="block_info">
-                                <a href="{% url 'manga-page' slug=item.manga.manga_slug %}">{{ item.manga.manga_name }}</a>
-    {#                          <h2>{{ chapter.volume_number.manga.manga_description }}</h2>#}
+
+    {% if request.is_mobile %}
+        <link rel="stylesheet" href="{% static 'main_section/css/main_page-mobile.css' %}">
+        <link rel="stylesheet" href="{% static '/css/text-mobile.css' %}">
+        <div class="main_container">
+            <div class="news_container contain_block">
+                <div class="block_title">
+                    <h2>Новости студии</h2>
+                </div>
+                <div class="block_container">
+                    {% for post in recent_post %}
+                        <div class="post_block">
+                            <div class="post_block_title">
+                                <a href="{% url 'post-page' post_slug=post.post_slug %}"><h3>{{ post.post_name }}
+                                    ({{ post.add_date|date:"d.m.Y" }})</h3></a>
                             </div>
-                            <div class="block_chapters">
-                                {% for chapter in item.chapters %}
-                                <div class="one_chapter">
-                                    <a href="{% url 'chapter-page' manga_slug=item.manga.manga_slug ch_number=chapter.get_chapter_display %}">
-                                        <div class="number">
-                                            Глава {{ chapter.get_chapter_display }}
-                                        </div>
-                                        {% if chapter.ch_name and chapter.ch_name.strip %}
-                                            <div class="name">
-                                                 {{ chapter.ch_name|smart_break:request|add_nbsp|safe }}
-                                            </div>
-                                        {% endif %}
-                                    </a>
-{#                                    <div class="chapter_date">#}
-{#                                        <p>{{ chapter.add_date|date:"d.m.Y" }}</p>#}
-{#                                    </div>#}
+                            <div class="post_block_content">
+                                <p>{{ post.get_short_content_safe|add_nbsp }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="updates_container contain_block">
+                <div class="block_title">
+                    <h2>Последние переводы</h2>
+                </div>
+                <div class="block_container">
+                    {% for item in recent_manga %}
+                        <div class="block">
+                            <div class="block_img">
+                                <img src={{ item.cover.url }}>
+                            </div>
+                            <div class="block_text">
+                                <div class="block_info">
+                                    <a href="{% url 'manga-page' slug=item.manga.manga_slug %}">
+                                        <h3>{{ item.manga.manga_name }}</h3></a>
+{#                                  <h2>{{ chapter.volume_number.manga.manga_description }}</h2>#}
                                 </div>
-                                {% endfor %}
+                                <div class="block_chapters">
+                                    {% for chapter in item.chapters %}
+                                    <div class="one_chapter">
+                                        <a href="{% url 'chapter-page' manga_slug=item.manga.manga_slug ch_number=chapter.get_chapter_display %}">
+                                            <div class="number">
+                                                <p>Глава {{ chapter.get_chapter_display }}</p>
+                                            </div>
+                                            {% if chapter.ch_name and chapter.ch_name.strip %}
+                                                <div class="name">
+                                                     <p>{{ chapter.ch_name|smart_break:request|add_nbsp|safe }}</p>
+                                                </div>
+                                            {% endif %}
+                                        </a>
+                                        <div class="chapter_date">
+                                            <p>{{ chapter.add_date|date:"d.m.Y" }}</p>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
         </div>
-        <div class="news_container">
-            <div class="block_title">
-                <h2>Новости студии</h2>
-            </div>
-            <div class="block_container">
-                {% for post in recent_post %}
-                    <div class="post_block">
-                        <div class="post_block_title">
-                            <a href="{% url 'post-page' post_slug=post.post_slug %}">{{ post.post_name }} ({{ post.add_date|date:"d.m.Y" }})</a>
+
+{#        <div class="tips_container">#}
+{#                <img src="{% static 'main_section/icons/qr_tips.svg' %}">#}
+{#                <div class="tips_link">#}
+{#                    <a href="https://pay.cloudtips.ru/p/2d188ea4">{{ 'Поддержать переводы и разработку'|add_nbsp }}</a>#}
+{#                </div>#}
+{#            </div>#}
+
+    {% else %}
+        <link rel="stylesheet" href="{% static 'main_section/css/main_page.css' %}">
+        <link rel="stylesheet" href="{% static '/css/text.css' %}">
+        <div class="main_container">
+            <div class="updates_container">
+                <div class="block_title">
+                    <h2>Последние переводы</h2>
+                </div>
+                <div class="block_container">
+                    {% for item in recent_manga %}
+                        <div class="block">
+                            <div class="block_img">
+                                <img src={{ item.cover.url }}>
+                            </div>
+                            <div class="block_text">
+                                <div class="block_info">
+                                    <a href="{% url 'manga-page' slug=item.manga.manga_slug %}">{{ item.manga.manga_name }}</a>
+        {#                          <h2>{{ chapter.volume_number.manga.manga_description }}</h2>#}
+                                </div>
+                                <div class="block_chapters">
+                                    {% for chapter in item.chapters %}
+                                    <div class="one_chapter">
+                                        <a href="{% url 'chapter-page' manga_slug=item.manga.manga_slug ch_number=chapter.get_chapter_display %}">
+                                            <div class="number">
+                                                Глава {{ chapter.get_chapter_display }}
+                                            </div>
+                                            {% if chapter.ch_name and chapter.ch_name.strip %}
+                                                <div class="name">
+                                                     {{ chapter.ch_name|smart_break:request|add_nbsp|safe }}
+                                                </div>
+                                            {% endif %}
+                                        </a>
+    {#                                    <div class="chapter_date">#}
+    {#                                        <p>{{ chapter.add_date|date:"d.m.Y" }}</p>#}
+    {#                                    </div>#}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
                         </div>
-                        <div class="post_block_content">
-                            <p>{{ post.get_short_content_safe|add_nbsp }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="news_container">
+                <div class="block_title">
+                    <h2>Новости студии</h2>
+                </div>
+                <div class="block_container">
+                    {% for post in recent_post %}
+                        <div class="post_block">
+                            <div class="post_block_title">
+                                <a href="{% url 'post-page' post_slug=post.post_slug %}">{{ post.post_name }} ({{ post.add_date|date:"d.m.Y" }})</a>
+                            </div>
+                            <div class="post_block_content">
+                                <p>{{ post.get_short_content_safe|add_nbsp }}</p>
+                            </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
         </div>
-    </div>
-    
-    <div class="tips_container">
-            <img src="{% static 'main_section/icons/qr_tips.svg' %}">
-            <div class="tips_link">
-                <a href="https://pay.cloudtips.ru/p/2d188ea4">{{ 'Поддержать переводы и разработку'|add_nbsp }}</a>
+
+        <div class="tips_container">
+                <img src="{% static 'main_section/icons/qr_tips.svg' %}">
+                <div class="tips_link">
+                    <a href="https://pay.cloudtips.ru/p/2d188ea4">{{ 'Поддержать переводы и разработку'|add_nbsp }}</a>
+                </div>
             </div>
-        </div>
+    {% endif %}
 {% endblock %}
