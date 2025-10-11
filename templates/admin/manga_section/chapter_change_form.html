@@ -167,7 +167,13 @@ document.addEventListener('DOMContentLoaded', function() {
             // Загрузка завершена
             currentFile.textContent = '✅ Все файлы загружены!';
             startBtn.textContent = '✅ Загрузка завершена';
+            startBtn.disabled = false;
             isUploading = false;
+            
+            // Обновляем страницу через 2 секунды чтобы показать новые изображения
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
             return;
         }
         
@@ -175,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const statusElement = document.getElementById(`status-${currentUploadIndex}`);
         
         statusElement.textContent = '📤 Загружается...';
-        statusElement.style.color = 'var(--primary)';
+        statusElement.style.color = '#79aec8';
         
         currentFile.textContent = `Загружается: ${file.name}`;
         
@@ -187,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
         uploadSingleFile(file, currentUploadIndex)
             .then((data) => {
                 statusElement.textContent = '✅ Успешно';
-                statusElement.style.color = 'var(--success)';
+                statusElement.style.color = '#4CAF50';
                 currentUploadIndex++;
                 
                 // Обновляем прогресс после успешной загрузки
@@ -199,7 +205,8 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch((error) => {
                 statusElement.textContent = '❌ Ошибка';
-                statusElement.style.color = 'var(--error)';
+                statusElement.style.color = '#f44336';
+                console.error('Ошибка загрузки:', error);
                 currentUploadIndex++;
                 setTimeout(uploadNextFile, 300);
             });
@@ -215,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Используем CSRF токен Django
             const csrftoken = getCookie('csrftoken');
             
-            fetch('{% url "admin:upload_chapter_images" %}', {
+            fetch('upload-chapter-images/', {
                 method: 'POST',
                 headers: {
                     'X-CSRFToken': csrftoken,
@@ -224,7 +231,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: formData
             })
             .then(response => {
-                if (!response.ok) throw new Error('Ошибка загрузки');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 return response.json();
             })
             .then(data => {
@@ -267,10 +276,52 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <style>
-.file-status { transition: all 0.3s ease; }
-:root {
-    --success: #4CAF50;
-    --error: #f44336;
+.file-status { 
+    transition: all 0.3s ease; 
+}
+.upload-section {
+    background: #f8f8f8;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 20px 0;
+    border: 1px solid #e0e0e0;
+}
+.upload-label {
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+}
+.upload-help {
+    font-size: 12px;
+    color: #666;
+    margin: 5px 0;
+}
+.upload-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 10px;
+}
+.upload-button.default {
+    background: #79aec8;
+    color: white;
+}
+.upload-button:hover {
+    opacity: 0.9;
+}
+#queue-items {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 10px;
+    background: white;
+}
+#overall-progress {
+    background: #f0f0f0 !important;
+}
+#overall-progress-bar {
+    background: #79aec8 !important;
 }
 </style>
 {% endblock %}
