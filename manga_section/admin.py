@@ -136,7 +136,6 @@ class ChapterAdmin(admin.ModelAdmin):
     search_fields = ['ch_number', 'ch_name']
     filter_horizontal = ['interpreter', 'editor', 'retoucher', 'typesetter', 'sfx_artist']
 
-    # Добавляем кастомный шаблон для массовой загрузки
     change_form_template = 'admin/manga_section/chapter_change_form.html'
 
     def get_manga_name(self, obj):
@@ -154,13 +153,11 @@ class ChapterAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
-            path('upload-chapter-images/', self.upload_chapter_images, name='upload_chapter_images'),
+            path('upload-chapter-images/', self.admin_site.admin_view(self.upload_chapter_images),
+                 name='upload_chapter_images'),
         ]
         return custom_urls + urls
 
-    @method_decorator(staff_member_required)
-    @method_decorator(require_POST)
-    @method_decorator(csrf_exempt)
     def upload_chapter_images(self, request):
         """AJAX обработчик для загрузки изображений главы"""
         try:
@@ -169,7 +166,6 @@ class ChapterAdmin(admin.ModelAdmin):
 
             file = request.FILES['file']
             chapter_id = request.POST.get('chapter_id')
-            file_index = request.POST.get('file_index')
 
             if not chapter_id:
                 return JsonResponse({'success': False, 'error': 'ID главы не указан'}, status=400)
@@ -213,10 +209,8 @@ class ChapterAdmin(admin.ModelAdmin):
     def response_change(self, request, obj):
         """Обрабатываем массовую загрузку изображений (старый метод)"""
         if 'upload_images' in request.POST:
-            # Обрабатываем загруженные файлы
             files = request.FILES.getlist('images')
             if files:
-                # Получаем следующий номер страницы
                 existing_pages = ChapterImage.objects.filter(chapter=obj)
                 if existing_pages.exists():
                     next_page_number = existing_pages.aggregate(
@@ -225,7 +219,6 @@ class ChapterAdmin(admin.ModelAdmin):
                 else:
                     next_page_number = 1
 
-                # Сохраняем все файлы
                 success_count = 0
                 for i, file in enumerate(files):
                     try:
