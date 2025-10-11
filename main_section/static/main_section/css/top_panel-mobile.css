@@ -70,7 +70,7 @@ body::-webkit-scrollbar, html::-webkit-scrollbar {
     width: 100vw;
     height: 100%;
     /*height: calc(100vh - 20px);*/
-    height: calc(100vh);
+    /*height: calc(100vh);*/
     position: fixed;
     overflow: hidden;
     opacity: 0;
