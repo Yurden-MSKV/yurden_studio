@@ -22,8 +22,8 @@
                     {% for post in recent_post %}
                         <div class="post_block">
                             <div class="post_block_title">
-                                <a href="{% url 'post-page' post_slug=post.post_slug %}"><h3>{{ post.post_name }}
-                                    ({{ post.add_date|date:"d.m.Y" }})</h3></a>
+                                <a href="{% url 'post-page' post_slug=post.post_slug %}"><p>{{ post.post_name }}
+                                    ({{ post.add_date|date:"d.m.Y" }})</p></a>
                             </div>
                             <div class="post_block_content">
                                 <p>{{ post.get_short_content_safe|add_nbsp }}</p>
@@ -45,7 +45,7 @@
                             <div class="block_text">
                                 <div class="block_info">
                                     <a href="{% url 'manga-page' slug=item.manga.manga_slug %}">
-                                        <h3>{{ item.manga.manga_name }}</h3></a>
+                                        <p>{{ item.manga.manga_name }}</p></a>
 {#                                  <h2>{{ chapter.volume_number.manga.manga_description }}</h2>#}
                                 </div>
                                 <div class="block_chapters">
@@ -61,9 +61,9 @@
                                                 </div>
                                             {% endif %}
                                         </a>
-                                        <div class="chapter_date">
-                                            <p>{{ chapter.add_date|date:"d.m.Y" }}</p>
-                                        </div>
+{#                                        <div class="chapter_date">#}
+{#                                            <p>{{ chapter.add_date|date:"d.m.Y" }}</p>#}
+{#                                        </div>#}
                                     </div>
                                     {% endfor %}
                                 </div>

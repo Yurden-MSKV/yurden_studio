@@ -19,6 +19,13 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Nunito';
+    src: url('../fonts/Nunito-ExtraBold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+
 a, p, h1, h2, h3 {
     margin: 0;
     padding: 0;
@@ -38,14 +45,14 @@ h1 {
 }
 
 h2 {
-    font-size: 35px;
+    font-size: 40px;
     font-weight: bold;
     margin: 0;
     padding: 0;
 }
 
 h3 {
-    font-size: 30px !important;
+    font-size: 35px !important;
     font-weight: bold;
     line-height: 1;
     color: var(--text-color);
@@ -55,7 +62,7 @@ h3 {
 }
 
 p {
-    font-size: 25px;
+    font-size: 35px;
     margin: 0;
     padding: 0;
 }
