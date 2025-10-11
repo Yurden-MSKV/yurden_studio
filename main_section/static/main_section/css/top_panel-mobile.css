@@ -22,7 +22,7 @@ body::-webkit-scrollbar, html::-webkit-scrollbar {
 
 .top_panel_container {
     display: flex;
-    position: sticky;
+    position: fixed;
     height: 50px;
     width: 98vw;
     margin: 0 auto;
