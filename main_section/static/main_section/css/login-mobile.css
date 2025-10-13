@@ -126,18 +126,6 @@ body, html {
                 /*border-right-color 0.5s ease;*/
 }
 
-.login_btn:hover {
-    background-color: var(--hover-color);
-    border-color: var(--block-color);
-    color: var(--hover-text-color);
-    transition: var(--tran-back),
-                border-bottom-color 0.5s ease,
-                border-top-color 0.5s ease,
-                border-left-color 0.5s ease,
-                border-right-color 0.5s ease,
-                color 0.5s ease;
-}
-
 .another_action {
     margin: 5px auto 0 auto;
     transition: var(--tran-back);
@@ -163,16 +151,4 @@ body, html {
                 border-top-color 0.5s ease,
                 border-left-color 0.5s ease,
                 border-right-color 0.5s ease;
-}
-
-.another_action a:hover {
-    background-color: var(--hover-color);
-    border-color: var(--block-color);
-    color: var(--hover-text-color);
-    transition: var(--tran-back),
-                border-bottom-color 0.5s ease,
-                border-top-color 0.5s ease,
-                border-left-color 0.5s ease,
-                border-right-color 0.5s ease,
-                color 0.5s ease;
 }

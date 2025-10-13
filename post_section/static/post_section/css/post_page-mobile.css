@@ -156,11 +156,9 @@ body, html {
     padding: 8px 16px;
     background: var(--element-color);
     color: var(--text-color);
-    font: bold 16px "Nunito";
+    font: bold 35px "Nunito";
     border: none;
     border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s;
     width: fit-content;
     text-align: left;
 }

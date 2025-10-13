@@ -6,7 +6,13 @@
     <title>Регистрация</title>
 </head>
 <body>
-    <link rel="stylesheet" href="{% static 'main_section/css/login.css' %}">
+
+    {% if request.is_mobile %}
+        <link rel="stylesheet" href="{% static 'main_section/css/login-mobile.css' %}">
+    {% else %}
+        <link rel="stylesheet" href="{% static 'main_section/css/login.css' %}">
+    {% endif %}
+    
     <div class="main_container">
         <div class="login_box">
             <h1>Регистрация</h1>
@@ -29,17 +35,17 @@
             <form method="post" class="login_form">
                 {% csrf_token %}
                 
-                <div>
+                <div class="input_block">
                     <label for="id_username">Никнейм:</label>
                     <input type="text" name="username" class="form-control" id="id_username" required>
                 </div>
             
-                <div>
+                <div class="input_block">
                     <label for="id_password1">Пароль:</label>
                     <input type="password" name="password1" class="form-control" id="id_password1" required>
                 </div>
                 
-                <div>
+                <div class="input_block">
                     <label for="id_password2">Повтор пароля:</label>
                     <input type="password" name="password2" class="form-control" id="id_password2" required>
                 </div>

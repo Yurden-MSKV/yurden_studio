@@ -10,10 +10,8 @@
     
         {% if request.is_mobile %}
             <link rel="stylesheet" href="{% static 'main_section/css/login-mobile.css' %}">
-            <link rel="stylesheet" href="{% static 'css/text-mobile.css' %}">
         {% else %}
             <link rel="stylesheet" href="{% static 'main_section/css/login.css' %}">
-            <link rel="stylesheet" href="{% static 'css/text.css' %}">
         {% endif %}
     
         <div class="login_box">
