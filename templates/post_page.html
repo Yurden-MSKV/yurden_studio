@@ -160,20 +160,22 @@
                                     {% for result in results_data.results %}
                                     <div class="result-row">
                                         <div class="result-info">
-                                            <span class="choice-text">{{ result.choice_text }}</span>
-                                            <span class="vote-count">{{ result.vote_count }} голосов</span>
+                                            <span class="choice-text"><p>{{ result.choice_text }}</p></span>
+                                            <span class="vote-count"><p>{{ result.vote_count }} голосов</p></span>
                                         </div>
-                                        <div class="result-visual">
-                                            <div class="progress-bar">
-                                                <div class="progress-fill {% if user_vote and user_vote.choice.id == result.choice_id %}user-choice{% endif %}"
-                                                     data-width="{{ result.percentage|stringformat:'f' }}">
+                                        <div class="result_graph">
+                                            <div class="result-visual">
+                                                <div class="progress-bar">
+                                                    <div class="progress-fill {% if user_vote and user_vote.choice.id == result.choice_id %}user-choice{% endif %}"
+                                                         data-width="{{ result.percentage|stringformat:'f' }}">
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <span class="progress-text"><p>{{ result.percentage|floatformat:1 }}%</p></span>
+                                            {% if user_vote and user_vote.choice.id == result.choice_id %}
+                                                <div class="user-badge"><p>[твой выбор]</p></div>
+                                            {% endif %}
                                         </div>
-                                        <span class="progress-text">{{ result.percentage|floatformat:1 }}%</span>
-                                        {% if user_vote and user_vote.choice.id == result.choice_id %}
-                                        <div class="user-badge">[твой выбор]</div>
-                                        {% endif %}
                                     </div>
                                     {% endfor %}
 

@@ -40,7 +40,7 @@ class PollManager {
 
     async vote(choiceId) {
         console.log('Voting for:', choiceId);
-        this.setButtonsState(true, 'Голосую...', choiceId);
+        this.setButtonsState(true, choiceId);
 
         try {
             const response = await fetch(window.location.href, {
@@ -121,23 +121,28 @@ class PollManager {
 
         results.forEach(result => {
             const isUserChoice = this.userChoiceId && result.choice_id == this.userChoiceId;
-            const percentage = totalVotes > 0 ? parseFloat(result.percentage).toFixed(1) : 0;
+            const percentage = totalVotes > 0 ? new Intl.NumberFormat('ru-RU', {
+                minimumFractionDigits: 1,
+                maximumFractionDigits: 1
+            }).format(parseFloat(result.percentage)) : '0';
 
             resultsHTML += `
                 <div class="result-row">
                     <div class="result-info">
-                        <span class="choice-text">${result.choice_text}</span>
-                        <span class="vote-count">${result.vote_count} голосов</span>
+                        <span class="choice-text"><p>${result.choice_text}</p></span>
+                        <span class="vote-count"><p>${result.vote_count} голосов</p></span>
                     </div>
-                    <div class="result-visual">
-                        <div class="progress-bar">
-                            <div class="progress-fill ${isUserChoice ? 'user-choice' : ''}" 
-                                 data-width="${percentage}">
-                                <span class="progress-text">${percentage}%</span>
+                    <div class="result_graph">
+                        <div class="result-visual">
+                            <div class="progress-bar">
+                                <div class="progress-fill ${isUserChoice ? 'user-choice' : ''}" 
+                                     data-width="${percentage.replace(',', '.')}">
+                                </div>
                             </div>
                         </div>
+                        <span class="progress-text"><p>${percentage}%</p></span>
+                        ${isUserChoice ? '<div class="user-badge"><p>[твой выбор]</p></div>' : ''}
                     </div>
-                    ${isUserChoice ? '<div class="user-badge">[твой выбор]</div>' : ''}
                 </div>
             `;
         });
@@ -153,8 +158,8 @@ class PollManager {
         resultsSection.style.display = 'block';
         this.setButtonsState(false);
 
-        // Применяем ширины после создания DOM
-        setTimeout(() => this.applyWidthsFromDataAttributes(), 100);
+        // Применяем ширины сразу
+        setTimeout(() => this.applyWidthsFromDataAttributes(), 10);
     }
 
     showVoteButtons(results, totalVotes) {
@@ -165,20 +170,25 @@ class PollManager {
             let resultsHTML = '<div class="results-container">';
 
             results.forEach(result => {
-                const percentage = totalVotes > 0 ? parseFloat(result.percentage).toFixed(1) : 0;
+                const percentage = totalVotes > 0 ? new Intl.NumberFormat('ru-RU', {
+                    minimumFractionDigits: 1,
+                    maximumFractionDigits: 1
+                }).format(parseFloat(result.percentage)) : '0';
 
                 resultsHTML += `
                     <div class="result-row">
                         <div class="result-info">
-                            <span class="choice-text">${result.choice_text}</span>
-                            <span class="vote-count">${result.vote_count} голосов</span>
+                            <span class="choice-text"><p>${result.choice_text}</p></span>
+                            <span class="vote-count"><p>${result.vote_count} голосов</p></span>
                         </div>
-                        <div class="result-visual">
-                            <div class="progress-bar">
-                                <div class="progress-fill" data-width="${percentage}">
-                                    <span class="progress-text">${percentage}%</span>
+                        <div class="result_graph">
+                            <div class="result-visual">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" data-width="${percentage.replace(',', '.')}">
+                                    </div>
                                 </div>
                             </div>
+                            <span class="progress-text"><p>${percentage}%</p></span>
                         </div>
                     </div>
                 `;
@@ -194,8 +204,8 @@ class PollManager {
         resultsSection.style.display = 'none';
         this.resetCancelButton();
 
-        // Применяем ширины после создания DOM
-        setTimeout(() => this.applyWidthsFromDataAttributes(), 100);
+        // Применяем ширины сразу
+        setTimeout(() => this.applyWidthsFromDataAttributes(), 10);
     }
 
     setButtonsState(disabled, loadingText = null, activeChoiceId = null) {
