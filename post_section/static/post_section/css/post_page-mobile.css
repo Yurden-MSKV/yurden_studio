@@ -1,5 +1,5 @@
 @import url('../../../../static/css/themes.css');
-@import url('../../../../static/css/text.css');
+@import url('../../../../static/css/text-mobile.css');
 
 body, html {
     width: 100%;
@@ -12,11 +12,38 @@ body, html {
 .main_container {
     display: flex;
     flex-direction: column;
-    width: 1000px;
+    width: 100vw;
     height: fit-content;
-    margin: 10px auto;
-    border-radius: 10px;
+    margin-top: 80px;
     background-color: var(--block-color);
+}
+
+.navig_buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    margin: 20px auto 10px 20px;
+}
+
+.navig_buttons a {
+    display: flex;
+    font-size: 30px;
+    font-weight: 500;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    align-items: center;
+}
+
+.navig_buttons p {
+    font-size: 30px;
+    line-height: 1;
+}
+
+.navig_buttons img {
+    filter: var(--icon-color);
+    margin-right: 5px;
+    width: 30px;
 }
 
 .post_header {
@@ -28,8 +55,8 @@ body, html {
     margin: 10px 10px 10px 20px;
 }
 
-.post_title h1 {
-    font-size: 24px;
+.post_title h2 {
+    /*font-size: 24px;*/
     margin: 0;
     padding: 0;
     width: fit-content;
@@ -54,7 +81,7 @@ body, html {
 }
 
 .post_content {
-    margin: 10px;
+    margin: 10px 10px 20px 10px;
 }
 
 .post_content h1, .post_content h2, .post_content h3 {
@@ -92,42 +119,6 @@ body, html {
     align-items: center;
     width: fit-content;
     height: fit-content;
-}
-
-.menu_block {
-    border-radius: 10px;
-    background-color: var(--block-color);
-}
-
-.menu_block a {
-    display: flex;
-    flex-direction: row;
-    padding: 3px 4px 3px 8px;
-    align-items: center;
-}
-
-.menu_block a p {
-    font-weight: 500;
-}
-
-.menu_block a img {
-    filter: var(--icon-color);
-    width: 24px
-}
-
-.menu_block:hover {
-    background-color: var(--hover-color);
-    transition: background-color 0.5s ease;
-}
-
-.menu_block:hover a p {
-    color: var(--hover-text-color) !important;
-    transition: color 0.5s ease;
-}
-
-.menu_block:hover a img {
-    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(16deg) brightness(111%) contrast(102%);
-    transition: filter 0.5s ease;
 }
 
 /* Стили для опроса */
@@ -174,11 +165,6 @@ body, html {
     text-align: left;
 }
 
-.vote-btn:hover {
-    background: var(--hover-color);
-    color: var(--hover-text-color);
-}
-
 .vote-btn:disabled {
     background: #cccccc;
     cursor: not-allowed;
@@ -195,9 +181,16 @@ body, html {
 
 .result-row {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    /*align-items: center;*/
     gap: 15px;
     padding: 10px 0;
+}
+
+.result_graph {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
 }
 
 .result-info {
@@ -209,7 +202,7 @@ body, html {
 .choice-text {
     color: var(--text-color);
     font-weight: bold;
-    font-size: 14px;
+    /*font-size: 14px;*/
     margin-bottom: 4px;
 }
 
@@ -221,7 +214,7 @@ body, html {
 
 .result-visual {
     flex: 1;
-    max-width: 400px;
+    max-width: 600px;
     position: relative;
 }
 
@@ -270,23 +263,21 @@ body, html {
     white-space: nowrap;
 }
 
+.choice-text p, .vote-count p, .progress-text p, .user-badge p {
+    font-size: 25px;
+    margin: 0 !important;
+}
+
 /* Кнопка отмены */
 .cancel-vote-btn {
     background: var(--element-color);
     color: var(--text-color);
-    font: bold 14px "Nunito";
+    font: bold 25px "Nunito";
     border: none;
     padding: 8px 16px;
     border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s;
-    margin-top: 10px;
+    margin: 10px 20px 10px auto;
     width: fit-content;
-}
-
-.cancel-vote-btn:hover {
-    background: var(--hover-color);
-    color: var(--hover-text-color);
 }
 
 .progress-fill {

@@ -7,104 +7,214 @@
 
 {% block content %}
 
-    <link rel="stylesheet" href="{% static 'post_section/css/post_page.css' %}">
-    <div class="main_container">
-        <div class="post_container">
-            {% if post.post_slug != 'info' %}
-                <div class="post_header">
-                    <div class="post_title">
-                        <h1>{{ post.post_name }}</h1>
-                    </div>
-                    <div class="post_views">
-                        <img src="{% static 'post_section/icons/view_eye.svg' %}">
-                        <p>{{ post.view_count }}</p>
-                    </div>
-                </div>
-            {% endif %}
+    {% if request.is_mobile %}
 
-            <div class="post_content">
-                <p>{{ post.content|safe }}</p>
+        <link rel="stylesheet" href="{% static 'post_section/css/post_page-mobile.css' %}">
+        <div class="main_container">
+            <div class="navig_buttons">
+                <a href="#"><img src="{% static "post_section/icons/arrow_back.svg" %}">К постам</a>
+                <p> | </p>
+                {% if user.username == 'yurden' %}
+                      <a href="/admin/post_section/post/{{ post.id }}/change/"><img src="{% static 'post_section/icons/edit.svg' %}">Редактировать</a>
+                {% endif %}
+            </div>
 
-                <!-- Блок опроса -->
-                {% if poll %}
-                    <div id="poll-container" class="poll-container">
-                        <h2>{{ poll.question }}</h2>
-
-                        {% if not user.is_authenticated %}
-                        <div class="auth-warning">
-                            ⚠️ Для голосования необходимо <a href="/admin/login/">войти в систему</a>
+            <div class="post_container">
+                {% if post.post_slug != 'info' %}
+                    <div class="post_header">
+                        <div class="post_title">
+                            <h2>{{ post.post_name }}</h2>
                         </div>
-                        {% endif %}
-
-                        <!-- Блок голосования -->
-                        <div id="vote-section" class="vote-section" {% if user_vote %}style="display: none;"{% endif %}>
-                            <div class="vote-buttons">
-                                {% for choice in choices %}
-                                <button type="button" class="vote-btn" data-choice-id="{{ choice.id }}"
-                                        {% if not user.is_authenticated %}disabled{% endif %}>
-                                    {{ choice.choice_text }}
-                                </button>
-                                {% endfor %}
-                            </div>
-                        </div>
-
-                        <!-- Блок результатов -->
-                        <div id="results-section" class="results-section" {% if not user_vote %}style="display: none;"{% endif %}>
-                            <div class="results-container">
-                                {% for result in results_data.results %}
-                                <div class="result-row">
-                                    <div class="result-info">
-                                        <span class="choice-text">{{ result.choice_text }}</span>
-                                        <span class="vote-count">{{ result.vote_count }} голосов</span>
-                                    </div>
-                                    <div class="result-visual">
-                                        <div class="progress-bar">
-                                            <div class="progress-fill {% if user_vote and user_vote.choice.id == result.choice_id %}user-choice{% endif %}"
-                                                 data-width="{{ result.percentage|stringformat:'f' }}">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span class="progress-text">{{ result.percentage|floatformat:1 }}%</span>
-                                    {% if user_vote and user_vote.choice.id == result.choice_id %}
-                                    <div class="user-badge">[твой выбор]</div>
-                                    {% endif %}
-                                </div>
-                                {% endfor %}
-
-                                {% if user_vote %}
-                                <button type="button" class="cancel-vote-btn" onclick="cancelVote()">
-                                    ✖ Отменить мой голос
-                                </button>
-                                {% endif %}
-                            </div>
+                        <div class="post_views">
+                            <img src="{% static 'post_section/icons/view_eye.svg' %}">
+                            <p>{{ post.view_count }}</p>
                         </div>
                     </div>
-
-                    <script src="{% static 'post_section/js/poll.js' %}"></script>
-                    <script>
-                        window.pollData = {
-                            userVoted: {% if user_vote %}true{% else %}false{% endif %},
-                            userChoiceId: {% if user_vote %}{{ user_vote.choice.id }}{% else %}null{% endif %}
-                        };
-
-                        document.addEventListener('DOMContentLoaded', function() {
-                            if (document.getElementById('poll-container')) {
-                                initPoll();
-                            }
-                        });
-                    </script>
                 {% endif %}
 
-            </div>
-        </div>
-    </div>
+                <div class="post_content">
+                    <p>{{ post.content|safe }}</p>
 
-    {% if user.username == 'yurden' %}
-        <div class="side_bar">
-            <div class="menu_block">
-                <a href="/admin/post_section/post/{{ post.id }}/change/"><p>Редактировать</p><img src="{% static 'post_section/icons/edit.svg' %}"></a>
+                    <!-- Блок опроса -->
+                    {% if poll %}
+                        <div id="poll-container" class="poll-container">
+                            <h2>[Опрос] {{ poll.question }}</h2>
+
+                            {% if not user.is_authenticated %}
+                            <div class="auth-warning">
+                                ⚠️ Для голосования необходимо <a href="/admin/login/">войти в систему</a>
+                            </div>
+                            {% endif %}
+
+                            <!-- Блок голосования -->
+                            <div id="vote-section" class="vote-section" {% if user_vote %}style="display: none;"{% endif %}>
+                                <div class="vote-buttons">
+                                    {% for choice in choices %}
+                                    <button type="button" class="vote-btn" data-choice-id="{{ choice.id }}"
+                                            {% if not user.is_authenticated %}disabled{% endif %}>
+                                        {{ choice.choice_text }}
+                                    </button>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Блок результатов -->
+                            <div id="results-section" class="results-section" {% if not user_vote %}style="display: none;"{% endif %}>
+                                <div class="results-container">
+                                    {% for result in results_data.results %}
+                                    <div class="result-row">
+                                        <div class="result-info">
+                                            <span class="choice-text"><p>{{ result.choice_text }}</p></span>
+                                            <span class="vote-count"><p>{{ result.vote_count }} голосов</p></span>
+                                        </div>
+                                        <div class="result_graph">
+                                            <div class="result-visual">
+                                                <div class="progress-bar">
+                                                    <div class="progress-fill {% if user_vote and user_vote.choice.id == result.choice_id %}user-choice{% endif %}"
+                                                         data-width="{{ result.percentage|stringformat:'f' }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span class="progress-text"><p>{{ result.percentage|floatformat:1 }}%</p></span>
+                                            {% if user_vote and user_vote.choice.id == result.choice_id %}
+                                                <div class="user-badge"><p>[твой выбор]</p></div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+
+                                    {% if user_vote %}
+                                    <button type="button" class="cancel-vote-btn" onclick="cancelVote()">
+                                        ✖ Отменить мой голос
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <script src="{% static 'post_section/js/poll.js' %}"></script>
+                        <script>
+                            window.pollData = {
+                                userVoted: {% if user_vote %}true{% else %}false{% endif %},
+                                userChoiceId: {% if user_vote %}{{ user_vote.choice.id }}{% else %}null{% endif %}
+                            };
+
+                            document.addEventListener('DOMContentLoaded', function() {
+                                if (document.getElementById('poll-container')) {
+                                    initPoll();
+                                }
+                            });
+                        </script>
+                    {% endif %}
+
+                </div>
             </div>
         </div>
+
+    {% else %}
+
+        <link rel="stylesheet" href="{% static 'post_section/css/post_page.css' %}">
+        <div class="main_container">
+            <div class="post_container">
+                {% if post.post_slug != 'info' %}
+                    <div class="post_header">
+                        <div class="post_title">
+                            <h1>{{ post.post_name }}</h1>
+                        </div>
+                        <div class="post_views">
+                            <img src="{% static 'post_section/icons/view_eye.svg' %}">
+                            <p>{{ post.view_count }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="post_content">
+                    <p>{{ post.content|safe }}</p>
+
+                    <!-- Блок опроса -->
+                    {% if poll %}
+                        <div id="poll-container" class="poll-container">
+                            <h2>{{ poll.question }}</h2>
+
+                            {% if not user.is_authenticated %}
+                            <div class="auth-warning">
+                                ⚠️ Для голосования необходимо <a href="/admin/login/">войти в систему</a>
+                            </div>
+                            {% endif %}
+
+                            <!-- Блок голосования -->
+                            <div id="vote-section" class="vote-section" {% if user_vote %}style="display: none;"{% endif %}>
+                                <div class="vote-buttons">
+                                    {% for choice in choices %}
+                                    <button type="button" class="vote-btn" data-choice-id="{{ choice.id }}"
+                                            {% if not user.is_authenticated %}disabled{% endif %}>
+                                        {{ choice.choice_text }}
+                                    </button>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Блок результатов -->
+                            <div id="results-section" class="results-section" {% if not user_vote %}style="display: none;"{% endif %}>
+                                <div class="results-container">
+                                    {% for result in results_data.results %}
+                                    <div class="result-row">
+                                        <div class="result-info">
+                                            <span class="choice-text">{{ result.choice_text }}</span>
+                                            <span class="vote-count">{{ result.vote_count }} голосов</span>
+                                        </div>
+                                        <div class="result-visual">
+                                            <div class="progress-bar">
+                                                <div class="progress-fill {% if user_vote and user_vote.choice.id == result.choice_id %}user-choice{% endif %}"
+                                                     data-width="{{ result.percentage|stringformat:'f' }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <span class="progress-text">{{ result.percentage|floatformat:1 }}%</span>
+                                        {% if user_vote and user_vote.choice.id == result.choice_id %}
+                                        <div class="user-badge">[твой выбор]</div>
+                                        {% endif %}
+                                    </div>
+                                    {% endfor %}
+
+                                    {% if user_vote %}
+                                    <button type="button" class="cancel-vote-btn" onclick="cancelVote()">
+                                        ✖ Отменить мой голос
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <script src="{% static 'post_section/js/poll.js' %}"></script>
+                        <script>
+                            window.pollData = {
+                                userVoted: {% if user_vote %}true{% else %}false{% endif %},
+                                userChoiceId: {% if user_vote %}{{ user_vote.choice.id }}{% else %}null{% endif %}
+                            };
+
+                            document.addEventListener('DOMContentLoaded', function() {
+                                if (document.getElementById('poll-container')) {
+                                    initPoll();
+                                }
+                            });
+                        </script>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+        {% if user.username == 'yurden' %}
+            <div class="side_bar">
+                <div class="menu_block">
+                    <a href="/admin/post_section/post/{{ post.id }}/change/"><p>Редактировать</p><img src="{% static 'post_section/icons/edit.svg' %}"></a>
+                </div>
+            </div>
+        {% endif %}
+
     {% endif %}
+
+
 
 {% endblock %}
