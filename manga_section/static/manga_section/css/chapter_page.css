@@ -1,74 +1,12 @@
 @import url('../../../../static/css/themes.css');
-
-
-@font-face {
-    font-family: 'Nunito';
-    src: url('../fonts/Nunito-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Nunito';
-    src: url('../fonts/Nunito-Bold.ttf') format('truetype');
-    font-weight: bold;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Nunito';
-    src: url('../fonts/Nunito-Medium.ttf') format('truetype');
-    font-weight: 500;
-    font-style: normal;
-}
+@import url('../../../../static/css/text.css');
 
 body, html {
-    width: 100vw;
+    width: 100%;
     margin: 0;
     padding: 0;
     font-family: 'Nunito';
     background: var(--background-color);
-}
-
-a, p, h1, h2, h3 {
-    margin: 0;
-    padding: 0;
-    color: var(--text-color) !important;
-}
-
-a {
-    font-size: 16px;
-    text-decoration: none;
-    color: var(--text-color);
-}
-
-h1 {
-    font-size: 23px;
-    font-weight: bold;
-    margin: 0;
-    padding: 0;
-}
-
-h2 {
-    font-size: 20px;
-    font-weight: bold;
-    margin: 0;
-    padding: 0;
-}
-
-h3 {
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--text-color);
-    transition: color 2s ease;
-    margin: 0;
-    padding: 0;
-}
-
-p {
-    font-size: 16px;
-    margin: 0;
-    padding: 0;
 }
 
 .total_container {
@@ -95,6 +33,9 @@ p {
 
 .back_to_manga {
     display: flex;
+    position: fixed;
+    top: 0;
+    left: 50px;
     margin-top: 20px;
     height: fit-content;
     border-radius: 10px;
@@ -120,8 +61,12 @@ p {
     transition: color 0.5s ease;
 }
 
+.back_to_manga img {
+    filter: var(--icon-color);
+}
+
 .back_to_manga:hover img {
-    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(16deg) brightness(111%) contrast(102%);
+    filter: var(--icon-hover-color);
     transition: filter 0.5s ease;
 }
 
@@ -131,6 +76,7 @@ p {
 
 .main_container {
     display: flex;
+    margin: 0 auto;
     width: 70vw;
     justify-content: center;
 }
@@ -262,6 +208,7 @@ p {
 .side_bar {
     display: flex;
     flex-direction: column;
+    position: fixed;
     margin-top: 20px;
     left: calc(100% - 225px);
     align-items: center;

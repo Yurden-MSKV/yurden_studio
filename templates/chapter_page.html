@@ -109,7 +109,7 @@
 
     <div class="side_bar">
             <div class="current_ch">
-                <p>Глава {{ chapter.ch_number }}</p>
+                <p>Глава {{ chapter.get_chapter_display }}</p>
             </div>
             <div class="credits">
                 {% if chapter.interpreter.all %}
