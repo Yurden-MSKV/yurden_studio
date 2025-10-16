@@ -1,28 +1,35 @@
 {% extends "admin/change_form.html" %}
-{% load static %}
-
-{% block content %}
-<!-- ВРЕМЕННАЯ ПРОВЕРКА -->
-<div style="background: green; color: white; padding: 15px; margin: 15px 0; border: 2px solid darkgreen; border-radius: 5px;">
-    <h3>✅ КАСТОМНЫЙ ШАБЛОН ЗАГРУЖЕН!</h3>
-    <p>Время: {% now "H:i:s" %}</p>
-    <p>Путь: templates/admin/manga_section/chapter_change_form.html</p>
-    <p>Если вы видите это сообщение - шаблон работает!</p>
-</div>
-
-{{ block.super }}
-{% endblock %}
 
 {% block after_field_sets %}
-<div style="background: orange; color: black; padding: 10px; margin: 10px 0;">
-    Блок after_field_sets загружен!
-</div>
-
-<!-- Ваш основной код массовой загрузки -->
-<div class="module aligned upload-section">
-    <h2>📁 Тест массовой загрузки страниц</h2>
-    <p>Если вы видите этот текст - всё работает!</p>
-    <!-- ... остальной ваш код ... -->
+<div class="module aligned">
+    <h2>📁 Массовая загрузка страниц</h2>
+    
+    <div class="form-row">
+        <div>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="upload_images" value="true">
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="id_images" style="display: block; margin-bottom: 8px; font-weight: bold;">
+                        Выберите изображения для загрузки:
+                    </label>
+                    <input type="file" name="images" id="id_images" multiple
+                           accept="image/jpeg,image/png,image/gif,image/webp"
+                           style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                
+                <div class="submit-row" style="border: none; padding: 0;">
+                    <input type="submit" value="🚀 Загрузить выбранные файлы" name="_save" class="default">
+                </div>
+                
+                <div style="margin-top: 15px; color: #666; font-size: 13px;">
+                    <p>• Файлы будут добавлены в конец главы с автоматической нумерацией</p>
+                    <p>• Поддерживаются форматы: JPG, PNG, GIF, WEBP</p>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 {{ block.super }}
