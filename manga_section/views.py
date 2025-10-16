@@ -51,8 +51,6 @@ def chapter_page(request, manga_slug, ch_number):
 
     images = ChapterImage.objects.filter(chapter=chapter).order_by('page_number')
 
-    reading_mode = request.GET.get('mode', 'rtl')
-
     # Функция для создания пар с учетом разворотов
     def create_page_pairs(images):
         pairs = []
@@ -77,7 +75,21 @@ def chapter_page(request, manga_slug, ch_number):
 
         return pairs
 
-    page_pairs = create_page_pairs(images)
+    def page_mobile(images):
+        pages = []
+        i = 0
+        while i < len(images):
+            pages.append(images[i])
+            i += 1
+
+        return pages
+
+    if request.is_mobile:
+        page_pairs = page_mobile(images)
+        print("Ты зашёл с телефона!")
+    else:
+        page_pairs = create_page_pairs(images)
+        print("Ты зашёл с компа!")
 
     # Получаем статистику оценок
     likes_count = ChapterLike.objects.filter(chapter=chapter, is_like=True).count()
@@ -103,7 +115,6 @@ def chapter_page(request, manga_slug, ch_number):
         'chapter': chapter,
         'images': images,
         'page_pairs': page_pairs,
-        'reading_mode': reading_mode,
         'like_percentage': like_percentage,
         'user_rating': user_rating,
     }
