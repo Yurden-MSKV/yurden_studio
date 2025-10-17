@@ -154,10 +154,48 @@ body, html {
 /* Стили для пар страниц */
 .page-pair {
     display: none;
+    position: relative;
     justify-content: center;
     /*gap: 10px;*/
-    max-height: 100vh;
+    height: 100vh;
     /*margin: 20px 0;*/
+}
+
+.reader_buttons {
+    display: flex;
+    position: absolute;
+    margin: auto 0;
+    width: 100%;
+    /*background: green;*/
+    /*opacity: 0.5;*/
+    height: 100%;
+}
+
+.read_btn {
+    width: 30%;
+    height: 100%;
+}
+
+.read_btn button {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: none;
+    /*background: blue;*/
+    /*opacity: 0.6;*/
+}
+
+.read_btn button:active {
+    border: none;
+    background: none;
+}
+
+.toggle_next {
+    margin-right: auto;
+}
+
+.toggle_prev {
+    margin-left: auto;
 }
 
 .page-pair.active {

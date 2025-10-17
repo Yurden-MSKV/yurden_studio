@@ -85,7 +85,6 @@
                             <div class="toggle_prev read_btn">
                                 <button id="prev_page" onclick="goToPreviousPage()"></button>
                             </div>
-                            
                         </div>
                     </div>
                 {% endfor %}
@@ -302,6 +301,14 @@
                                      alt="Страница {{ pair.0.page_number }}">
                             </div>
                         {% endif %}
+                        <div class="reader_buttons">
+                            <div class="toggle_next read_btn">
+                                <button id="next_page" onclick="goToNextPage()"></button>
+                            </div>            
+                            <div class="toggle_prev read_btn">
+                                <button id="prev_page" onclick="goToPreviousPage()"></button>
+                            </div>
+                        </div>
                     </div>
                 {% endfor %}
             </div>
@@ -354,6 +361,9 @@
         <script>
             let currentPairIndex = 0;
             const totalPairs = {{ page_pairs|length }};
+            const manga_slug = "{{ manga.manga_slug }}";
+            const next_chapter = {% if next_chapter %}"{{ next_chapter }}"{% else %}null{% endif %};
+            const prev_chapter = {% if prev_chapter %}"{{ prev_chapter }}"{% else %}null{% endif %};
             const pagePairs = document.querySelectorAll('.page-pair');
     
             // Функция для обновления отображаемой пары страниц
@@ -369,7 +379,7 @@
                 pagePairs[currentPairIndex].classList.add('active');
     
                 // Обновляем информацию о текущих страницах
-                updatePageInfo();
+                {#updatePageInfo();#}
             }
     
             // Функция для обновления информации о страницах
@@ -397,7 +407,10 @@
                 if (currentPairIndex < totalPairs - 1) {
                     currentPairIndex++;
                     updateDisplayedPair();
-                }
+                } 
+                else if (currentPairIndex === totalPairs - 1 && next_chapter) {
+                    window.location.href = `/manga/${manga_slug}/chapter/${next_chapter}/`;
+                 } 
             }
     
             // Переход к предыдущей паре страниц
@@ -405,7 +418,10 @@
                 if (currentPairIndex > 0) {
                     currentPairIndex--;
                     updateDisplayedPair();
-                }
+                } 
+                else if (currentPairIndex === 0 && prev_chapter) {
+                    window.location.href = `/manga/${manga_slug}/chapter/${prev_chapter}/`;
+                 } 
             }
     
             // Обработка клавиш клавиатуры для навигации
