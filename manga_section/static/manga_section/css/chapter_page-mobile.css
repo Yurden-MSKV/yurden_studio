@@ -167,6 +167,11 @@ body, html {
     /*opacity: 0.6;*/
 }
 
+.read_btn button:active {
+    border: none;
+    background: none;
+}
+
 .toggle_next {
     margin-right: auto;
 }
