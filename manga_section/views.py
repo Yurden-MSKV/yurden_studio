@@ -49,6 +49,25 @@ def chapter_page(request, manga_slug, ch_number):
         ch_number=ch_number
     )
 
+    prev_chapter = Chapter.objects.filter(
+        volume__manga=manga,
+        ch_number__lt=ch_number
+    ).order_by('-ch_number').first()
+    if prev_chapter:
+        print(f"Предыдушая глава: {prev_chapter.get_chapter_display()}")
+    else:
+        print("Предыдущей нет.")
+
+    # Следующая глава (минимальный номер больше текущего)
+    next_chapter = Chapter.objects.filter(
+        volume__manga=manga,
+        ch_number__gt=ch_number
+    ).order_by('ch_number').first()
+    if next_chapter:
+        print(f"Следующая глава: {next_chapter.get_chapter_display()}")
+    else:
+        print("Следующей нет.")
+
     images = ChapterImage.objects.filter(chapter=chapter).order_by('page_number')
 
     # Функция для создания пар с учетом разворотов
@@ -117,6 +136,8 @@ def chapter_page(request, manga_slug, ch_number):
         'page_pairs': page_pairs,
         'like_percentage': like_percentage,
         'user_rating': user_rating,
+        'prev_chapter': prev_chapter.get_chapter_display if prev_chapter else None,
+        'next_chapter': next_chapter.get_chapter_display if next_chapter else None,
     }
     return render(request, 'chapter_page.html', context)
 

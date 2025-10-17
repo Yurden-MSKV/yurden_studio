@@ -139,27 +139,30 @@
         <script>
             let currentPairIndex = 0;
             const totalPairs = {{ page_pairs|length }};
-            const pagePairs = document.querySelectorAll('.page-pair');
+            const manga_slug = "{{ manga.manga_slug }}";
+            const next_chapter = {% if next_chapter %}"{{ next_chapter }}"{% else %}null{% endif %};
+            const prev_chapter = {% if prev_chapter %}"{{ prev_chapter }}"{% else %}null{% endif %};
+            const mobilepagePairs = document.querySelectorAll('.page-pair');
     
             // Функция для обновления отображаемой пары страниц
             function updateDisplayedPair() {
                 // Скрываем все пары
-                pagePairs.forEach(pair => {
+                mobilepagePairs.forEach(pair => {
                     pair.classList.add('hidden');
                     pair.classList.remove('active');
                 });
     
                 // Показываем текущую пару
-                pagePairs[currentPairIndex].classList.remove('hidden');
-                pagePairs[currentPairIndex].classList.add('active');
+                mobilepagePairs[currentPairIndex].classList.remove('hidden');
+                mobilepagePairs[currentPairIndex].classList.add('active');
     
                 // Обновляем информацию о текущих страницах
-                updatePageInfo();
+                {#updatePageInfo();#}
             }
     
             // Функция для обновления информации о страницах
             function updatePageInfo() {
-                const currentPair = pagePairs[currentPairIndex];
+                const currentPair = mobilepagePairs[currentPairIndex];
                 const pages = currentPair.querySelectorAll('.page[data-page-number]');
     
                 if (pages.length === 1) {
@@ -182,7 +185,10 @@
                 if (currentPairIndex < totalPairs - 1) {
                     currentPairIndex++;
                     updateDisplayedPair();
-                }
+                } 
+                else if (currentPairIndex === totalPairs - 1 && next_chapter) {
+                    window.location.href = `/manga/${manga_slug}/chapter/${next_chapter}/`;
+                 } 
             }
     
             // Переход к предыдущей паре страниц
@@ -190,7 +196,10 @@
                 if (currentPairIndex > 0) {
                     currentPairIndex--;
                     updateDisplayedPair();
-                }
+                } 
+                else if (currentPairIndex === 0 && prev_chapter) {
+                    window.location.href = `/manga/${manga_slug}/chapter/${prev_chapter}/`;
+                 } 
             }
     
             // Обработка клавиш клавиатуры для навигации
@@ -207,6 +216,7 @@
         </script>
     
 {% else %}
+    
         <link rel="stylesheet" href="{% static 'manga_section/css/chapter_page.css' %}">
         <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
         
