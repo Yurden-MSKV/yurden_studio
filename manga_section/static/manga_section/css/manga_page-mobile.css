@@ -177,11 +177,18 @@ body, html {
     display: flex;
     margin-left: auto;
     height: fit-content;
+    padding: 4px 8px 4px 6px;
     /*background-color: var(--element-color);*/
     /*border-radius: 10px;*/
 }
 
 .chapter_rating p {
-    padding: 4px 8px;
     width: fit-content;
+    font-weight: 500;
+}
+
+.chapter_rating img {
+    display: flex;
+    filter: var(--icon-color);
+    width: 28px
 }
