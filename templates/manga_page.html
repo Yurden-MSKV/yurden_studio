@@ -41,9 +41,9 @@
                                 <div class="volume_number">
                                     <h2>Том {{ volume.vol_number }}</h2>
                                 </div>
-                                <div class="volume_desc">
-                                    <p>{{ volume.volume_description }}</p>
-                                </div>
+{#                                <div class="volume_desc">#}
+{#                                    <p>{{ volume.volume_description }}</p>#}
+{#                                </div>#}
                             </div>
                             <div class="volume_list">
                                     {% for chapter in volume.chapters.all %}
@@ -115,22 +115,38 @@
                             <div class="volume_list">
                                     {% for chapter in volume.chapters.all %}
                                         <div class="chapter_element">
-                                            <div class="chapter_width">
-                                                <div class="chapter">
-                                                    <a href="
-    {% url 'chapter-page' manga_slug=manga.manga_slug ch_number=chapter.get_chapter_display %}">
-                                                        <div class="ch_number">
-                                                        Глава {{ chapter.get_chapter_display}}
-                                                        </div>
-                                                        <div class="ch_name">
-                                                            {{ chapter.ch_name|add_nbsp|smart_break:request|safe }}
-                                                        </div>
-                                                    </a>
-                                                </div>
+                                            <div class="view_sign">
+                                                {% with last_readen=viewed_chapters_dates|last %}
+                                                    {% if not chapter.id in viewed_chapters %}
+                                                        <img class="no_read" src=
+                                                                "{% static 'manga_section/icons/no_view.svg' %}">
+                                                    {% elif chapter.id in viewed_chapters and chapter.id != last_readen %}
+                                                        <img class="is_read" src=
+                                                                "{% static 'manga_section/icons/is_view.svg' %}">
+                                                    {% elif chapter.id in viewed_chapters and chapter.id == last_readen %}
+                                                        <img class="last_read" src="{% static 'manga_section/icons/last_read.svg' %}">
+                                                    
+                                                    {% endif %}
+                                                {% endwith %}
                                             </div>
-                                            <div class="chapter_rating">
-                                                <img src="{% static 'manga_section/icons/rate_star.svg' %}">
-                                                <p>{{ chapter.rate_percentage }}%</p>
+                                            <div class="chapter_and_rate">
+                                                <div class="chapter_width">
+                                                    <div class="chapter">
+                                                        <a href="
+        {% url 'chapter-page' manga_slug=manga.manga_slug ch_number=chapter.get_chapter_display %}">
+                                                            <div class="ch_number">
+                                                            Глава {{ chapter.get_chapter_display}}
+                                                            </div>
+                                                            <div class="ch_name">
+                                                                {{ chapter.ch_name|add_nbsp|smart_break:request|safe }}
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="chapter_rating">
+                                                    <img src="{% static 'manga_section/icons/rate_star.svg' %}">
+                                                    <p>{{ chapter.rate_percentage }}%</p>
+                                                </div>
                                             </div>
                                         </div>
                                     {% endfor %}

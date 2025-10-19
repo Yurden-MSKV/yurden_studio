@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-from manga_section.models import Chapter
+from manga_section.models import Chapter, Manga
 
 
 class ChapterLike(models.Model):
@@ -50,3 +50,14 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+class ChapterView(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    manga = models.ForeignKey(Manga, on_delete=models.CASCADE)
+    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE,
+                                related_name='views')
+    is_view = models.BooleanField(blank=True, null=True)
+    view_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+
+    class Meta:
+        unique_together = ('user', 'chapter')

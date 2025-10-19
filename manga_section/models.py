@@ -122,6 +122,15 @@ class Chapter(models.Model):
         else:
             return 0
 
+    def get_next_chapter(self):
+        try:
+            return Chapter.objects.filter(
+                volume__manga=self.volume.manga,
+                ch_number__gt=self.ch_number
+            ).order_by('ch_number').first()
+        except:
+            return None
+
 def chapter_image_path(instance, filename):
     return f'manga/chapters/images/{instance.chapter.id}/{filename}'
 

@@ -2,11 +2,12 @@ from django.http import Http404, JsonResponse
 from decimal import Decimal
 
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 
 from manga_section.models import Manga, Chapter, ChapterImage
-from main_section.models import ChapterLike
+from main_section.models import ChapterLike, ChapterView
 
 from django.shortcuts import render, get_object_or_404
 
@@ -15,12 +16,21 @@ def manga_page(request, slug):
     # Получаем мангу с предзагрузкой всех связанных данных
     manga = get_object_or_404(Manga.objects.prefetch_related(
         'volumes__chapters__likes',  # Тома и их главы
+        'volumes__chapters__views',
         'genres',
         'authors'
     ), manga_slug=slug)
 
     # Получаем тома, отсортированные по номеру
     volumes = manga.volumes.all().order_by('vol_number')
+
+    viewed_chapters_dates = list(ChapterView.objects.filter(
+        user=request.user,
+        manga=manga,
+        is_view=True
+    ).order_by('view_date').values_list('chapter_id', flat=True))
+
+    viewed_chapters = set(viewed_chapters_dates)
 
     genres = manga.genres.all()
     authors = manga.authors.all()
@@ -30,8 +40,11 @@ def manga_page(request, slug):
         'volumes': volumes,  # Добавляем тома в контекст
         'genres': genres,
         'authors': authors,
+        'viewed_chapters_dates': viewed_chapters_dates,
+        'viewed_chapters': viewed_chapters,
     }
     return render(request, 'manga_page.html', context)
+
 
 @ensure_csrf_cookie
 def chapter_page(request, manga_slug, ch_number):
@@ -47,6 +60,16 @@ def chapter_page(request, manga_slug, ch_number):
     chapter = get_object_or_404(
         Chapter.objects.filter(volume__manga=manga),
         ch_number=ch_number
+    )
+
+    chapter_view, created = ChapterView.objects.update_or_create(
+        user=request.user,
+        chapter=chapter,
+        manga=manga,
+        defaults={
+            'is_view': True,
+            'view_date': timezone.now()  # Всегда обновляем дату
+        }
     )
 
     prev_chapter = Chapter.objects.filter(

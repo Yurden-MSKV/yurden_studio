@@ -1,4 +1,4 @@
-@import url('../../../../static/css/themes.css');
+/*@import url('../../../../static/css/themes.css');*/
 @import url('../../../../static/css/text.css');
 
 
@@ -142,6 +142,37 @@ body, html {
     gap: 10px;
 }
 
+.view_sign {
+    display: flex;
+    align-items: center;
+    padding: 0 5px;
+    border-radius: 10px;
+    background: var(--element-color);
+}
+
+.view_sign img {
+    width: 24px;
+    filter: var(--icon-color);
+}
+
+img.no_read {
+    filter: invert(49%) sepia(97%) saturate(2944%) hue-rotate(329deg) brightness(107%) contrast(114%);
+}
+
+img.is_read {
+    filter: invert(62%) sepia(42%) saturate(626%) hue-rotate(73deg) brightness(88%) contrast(86%);
+}
+
+img.last_read {
+    filter: invert(89%) sepia(23%) saturate(5489%) hue-rotate(351deg) brightness(99%) contrast(104%);
+}
+
+.chapter_and_rate {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
 .chapter_width {
     display: flex;
     max-width: 460px;
@@ -155,7 +186,7 @@ body, html {
     border-radius: 10px;
 }
 
-.chapter:hover {
+.chapter_and_rate:hover .chapter {
     background-color: var(--hover-color);
     transition: background-color 0.5s ease;
 }
@@ -168,7 +199,7 @@ body, html {
     width: fit-content;
 }
 
-.chapter a:hover {
+.chapter_and_rate:hover .chapter a {
     color: var(--hover-text-color) !important;
     transition: color 0.5s ease;
 }
@@ -180,7 +211,7 @@ body, html {
 .chapter_rating {
     display: flex;
     align-items: center;
-    margin: 0 165px 0 auto;
+    margin: 0 95px 0 auto;
     padding: 4px 8px 4px 6px;
     height: fit-content;
     background-color: var(--element-color);
@@ -196,4 +227,19 @@ body, html {
 .chapter_rating img {
     display: flex;
     filter: var(--icon-color)
+}
+
+.chapter_and_rate:hover .chapter_rating {
+    background: var(--hover-color);
+    transition: background-color 0.5s ease;
+}
+
+.chapter_and_rate:hover .chapter_rating p {
+    color: var(--hover-text-color) !important;
+    transition: color 0.5s ease;
+}
+
+.chapter_and_rate:hover .chapter_rating img {
+    filter: var(--icon-hover-color);
+    transition: filter 0.5s ease;
 }
