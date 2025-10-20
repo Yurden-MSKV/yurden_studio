@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('main_section', '0005_chapterview'),
-        ('manga_section', '0010_alter_chapter_ch_number'),
+        ('manga_section', '0001_initial'),
     ]
 
     operations = [

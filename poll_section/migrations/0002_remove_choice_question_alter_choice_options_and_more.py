@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('poll_section', '0001_initial'),
-        ('post_section', '0003_alter_post_visibility'),
+        ('post_section', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 

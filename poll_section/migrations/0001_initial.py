@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('post_section', '0003_alter_post_visibility'),
+        ('post_section', '0001_initial'),
     ]
 
     operations = [

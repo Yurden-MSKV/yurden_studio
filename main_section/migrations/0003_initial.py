@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('main_section', '0002_delete_chapterlike'),
-        ('manga_section', '0003_remove_chapter_dislike_count_and_more'),
+        ('manga_section', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
