@@ -17,7 +17,7 @@ body, html {
     background-color: var(--block-color);
     width: 100vw;
     height: fit-content;
-    margin-top: 80px;
+    margin-top: 110px;
     /*border-radius: 10px;*/
 }
 
@@ -37,13 +37,14 @@ body, html {
 }
 
 .name {
-    margin: 10px 0 0 15px;
+    margin: 10px 0 10px 15px;
     width: fit-content;
     padding: 0;
 }
 
-.name h2 {
+.name h1 {
     line-height: 1;
+    font-size: 45px !important;
 }
 
 .description {
@@ -62,14 +63,15 @@ body, html {
     justify-content: center;
     box-sizing: border-box;
     margin-right: 10px;
-    background-color: var(--element-color);
-    border-radius: 15px;
+    /*background-color: var(--element-color);*/
+    /*border-radius: 15px;*/
     /*border: 1px solid black;*/
 }
 
 .genres_block p {
     /*color: #991B1B;*/
-    font-weight: 500;
+    font-weight: bold;
+    font-style: italic;
     margin-top: 0;
     width: fit-content;
     padding: 4px 10px;
@@ -137,9 +139,9 @@ body, html {
 .volume_list {
     display: flex;
     flex-direction: column;
-    margin: 10px 20px 10px 10px;
+    margin: 10px 20px;
     height: fit-content;
-    gap: 15px;
+    gap: 30px;
     padding: 0;
 }
 
@@ -165,12 +167,50 @@ body, html {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding: 4px 8px;
+    padding: 5px 12px;
     width: fit-content;
+    background: var(--element-color);
+    border-radius: 10px;
 }
 
 .ch_number {
     font-weight: bold;
+}
+
+.rate_and_mark {
+    display: flex;
+    flex-direction: column;
+    /*gap: 10px;*/
+    align-items: end;
+    justify-content: center;
+    margin-left: auto;
+    width: max-content;
+}
+
+.view_sign {
+    display: flex;
+    align-items: center;
+    padding: 0 5px;
+    border-radius: 10px;
+    /*background: var(--element-color);*/
+    width: fit-content;
+}
+
+.view_sign img {
+    width: 50px;
+    filter: var(--icon-color);
+}
+
+img.no_read {
+    filter: invert(49%) sepia(97%) saturate(2944%) hue-rotate(329deg) brightness(107%) contrast(114%);
+}
+
+img.is_read {
+    filter: invert(62%) sepia(42%) saturate(626%) hue-rotate(73deg) brightness(88%) contrast(86%);
+}
+
+img.last_read {
+    filter: invert(89%) sepia(23%) saturate(5489%) hue-rotate(351deg) brightness(99%) contrast(104%);
 }
 
 .chapter_rating {
@@ -191,4 +231,8 @@ body, html {
     display: flex;
     filter: var(--icon-color);
     width: 28px
+}
+
+.svg-icon {
+    transition: opacity 0.3s;
 }

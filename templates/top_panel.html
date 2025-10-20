@@ -75,12 +75,11 @@
         {% block top_panel %}
             {% if request.is_mobile %}
                 <link rel="stylesheet" href="{% static 'main_section/css/top_panel-mobile.css' %}">
-                <link rel="stylesheet" href="{% static 'css/text-mobile.css' %}">
 
                 {#  Верхняя панель  #}
                 <div class="top_panel_container">
                     <div class="site_name_container">
-                        <h2>Студия Юрия Московцева</h2>
+                        <h1>Студия Юрия Московцева</h1>
                     </div>
                     <div class="menu_toggle_block">
                         <button class="toggle_btn" onclick="toggleMenu()">
@@ -89,10 +88,6 @@
                     </div>
                 </div>
                 <div class="menu-cont">
-                        <!-- NOTE: 
-                            Тень при прокрутке на телефоне обрабатывается неправильно.
-                            Снизу остаётся незатемнённая область, которая растормаживается,
-                            только если прокручивать вверх. -->
                         <div class="page-shadow" id="page-shadow"></div>
                         <div class="menu_block" id="menu_block">
                             <div class="navigation">
@@ -109,7 +104,7 @@
                             <div class="navigation" id="userMenu">
                                 {% if user.username == 'yurden' %}
                                     <div class="menu_item">
-                                        <a href="/admin/"><img src="{% static 'main_section/icons/admin.svg' %}"><p>Админка</p></a>
+                                        <a href="/admin/"><img src="{% static 'main_section/icons/admin.svg' %}">Админка</a>
                                     </div>
                                 {% endif %}
                                 <div class="menu_item">
@@ -120,7 +115,7 @@
                                     </button>
                                 </div>
                                 <div class="menu_item">
-                                    <a href="{% url 'logout' %}"><img src="{% static 'main_section/icons/logout.svg' %}"><p>Выйти</p></a>
+                                    <a href="{% url 'logout' %}"><img src="{% static 'main_section/icons/logout.svg' %}">Выйти</a>
                                 </div>
                             </div>
                         </div>
@@ -142,21 +137,35 @@
                         }, 10);
                     });
                 
-                    function toggleMenu() {
+                    function toggleMenu(event) {
+                        if (event) event.stopPropagation();
+
                         const menu = document.getElementById('menu_block');
-                        menu.classList.toggle('show');
                         const shadow = document.getElementById('page-shadow');
+                        const isShowing = !menu.classList.contains('show');
+
+                        menu.classList.toggle('show');
                         shadow.classList.toggle('shadow_show');
+
+                        if (isShowing) {
+                            document.dispatchEvent(new CustomEvent('overlayShow', {detail: { isVisible: true }}));
+                        } else {
+                            document.dispatchEvent(new CustomEvent('overlayHide', {detail: { isVisible: false }}));
+                        }
                     }
 
                     document.addEventListener('click', function(event) {
                         const menu = document.getElementById('menu_block');
-                        const shadow = document.getElementById('page-shadow');
                         const button = document.querySelector('.toggle_btn');
 
-                        if (!menu.contains(event.target) && !button.contains(event.target)) {
+                        // Закрываем меню только если оно открыто И клик был вне меню И вне кнопки
+                        if (menu.classList.contains('show') &&
+                            !menu.contains(event.target) &&
+                            !button.contains(event.target)) {
+
                             menu.classList.remove('show');
-                            shadow.classList.remove('shadow_show');
+                            document.getElementById('page-shadow').classList.remove('shadow_show');
+                            document.dispatchEvent(new CustomEvent('overlayHide', {detail: { isVisible: false }}));
                         }
                     });
                 </script>

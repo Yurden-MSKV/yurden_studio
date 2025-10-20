@@ -16,7 +16,7 @@
             <div class="info_block">
                 <div class="name_n_description">
                     <div class="name">
-                        <h2>{{ manga.manga_name }}</h2>
+                        <h1>{{ manga.manga_name }}</h1>
                     </div>
                     <div class="description">
                         <p>{{ manga.description|add_nbsp }}</p>
@@ -57,14 +57,32 @@
                                                         </div>
                                                         <div class="ch_name">
                                                             <p>
-                                                                {{ chapter.ch_name|add_nbsp|safe }}</p>
+                                                                {{ chapter.ch_name|add_nbsp|split_by_width_ignore_html|safe }}</p>
                                                         </div>
                                                     </a>
                                                 </div>
                                             </div>
-                                            <div class="chapter_rating">
-                                                <img src="{% static 'manga_section/icons/rate_star.svg' %}">
-                                                <p>{{ chapter.rate_percentage }}%</p>
+                                            <div class="rate_and_mark">
+                                                <div class="chapter_rating">
+                                                    <img class="svg-icon" src=
+                                                            "{% static 'manga_section/icons/rate_star.svg' %}">
+                                                    <p>{{ chapter.rate_percentage }}%</p>
+                                                </div>
+                                                <div class="view_sign">
+                                                {% with last_readen=viewed_chapters_dates|last %}
+                                                    {% if not chapter.id in viewed_chapters %}
+{#                                                        <img class="no_read" src=#}
+{#                                                                "{% static 'manga_section/icons/no_view.svg' %}">#}
+                                                    {% elif chapter.id in viewed_chapters and chapter.id != last_readen %}
+{#                                                        <img class="is_read" src=#}
+{#                                                                "{% static 'manga_section/icons/is_view.svg' %}">#}
+                                                    {% elif chapter.id in viewed_chapters and chapter.id == last_readen %}
+                                                        <img class="last_read svg-icon" src=
+                                                                "{% static 'manga_section/icons/last_read.svg' %}">
+
+                                                    {% endif %}
+                                                {% endwith %}
+                                            </div>
                                             </div>
                                         </div>
                                     {% endfor %}
@@ -74,6 +92,21 @@
                 {% endfor %}
             </div>
         </div>
+
+        <script>
+            document.addEventListener('overlayShow', (event) => {
+              console.log('Overlay SHOW event received');
+              document.querySelectorAll('.svg-icon').forEach(icon => {
+                icon.style.opacity = '0.5';
+              });
+            });
+            document.addEventListener('overlayHide', (event) => {
+              console.log('Overlay HIDE event received');
+              document.querySelectorAll('.svg-icon').forEach(icon => {
+                icon.style.opacity = '1'; // Возвращаем исходный фильтр
+              });
+            });
+        </script>
 
     {% else %}
 
@@ -158,7 +191,5 @@
         </div>
 
     {% endif %}
-
-
 
 {% endblock %}
