@@ -13,7 +13,7 @@ body, html {
 .main_container {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
     width: 100vw;
     height: fit-content;
     margin-top: 110px;
@@ -47,7 +47,7 @@ body, html {
 }
 
 .block_title h1 {
-    font-size: 20px;
+    /*font-size: 20px;*/
     text-align: center;
     margin: 0 auto;
     /*border: 1px solid red;*/
@@ -98,11 +98,11 @@ body, html {
     /*border: 1px solid red;*/
 }
 
-.block_text h1 {
-    margin-top: 0;
-    font-size: 20px;
-    /*border: 1px solid red;*/
-}
+/*.block_text h1 {*/
+/*    margin-top: 0;*/
+/*    font-size: 20px;*/
+/*    !*border: 1px solid red;*!*/
+/*}*/
 
 .block_text h2 {
     margin-top: 0;
@@ -123,7 +123,7 @@ body, html {
     display: flex;
     justify-content: center;
     width: fit-content;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     box-sizing: border-box;
     border-radius: 10px;
 }
@@ -134,15 +134,16 @@ body, html {
     text-decoration: none;
     color: var(--text-color);
     margin: 0;
-    padding: 2px 5px;
-    border-radius: 5px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background: var(--element-color);
 }
 
 .block_chapters {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: 20px;
     margin-left: 20px;
     /*border: 1px solid red;*/
 }
@@ -168,11 +169,13 @@ body, html {
     white-space: normal;
     /*font-size: 16px;*/
     font-weight: 500;
-    padding: 4px 8px;
+    padding: 5px 10px;
     box-sizing: border-box;
     text-decoration: none;
     color: var(--text-color);
     /*width: 100%;*/
+    background: var(--element-color);
+    border-radius: 10px;
 }
 
 .number {

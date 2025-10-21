@@ -16,14 +16,14 @@
         <div class="main_container">
             <div class="news_container contain_block">
                 <div class="block_title">
-                    <h2>Новости студии</h2>
+                    <h1>Новости студии</h1>
                 </div>
                 <div class="block_container">
                     {% for post in recent_post %}
                         <div class="post_block">
                             <div class="post_block_title">
-                                <a href="{% url 'post-page' post_slug=post.post_slug %}"><p>{{ post.post_name }}
-                                    ({{ post.add_date|date:"d.m.Y" }})</p></a>
+                                <a href="{% url 'post-page' post_slug=post.post_slug %}"><h1>{{ post.post_name }}
+                                    ({{ post.add_date|date:"d.m.Y" }})</h1></a>
                             </div>
                             <div class="post_block_content">
                                 <p>{{ post.get_short_content_safe|add_nbsp }}</p>
@@ -34,7 +34,7 @@
             </div>
             <div class="updates_container contain_block">
                 <div class="block_title">
-                    <h2>Последние переводы</h2>
+                    <h1>Последние переводы</h1>
                 </div>
                 <div class="block_container">
                     {% for item in recent_manga %}
@@ -45,7 +45,7 @@
                             <div class="block_text">
                                 <div class="block_info">
                                     <a href="{% url 'manga-page' slug=item.manga.manga_slug %}">
-                                        <p>{{ item.manga.manga_name }}</p></a>
+                                        <h1>{{ item.manga.manga_name }}</h1></a>
 {#                                  <h2>{{ chapter.volume_number.manga.manga_description }}</h2>#}
                                 </div>
                                 <div class="block_chapters">
