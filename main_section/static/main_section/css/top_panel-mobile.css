@@ -91,7 +91,7 @@ body::-webkit-scrollbar, html::-webkit-scrollbar {
     display: flex;
     flex-direction: column;
     position: fixed;
-    top: 80px;
+    top: 110px;
     right: 25px;
     visibility: hidden;
     opacity: 0;

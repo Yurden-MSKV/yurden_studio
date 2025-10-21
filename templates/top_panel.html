@@ -169,6 +169,22 @@
                         }
                     });
                 </script>
+                <script>
+                    // Обработчики для затемнения иконок при открытии меню
+                    document.addEventListener('overlayShow', (event) => {
+                      console.log('Overlay SHOW event received in top_panel');
+                      document.querySelectorAll('.svg-icon').forEach(icon => {
+                        icon.style.opacity = '0.5';
+                      });
+                    });
+                    
+                    document.addEventListener('overlayHide', (event) => {
+                      console.log('Overlay HIDE event received in top_panel');
+                      document.querySelectorAll('.svg-icon').forEach(icon => {
+                        icon.style.opacity = '1';
+                      });
+                    });
+                </script>
 
             {% else %}
                 <link rel="stylesheet" href="{% static 'main_section/css/top_panel.css' %}">

@@ -93,21 +93,6 @@
             </div>
         </div>
 
-        <script>
-            document.addEventListener('overlayShow', (event) => {
-              console.log('Overlay SHOW event received');
-              document.querySelectorAll('.svg-icon').forEach(icon => {
-                icon.style.opacity = '0.5';
-              });
-            });
-            document.addEventListener('overlayHide', (event) => {
-              console.log('Overlay HIDE event received');
-              document.querySelectorAll('.svg-icon').forEach(icon => {
-                icon.style.opacity = '1'; // Возвращаем исходный фильтр
-              });
-            });
-        </script>
-
     {% else %}
 
         <link rel="stylesheet" href="{% static 'manga_section/css/manga_page.css' %}">

@@ -58,11 +58,11 @@ body, html {
 }
 
 .post_content h1, .post_content h2, .post_content h3 {
-    margin: 25px 0 10px 0;
+    margin: 25px 0 10px 10px;
 }
 
-.post_content h1:first-child, .post_content h2:first-child, .post_content h3:first-child {
-    margin: 10px 0;
+.post_content h1:first-of-type, .post_content h2:first-of-type, .post_content h3:first-of-type {
+    margin: 10px;
 }
 
 .post_content p {

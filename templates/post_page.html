@@ -1,4 +1,6 @@
 {% extends 'top_panel.html' %}
+{% load nbsp_filters %}
+{% load text_processing %}
 {% load static %}
 
 {% block title %}
@@ -12,10 +14,10 @@
         <link rel="stylesheet" href="{% static 'post_section/css/post_page-mobile.css' %}">
         <div class="main_container">
             <div class="navig_buttons">
-                <a href="#"><img src="{% static "post_section/icons/arrow_back.svg" %}">К постам</a>
-                <p> | </p>
+                <a href="#"><img class="svg-icon" src="{% static "post_section/icons/arrow_back.svg" %}">К постам</a>
                 {% if user.username == 'yurden' %}
-                      <a href="/admin/post_section/post/{{ post.id }}/change/"><img src="{% static 'post_section/icons/edit.svg' %}">Редактировать</a>
+                    <p> | </p>
+                    <a href="/admin/post_section/post/{{ post.id }}/change/"><img class="svg-icon" src="{% static 'post_section/icons/edit.svg' %}">Редактировать</a>
                 {% endif %}
             </div>
 
@@ -26,14 +28,14 @@
                             <h2>{{ post.post_name }}</h2>
                         </div>
                         <div class="post_views">
-                            <img src="{% static 'post_section/icons/view_eye.svg' %}">
+                            <img class="svg-icon" src="{% static 'post_section/icons/view_eye.svg' %}">
                             <p>{{ post.view_count }}</p>
                         </div>
                     </div>
                 {% endif %}
 
                 <div class="post_content">
-                    <p>{{ post.content|safe }}</p>
+                    <p>{{ post.content|add_nbsp|safe }}</p>
 
                     <!-- Блок опроса -->
                     {% if poll %}
@@ -129,7 +131,7 @@
                 {% endif %}
 
                 <div class="post_content">
-                    <p>{{ post.content|safe }}</p>
+                    <p>{{ post.content|add_nbsp|safe }}</p>
 
                     <!-- Блок опроса -->
                     {% if poll %}
