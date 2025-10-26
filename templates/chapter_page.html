@@ -187,7 +187,10 @@
                 } 
                 else if (currentPairIndex === totalPairs - 1 && next_chapter) {
                     window.location.href = `/manga/${manga_slug}/chapter/${next_chapter}/`;
-                 } 
+                }
+                else if (currentPairIndex === totalPairs - 1 && !next_chapter) {
+                    window.location.href = `/manga/${manga_slug}/`;
+                }
             }
     
             // Переход к предыдущей паре страниц
@@ -198,17 +201,11 @@
                 } 
                 else if (currentPairIndex === 0 && prev_chapter) {
                     window.location.href = `/manga/${manga_slug}/chapter/${prev_chapter}/`;
-                 } 
-            }
-    
-            // Обработка клавиш клавиатуры для навигации
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'ArrowRight') {
-                    goToPreviousPage();
-                } else if (event.key === 'ArrowLeft') {
-                    goToNextPage();
                 }
-            });
+                else if (currentPairIndex === 0 && !prev_chapter) {
+                    window.location.href = `/manga/${manga_slug}/`;
+                }
+            }
     
             // Инициализация при загрузке
             updateDisplayedPair();
@@ -410,7 +407,10 @@
                 } 
                 else if (currentPairIndex === totalPairs - 1 && next_chapter) {
                     window.location.href = `/manga/${manga_slug}/chapter/${next_chapter}/`;
-                 } 
+                }
+                else if (currentPairIndex === totalPairs - 1 && !next_chapter) {
+                    window.location.href = `/manga/${manga_slug}/`;
+                }
             }
     
             // Переход к предыдущей паре страниц
@@ -421,7 +421,10 @@
                 } 
                 else if (currentPairIndex === 0 && prev_chapter) {
                     window.location.href = `/manga/${manga_slug}/chapter/${prev_chapter}/`;
-                 } 
+                }
+                else if (currentPairIndex === 0 && !prev_chapter) {
+                    window.location.href = `/manga/${manga_slug}/`;
+                }
             }
     
             // Обработка клавиш клавиатуры для навигации
