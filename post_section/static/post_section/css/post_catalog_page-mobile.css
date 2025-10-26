@@ -1,0 +1,42 @@
+@import url('../../../../static/css/themes.css');
+@import url('../../../../static/css/text-mobile.css');
+
+body, html {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito';
+    background: var(--background-color);
+}
+
+.main_container {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: fit-content;
+    margin-top: 110px;
+    gap: 10px;
+    background-color: var(--block-color);
+}
+
+.post_link:first-child {
+    display: flex;
+    margin-top: 15px;
+}
+
+.post_link:last-child {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.post_block {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: auto;
+    height: fit-content;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background: var(--element-color);
+}

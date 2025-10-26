@@ -1,0 +1,31 @@
+{% extends "top_panel.html" %}
+{% load nbsp_filters %}
+{% load static %}
+
+{% block title %}
+    <title>Каталог Студии</title>
+{% endblock %}
+
+{% block content %}
+    
+    {% if request.is_mobile %}
+        <link rel="stylesheet" href="{% static 'manga_section/css/catalog_page-mobile.css' %}">
+    {% else %}
+        <link rel="stylesheet" href="{% static 'manga_section/css/catalog_page.css' %}"></link>
+    {% endif %}
+    
+    <div class="main_container">
+        {% for manga in manga_list %}
+            <a class="manga_link" href="{% url 'manga-page' slug=manga.manga_slug %}">
+                <div class="manga_block">
+                    <img class="cover" src="{{manga.get_latest_volume_cover.url}}">
+                    <div class="info_block">
+                        <h1>{{ manga.manga_name }}</h1>
+                        <p>{{ manga.description|add_nbsp }}</p>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+    
+{% endblock %}

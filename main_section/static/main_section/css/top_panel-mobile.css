@@ -24,7 +24,7 @@ body::-webkit-scrollbar, html::-webkit-scrollbar {
     display: flex;
     position: fixed;
     height: 80px;
-    width: 98.5vw;
+    width: 98.2vw;
     margin: 0 auto;
     padding: 10px;
     align-items: center;
@@ -95,7 +95,7 @@ body::-webkit-scrollbar, html::-webkit-scrollbar {
     right: 25px;
     visibility: hidden;
     opacity: 0;
-    gap: 30px;
+    gap: 35px;
     /*align-items: center;*/
     margin-left: 20px;
     margin-right: auto;
@@ -115,7 +115,7 @@ body::-webkit-scrollbar, html::-webkit-scrollbar {
 }
 
 .menu_block a {
-    font-size: 45px !important;
+    font-size: 50px !important;
     font-weight: bold;
 }
 
@@ -123,7 +123,7 @@ body::-webkit-scrollbar, html::-webkit-scrollbar {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 35px;
 }
 
 .top_panel_button {
@@ -172,7 +172,7 @@ body::-webkit-scrollbar, html::-webkit-scrollbar {
     display: none;
     flex-direction: row;
     align-items: center;
-    font: bold 45px 'Nunito';
+    font: bold 50px 'Nunito';
     color: var(--text-color);
 }
 

@@ -4,5 +4,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path('', views.post_catalog, name='post-catalog'),
     path('<slug:post_slug>/', views.post_page, name='post-page'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

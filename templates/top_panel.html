@@ -91,15 +91,31 @@
                         <div class="page-shadow" id="page-shadow"></div>
                         <div class="menu_block" id="menu_block">
                             <div class="navigation">
-                                <div class="top_panel_button">
-                                    <a href="{% url 'home-page' %}">Главная</a>
-                                </div>
-                                <div class="top_panel_button">
-                                    <a href="#">Каталог</a>
-                                </div>
-                                <div class="top_panel_button">
-                                    <a href="{% url 'info' %}">Инфо</a>
-                                </div>
+                                <a class="top_panel_button" href="{% url 'home-page' %}">
+                                    <div class="button_block">
+                                        Главная
+                                    </div>
+                                </a>
+                                <a class="top_panel_button" href="{% url 'catalog-page' %}">
+                                    <div class="button_block">
+                                        Каталог
+                                    </div>
+                                </a>
+                                <a class="top_panel_button" href="{% url 'post-catalog' %}">
+                                    <div class="button_block">
+                                        Посты
+                                    </div>
+                                </a>
+                                <a class="top_panel_button" href="#">
+                                    <div class="button_block">
+                                        Работа
+                                    </div>
+                                </a>
+                                <a class="top_panel_button" href="{% url 'info' %}">
+                                    <div class="button_block">
+                                        Инфо
+                                    </div>
+                                </a>
                             </div>
                             <div class="navigation" id="userMenu">
                                 {% if user.username == 'yurden' %}
@@ -187,8 +203,10 @@
                 </script>
 
             {% else %}
-                <link rel="stylesheet" href="{% static 'main_section/css/top_panel.css' %}">
                 <link rel="stylesheet" href="{% static 'css/text.css' %}">
+                <link rel="stylesheet" href="{% static 'css/themes.css' %}">
+                <link rel="stylesheet" href="{% static 'main_section/css/top_panel.css' %}">
+                
 
                 {#  Верхняя панель  #}
                 <div class="top_panel_container">
@@ -196,16 +214,31 @@
                         <h2>Студия Юрия Московцева</h2>
                     </div>
                     <div class="buttons_container">
-                        <div class="top_panel_button">
-    {#                        <a href="#">Главная</a>#}
-                            <a href="{% url 'home-page' %}">Главная</a>
-                        </div>
-                        <div class="top_panel_button">
-                            <a href="#">Каталог</a>
-                        </div>
-                        <div class="top_panel_button">
-                            <a href="{% url 'info' %}">Инфо</a>
-                        </div>
+                        <a class="top_panel_button" href="{% url 'home-page' %}">
+                            <div class="button_block">
+                                <p>Главная</p>
+                            </div>
+                        </a>
+                        <a class="top_panel_button" href="{% url 'catalog-page' %}">
+                            <div class="button_block">
+                                <p>Каталог</p>
+                            </div>
+                        </a>
+                        <a class="top_panel_button" href="{% url 'post-catalog' %}">
+                            <div class="button_block">
+                                <p>Посты</p>
+                            </div>
+                        </a>
+                        <a class="top_panel_button" href="#">
+                            <div class="button_block">
+                                <p>Работа</p>
+                            </div>
+                        </a>
+                        <a class="top_panel_button" href="{% url 'info' %}">
+                            <div class="button_block">
+                                <p>Инфо</p>
+                            </div>
+                        </a>
                     </div>
                     <div class="profile_container">
                         {% if user.is_authenticated %}
@@ -235,9 +268,12 @@
                         {% endif %}
                         <div class="menu_item">
                             <button id="themeToggle" class="theme-toggle" aria-label="Переключить тему">
-                                <span class="theme-icon light-icon"><img src="{% static 'main_section/icons/light_mode.svg' %}"> Светлая</span>
-                                <span class="theme-icon dark-icon"><img src="{% static 'main_section/icons/dark_mode.svg' %}"> Тёмная</span>
-                                <span class="theme-icon auto-icon show"><img src="{% static 'main_section/icons/time_mode.svg' %}"> Авто</span>
+                                <span class="theme-icon light-icon"><img src="
+{% static 'main_section/icons/light_mode.svg' %}"><p>Светлая</p></span>
+                                <span class="theme-icon dark-icon"><img src="
+{% static 'main_section/icons/dark_mode.svg' %}"><p>Тёмная</p></span>
+                                <span class="theme-icon auto-icon show"><img src="
+{% static 'main_section/icons/time_mode.svg' %}"><p>Авто</p></span>
                             </button>
                         </div>
                         <div class="menu_item">

@@ -12,6 +12,15 @@ from main_section.models import ChapterLike, ChapterView
 from django.shortcuts import render, get_object_or_404
 
 
+def catalog_page(request):
+    manga_list = Manga.objects.all()
+
+    context = {
+        'manga_list': manga_list,
+    }
+
+    return render(request, "catalog_page.html", context)
+
 def manga_page(request, slug):
     # Получаем мангу с предзагрузкой всех связанных данных
     manga = get_object_or_404(Manga.objects.prefetch_related(

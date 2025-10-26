@@ -8,7 +8,7 @@ body.light-theme {
     --element-color: #BFBFBF;
     --icon-color: invert(0%) sepia(96%) saturate(15%) hue-rotate(246deg) brightness(105%) contrast(105%);
     --icon-hover-color: invert(100%) sepia(2%) saturate(9%) hue-rotate(16deg) brightness(103%) contrast(100%);
-    --tran-back: background-color 0.5s ease;
+    --tran-back: background 0.5s ease;
     --tran-icon: filter 0.5s ease;
     --tran-font: color 0.5s ease;
 }

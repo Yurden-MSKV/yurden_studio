@@ -1,28 +1,6 @@
 @import url('../../../../static/css/themes.css');
 @import url('../../../../static/css/text.css');
 
-
-@font-face {
-    font-family: 'Nunito';
-    src: url('../fonts/Nunito-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Nunito';
-    src: url('../fonts/Nunito-Bold.ttf') format('truetype');
-    font-weight: bold;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Nunito';
-    src: url('../fonts/Nunito-Medium.ttf') format('truetype');
-    font-weight: 500;
-    font-style: normal;
-}
-
 :root {
     --hover_icon: invert(100%) sepia(0%) saturate(0%) hue-rotate(16deg) brightness(111%) contrast(102%);
 }
@@ -67,33 +45,28 @@ body, html {
     margin-right: auto;
 }
 
-.buttons_container a {
-    font-size: 18px;
-    font-weight: 500;
-}
-
 .top_panel_button {
     display: flex;
     border-radius: 10px;
-    transition: var(--tran-back);
+    padding: 2px 5px;
+    transition: background 0.5s;
 }
 
-.top_panel_button a {
-    padding: 2px 5px;
+.button_block p {
+    /*color: var(--text-color);*/
     font-size: 18px;
     font-weight: bold;
-    color: var(--text-color);
-    /*transition: var(--tran-font);*/
+    transition: color 0.5s;
 }
 
 .top_panel_button:hover {
-    background-color: var(--hover-color);
-    transition: var(--tran-back);
+    background: var(--hover-color);
+    transition: background 0.5s;
 }
 
-.top_panel_button a:hover {
-    color: var(--hover-text-color) !important;
-    transition: var(--tran-font);
+.top_panel_button:hover .button_block p {
+    color: var(--hover-text-color);
+    transition: color 0.5s;
 }
 
 .profile_container {
@@ -124,12 +97,14 @@ body, html {
 
 .profile_button_block button img {
     width: 24px;
-    filter: var(--icon-color)
+    filter: var(--icon-color);
+    transition: filter 0.5s;
 }
 
 .profile_button_block button p {
     font: bold 18px 'Nunito';
-    color: var(--text-color)
+    color: var(--text-color);
+    transition: color 0.5s;
 }
 
 .profile_button_block:hover {
@@ -158,7 +133,7 @@ body, html {
 .profile_container a {
     text-decoration: none;
     font-weight: 500;
-    color: #FFFFFF;
+    color: var(--text-color);
     padding: 4px 8px;
     font-size: 18px;
 }
@@ -200,25 +175,31 @@ body, html {
 
 .menu_item:hover a p {
     color: var(--hover-text-color);
-    transition: color 0.5s ease;
+    transition: color 0.5s;
 }
 
 .menu_item:hover a img {
     filter: var(--icon-hover-color);
-    transition: filter 0.5s ease;
+    transition: filter 0.5s;
 
 }
 
 .menu_item a {
     display: flex;
     text-decoration: none;
-    color: black;
+    color: var(--text-color);
 }
 
 .menu_item a img {
     width: 24px;
     filter: var(--icon-color);
+    transition: filter 0.5s;
     align-items: center;
+}
+
+.menu_item a p {
+    color: var(--text-color);
+    transition: color 0.5s;
 }
 
 .menu_item button {
@@ -241,7 +222,13 @@ body, html {
 
 .theme-icon img {
     filter: var(--icon-color);
+    transition: filter 0.5s;
     margin-right: 1px;
+}
+
+.theme-icon p {
+    color: var(--text-color);
+    transition: color 0.5s;
 }
 
 .menu_item:hover span img {
@@ -249,7 +236,7 @@ body, html {
     transition: filter 0.5s ease;
 }
 
-.menu_item:hover span {
+.menu_item:hover span p {
     color: var(--hover-text-color);
     transition: color 0.5s ease;
 }

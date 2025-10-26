@@ -1,0 +1,29 @@
+{% extends "top_panel.html" %}
+{% load nbsp_filters %}
+{% load static %}
+
+{% block title %}
+    <title>Все посты</title>
+{% endblock %}
+
+{% block content %}
+    {% if request.is_mobile %}
+        <link rel="stylesheet" href="{% static 'post_section/css/post_catalog_page-mobile.css' %}">
+    {% else %}
+        <link rel="stylesheet" href="{% static 'post_section/css/post_catalog_page.css' %}"></link>
+    {% endif %}
+
+    <div class="main_container">
+
+        {% for post in post_list %}
+            <a class="post_link" href="{% url 'post-page' post_slug=post.post_slug %}">
+                <div class="post_block">
+                    <h1>{{ post.post_name }}</h1>
+                    <p>{{ post.short_for_catalog }}</p>
+                </div>
+            </a>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

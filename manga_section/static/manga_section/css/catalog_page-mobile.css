@@ -1,0 +1,47 @@
+@import url('../../../../static/css/themes.css');
+@import url('../../../../static/css/text-mobile.css');
+
+body, html {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito';
+    background: var(--background-color);
+}
+
+.main_container {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: fit-content;
+    margin-top: 110px;
+    background-color: var(--block-color);
+}
+
+.manga_link:first-child {
+    display: flex;
+    margin-top: 15px;
+}
+
+.manga_link:last-child {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.manga_block {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    width: auto;
+    height: fit-content;
+    margin: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    background: var(--element-color);
+    align-items: center;
+}
+
+.manga_block img {
+    height: 400px;
+    border-radius: 5px;
+}

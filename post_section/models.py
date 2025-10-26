@@ -45,3 +45,7 @@ class Post(models.Model):
         """
         from django.utils.safestring import mark_safe
         return mark_safe(self.get_short_content(max_length))
+
+    def short_for_catalog(self, max_length=250):
+        from django.utils.safestring import mark_safe
+        return mark_safe(self.get_short_content(max_length))

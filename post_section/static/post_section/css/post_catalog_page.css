@@ -1,0 +1,50 @@
+@import url('../../../../static/css/themes.css');
+@import url('../../../../static/css/text.css');
+
+
+body, html {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito';
+    background: var(--background-color);
+}
+
+.main_container {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--block-color);
+    width: 1000px;
+    height: fit-content;
+    margin: 10px auto;
+    /*gap: 10px;*/
+    /*border: 2px solid #000000;*/
+    border-radius: 10px;
+}
+
+.post_block {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: auto;
+    height: fit-content;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background: var(--element-color);
+    transition: background 0.5s;
+}
+
+.post_block:hover {
+    background: var(--hover-color);
+    transition: background 0.5s;
+}
+
+.post_block h1, .post_block p {
+    transition: color 0.5s;
+}
+
+.post_block:hover h1, .post_block:hover p {
+    color: var(--hover-text-color);
+    transition: color 0.5s;
+}

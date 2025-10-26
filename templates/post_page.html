@@ -14,7 +14,8 @@
         <link rel="stylesheet" href="{% static 'post_section/css/post_page-mobile.css' %}">
         <div class="main_container">
             <div class="navig_buttons">
-                <a href="#"><img class="svg-icon" src="{% static "post_section/icons/arrow_back.svg" %}">К постам</a>
+                <a href="{% url 'post-catalog' %}"><img class="svg-icon" src="{% static "post_section/icons/arrow_back.svg" %}">К 
+                    постам</a>
                 {% if user.username == 'yurden' %}
                     <p> | </p>
                     <a href="/admin/post_section/post/{{ post.id }}/change/"><img class="svg-icon" src="{% static 'post_section/icons/edit.svg' %}">Редактировать</a>

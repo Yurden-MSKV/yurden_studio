@@ -6,6 +6,14 @@ from django.shortcuts import render, get_object_or_404
 from poll_section.models import Choice, Vote
 from post_section.models import Post
 
+def post_catalog(request):
+    post_list = Post.objects.filter(visibility=True).order_by('-add_date')
+
+    context = {
+        'post_list': post_list,
+    }
+
+    return render(request, "post_catalog_page.html", context)
 
 def post_page(request, post_slug):
     post = get_object_or_404(Post, post_slug=post_slug)

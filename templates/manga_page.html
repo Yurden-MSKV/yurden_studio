@@ -69,20 +69,19 @@
                                                     <p>{{ chapter.rate_percentage }}%</p>
                                                 </div>
                                                 <div class="view_sign">
-                                                {% with last_readen=viewed_chapters_dates|last %}
-                                                    {% if not chapter.id in viewed_chapters %}
-{#                                                        <img class="no_read" src=#}
-{#                                                                "{% static 'manga_section/icons/no_view.svg' %}">#}
-                                                    {% elif chapter.id in viewed_chapters and chapter.id != last_readen %}
-{#                                                        <img class="is_read" src=#}
-{#                                                                "{% static 'manga_section/icons/is_view.svg' %}">#}
-                                                    {% elif chapter.id in viewed_chapters and chapter.id == last_readen %}
-                                                        <img class="last_read svg-icon" src=
-                                                                "{% static 'manga_section/icons/last_read.svg' %}">
-
-                                                    {% endif %}
-                                                {% endwith %}
-                                            </div>
+                                                    {% with last_readen=viewed_chapters_dates|last %}
+                                                        {% if not chapter.id in viewed_chapters %}
+    {#                                                        <img class="no_read" src=#}
+    {#                                                                "{% static 'manga_section/icons/no_view.svg' %}">#}
+                                                        {% elif chapter.id in viewed_chapters and chapter.id != last_readen %}
+    {#                                                        <img class="is_read" src=#}
+    {#                                                                "{% static 'manga_section/icons/is_view.svg' %}">#}
+                                                        {% elif chapter.id in viewed_chapters and chapter.id == last_readen %}
+                                                            <img class="last_read svg-icon" src=
+                                                                    "{% static 'manga_section/icons/last_read.svg' %}">
+                                                        {% endif %}
+                                                    {% endwith %}
+                                                </div>
                                             </div>
                                         </div>
                                     {% endfor %}
@@ -133,20 +132,6 @@
                             <div class="volume_list">
                                     {% for chapter in volume.chapters.all %}
                                         <div class="chapter_element">
-                                            <div class="view_sign">
-                                                {% with last_readen=viewed_chapters_dates|last %}
-                                                    {% if not chapter.id in viewed_chapters %}
-                                                        <img class="no_read" src=
-                                                                "{% static 'manga_section/icons/no_view.svg' %}">
-                                                    {% elif chapter.id in viewed_chapters and chapter.id != last_readen %}
-                                                        <img class="is_read" src=
-                                                                "{% static 'manga_section/icons/is_view.svg' %}">
-                                                    {% elif chapter.id in viewed_chapters and chapter.id == last_readen %}
-                                                        <img class="last_read" src="{% static 'manga_section/icons/last_read.svg' %}">
-                                                    
-                                                    {% endif %}
-                                                {% endwith %}
-                                            </div>
                                             <div class="chapter_and_rate">
                                                 <div class="chapter_width">
                                                     <div class="chapter">
@@ -159,6 +144,20 @@
                                                                 {{ chapter.ch_name|add_nbsp|smart_break:request|safe }}
                                                             </div>
                                                         </a>
+                                                    </div>
+                                                    <div class="view_sign">
+                                                        {% with last_readen=viewed_chapters_dates|last %}
+                                                            {% if not chapter.id in viewed_chapters %}
+        {#                                                        <img class="no_read" src=#}
+        {#                                                                "{% static 'manga_section/icons/no_view.svg' %}">#}
+                                                            {% elif chapter.id in viewed_chapters and chapter.id != last_readen %}
+        {#                                                        <img class="is_read" src=#}
+        {#                                                                "{% static 'manga_section/icons/is_view.svg' %}">#}
+                                                            {% elif chapter.id in viewed_chapters and chapter.id == last_readen %}
+                                                                <img class="last_read" src="{% static 'manga_section/icons/last_read.svg' %}">
+                                                            
+                                                            {% endif %}
+                                                        {% endwith %}
                                                     </div>
                                                 </div>
                                                 <div class="chapter_rating">
