@@ -53,6 +53,7 @@ def main_page(request):
 
     random_manga = None
     random_post = None
+    random_volume = None
     last_week = timezone.now() - timezone.timedelta(days=7)
     recent_chapters = Chapter.objects.filter(
         add_date__gte=last_week
