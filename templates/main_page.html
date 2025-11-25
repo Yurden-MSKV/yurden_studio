@@ -85,69 +85,118 @@
         <link rel="stylesheet" href="{% static 'main_section/css/main_page.css' %}">
         <link rel="stylesheet" href="{% static '/css/text.css' %}">
         <div class="main_container">
-            <div class="updates_container">
-                <div class="block_title">
-                    <h2>Последние переводы</h2>
-                </div>
-                <div class="block_container">
-                    {% for item in recent_manga %}
-                        <div class="block">
-                            <div class="block_img">
-                                <img src={{ item.cover.url }}>
-                            </div>
-                            <div class="block_text">
-                                <div class="block_info">
-                                    <a href="{% url 'manga-page' slug=item.manga.manga_slug %}">{{ item.manga.manga_name }}</a>
-        {#                          <h2>{{ chapter.volume_number.manga.manga_description }}</h2>#}
-                                </div>
-                                <div class="block_chapters">
-                                    {% for chapter in item.chapters %}
-                                    <div class="one_chapter">
-                                        <a href="{% url 'chapter-page' manga_slug=item.manga.manga_slug ch_number=chapter.get_chapter_display %}">
-                                            <div class="number">
-                                                Глава {{ chapter.get_chapter_display }}
-                                            </div>
-                                            {% if chapter.ch_name and chapter.ch_name.strip %}
-                                                <div class="name">
-                                                     {{ chapter.ch_name|smart_break:request|add_nbsp|safe }}
-                                                </div>
-                                            {% endif %}
-                                        </a>
-    {#                                    <div class="chapter_date">#}
-    {#                                        <p>{{ chapter.add_date|date:"d.m.Y" }}</p>#}
-    {#                                    </div>#}
+            <div class="manga_and_post">
+                <div class="updates_container">
+                    {% if recent_manga %}
+                        <div class="block_title">
+                            <h2>Последние переводы</h2>
+                        </div>
+                        <div class="block_container">
+                            {% for item in recent_manga %}
+                                <div class="block">
+                                    <div class="block_img">
+                                        <img src={{ item.cover.url }}>
                                     </div>
-                                    {% endfor %}
+                                    <div class="block_text">
+                                        <div class="block_info">
+                                            <a href="{% url 'manga-page' slug=item.manga.manga_slug %}">{{ item.manga.manga_name }}</a>
+                {#                          <h2>{{ chapter.volume_number.manga.manga_description }}</h2>#}
+                                        </div>
+                                        <div class="block_chapters">
+                                            {% for chapter in item.chapters %}
+                                            <div class="one_chapter">
+                                                <a href="{% url 'chapter-page' manga_slug=item.manga.manga_slug ch_number=chapter.get_chapter_display %}">
+                                                    <div class="number">
+                                                        Глава {{ chapter.get_chapter_display }}
+                                                    </div>
+                                                    {% if chapter.ch_name and chapter.ch_name.strip %}
+                                                        <div class="name">
+                                                             {{ chapter.ch_name|smart_break:request|add_nbsp|safe }}
+                                                        </div>
+                                                    {% endif %}
+                                                </a>
+            {#                                    <div class="chapter_date">#}
+            {#                                        <p>{{ chapter.add_date|date:"d.m.Y" }}</p>#}
+            {#                                    </div>#}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="block_title">
+                            <h2>Случайная работа из каталога</h2>
+                        </div>
+                        <div class="block_container">
+                            <div class="block">
+                                <div class="block_img">
+                                    <img style="width: 150px" src={{ volume.vol_cover.url }}>
+                                </div>
+                                <div class="block_text">
+                                    <div class="block_info">
+                                        <a href="{% url 'manga-page' slug=manga.manga_slug %}">{{ manga.manga_name }}</a>
+                                    </div>
+                                    <div class="post_block_content" style="margin-left: 5px">
+                                        <p>{{ manga.description|add_nbsp }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="news_container">
+                    {% if recent_post %}
+                        <div class="block_title">
+                            <h2>Новости студии</h2>
+                        </div>
+                        <div class="block_container">
+                            {% for post in recent_post %}
+                                <div class="post_block">
+                                    <div class="post_block_title">
+                                        <a href="{% url 'post-page' post_slug=post.post_slug %}">
+                                            {{ post.post_name|split_post_title  }} 
+{#                                            ({{ post.add_date|date:"d.m.Y" }})#}
+                                        </a>
+                                    </div>
+                                    <div class="post_block_content">
+                                        <p>{{ post.get_short_content_safe|add_nbsp }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="block_title">
+                            <h2>Случайный пост</h2>
+                        </div>
+                        <div class="block_container">
+                            <div class="post_block">
+                                    <div class="post_block_title">
+                                        <a href="{% url 'post-page' post_slug=post.post_slug %}">
+                                            {{ post.post_name|split_post_title }}</a>
+                                    </div>
+                                    <div class="post_block_content">
+                                        <p>{{ post.get_short_content_safe|add_nbsp }}</p>
+                                    </div>
+                                </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
-            <div class="news_container">
-                <div class="block_title">
-                    <h2>Новости студии</h2>
+            <div class="tips_and_about">
+                <div class="tips_container">
+                    <img src="{% static 'main_section/icons/qr_tips.svg' %}">
+                    <div class="tips_link">
+                        <a href="https://pay.cloudtips.ru/p/2d188ea4"><h1>
+                            {{ 'Поддержи переводы <br> и разработку'|add_nbsp }}</h1></a>
+                    </div>
                 </div>
-                <div class="block_container">
-                    {% for post in recent_post %}
-                        <div class="post_block">
-                            <div class="post_block_title">
-                                <a href="{% url 'post-page' post_slug=post.post_slug %}">{{ post.post_name }} ({{ post.add_date|date:"d.m.Y" }})</a>
-                            </div>
-                            <div class="post_block_content">
-                                <p>{{ post.get_short_content_safe|add_nbsp }}</p>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
+{#                <div class="about_site">#}
+{#                    <h1>Это личная читалка</h1>#}
+{#                    <p>- без суеты<br>- без нейроперевода<br>- сканлейт как увлечение, а не бизнес</p>#}
+{#                </div>#}
             </div>
         </div>
-
-        <div class="tips_container">
-                <img src="{% static 'main_section/icons/qr_tips.svg' %}">
-                <div class="tips_link">
-                    <a href="https://pay.cloudtips.ru/p/2d188ea4">{{ 'Поддержать переводы и разработку'|add_nbsp }}</a>
-                </div>
-            </div>
     {% endif %}
 {% endblock %}

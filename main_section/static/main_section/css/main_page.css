@@ -73,7 +73,8 @@ p {
 
 .main_container {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    /*justify-content: space-between;*/
     padding: 0 15px;
     /*background: #FAFAFA;*/
     width: 1000px;
@@ -81,6 +82,13 @@ p {
     margin: 0 auto;
     /*border: 2px solid #000000;*/
     border-radius: 5px;
+    gap: 10px
+}
+
+.manga_and_post {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .updates_container {
@@ -278,6 +286,7 @@ p {
     margin: 10px 0 10px 10px;
     width: fit-content;
     border-radius: 5px;
+    padding: 2px 5px;
 }
 
 .post_block_title:hover {
@@ -290,11 +299,10 @@ p {
     font-weight: bold;
     text-decoration: none;
     color: var(--text-color);
-    padding: 2px 5px;
     margin: 0;
 }
 
-.post_block_title a:hover {
+.post_block_title:hover a {
     color: var(--hover-text-color) !important;
     transition: color 0.5s ease;
 }
@@ -317,12 +325,20 @@ p {
     font-size: 16px;
 }
 
+.tips_and_about {
+    display: flex;
+    flex-direction: row;
+    /*justify-content: space-evenly;*/
+    justify-content: center;
+}
+
 .tips_container {
     display: flex;
-    align-items: center;
-    flex-direction: column;
+    /*align-items: center;*/
+    flex-direction: row;
     width: fit-content;
-    position: fixed;
+    /*margin: 0 auto;*/
+    /*position: fixed;*/
     top: 35%;
     right: calc(100% - 225px);
     background-color: var(--block-color);
@@ -335,14 +351,31 @@ p {
 }
 
 .tips_link {
-    width: 150px;
-    margin-top: -5px;
-    margin-bottom: 6px;
-    text-align: center !important;
+    display: flex;
+    align-items: center;
+    margin: 10px 10px 10px 0;
 }
 
 .tips_link a {
-    padding: 0;
-    text-decoration: underline !important;
+    padding: 2px 5px;
+    text-decoration: none !important;
     font-weight: bold;
+    border-radius: 10px;
+}
+
+.tips_link a:hover {
+    background: var(--hover-color);
+    transition: background-color 0.5s;
+}
+
+.tips_link h1:hover {
+    color: var(--hover-text-color) !important;
+    transition: color 0.5s;
+}
+
+.about_site {
+    height: fit-content;
+    padding: 15px;
+    background-color: var(--block-color);
+    border-radius: 10px;
 }

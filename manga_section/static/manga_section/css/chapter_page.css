@@ -14,6 +14,7 @@ body, html {
     flex-direction: row;
     gap: 10px;
     justify-content: center;
+    overflow: hidden;
 }
 
 /* Селектор режима чтения */

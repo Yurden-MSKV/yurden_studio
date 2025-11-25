@@ -83,6 +83,21 @@ body, html {
     text-decoration: none;
 }
 
+.post_content blockquote {
+    background: var(--element-color);
+    width: fit-content;
+    margin-left: 10px;
+    font-weight: 500;
+    font-size: 17px;
+    padding: 2px 8px;
+    border-radius: 5px;
+    color: var(--text-color);
+}
+
+.post_content blockquote p {
+    margin: 0;
+}
+
 .side_bar {
     display: flex;
     flex-direction: column;

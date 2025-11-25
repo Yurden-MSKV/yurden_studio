@@ -132,7 +132,7 @@
                 {% endif %}
 
                 <div class="post_content">
-                    <p>{{ post.content|add_nbsp|safe }}</p>
+                    {{ post.content|add_nbsp|safe|quote_break }}
 
                     <!-- Блок опроса -->
                     {% if poll %}

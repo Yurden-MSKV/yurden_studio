@@ -1,3 +1,5 @@
+import random
+
 from django.contrib.auth import login
 from django.contrib import messages
 from django.db.models import Prefetch
@@ -7,7 +9,7 @@ from django.contrib.auth import logout
 from django.views.decorators.http import require_http_methods
 
 from main_section.forms import RegisterForm
-from manga_section.models import Chapter, Volume
+from manga_section.models import Chapter, Volume, Manga
 from post_section.models import Post
 
 from django.http import JsonResponse
@@ -33,7 +35,7 @@ def register_view(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)  # Автоматический вход после регистрации
+            login(request, user)
             messages.success(request, 'Регистрация прошла успешно!')
             return redirect('home-page')
     else:
@@ -44,13 +46,14 @@ def register_view(request):
 @require_http_methods(["GET"])
 def custom_logout(request):
     logout(request)
-    return redirect('login')  # или другой нужный вам URL
+    return redirect('login')
 
 
 def main_page(request):
-    last_week = timezone.now() - timezone.timedelta(days=7)
 
-    # Оптимизируем запросы с prefetch_related для получения последних томов
+    random_manga = None
+    random_post = None
+    last_week = timezone.now() - timezone.timedelta(days=7)
     recent_chapters = Chapter.objects.filter(
         add_date__gte=last_week
     ).select_related(
@@ -61,28 +64,43 @@ def main_page(request):
                  to_attr='latest_volumes')
     ).order_by('-add_date')
 
+    if recent_chapters.exists():
+        manga_dict = {}
+        for chapter in recent_chapters:
+            manga = chapter.volume.manga
+            if manga.id not in manga_dict:
+                latest_volume = manga.volumes.order_by('-vol_number').first()
+                cover = latest_volume.vol_cover if latest_volume else None
+
+                manga_dict[manga.id] = {
+                    'manga': manga,
+                    'cover': cover,
+                    'chapters': []
+                }
+            manga_dict[manga.id]['chapters'].append(chapter)
+    else:
+        manga_dict = {}
+        manga = Manga.objects.all()
+        random_manga = random.choice(list(manga))
+        volumes = random_manga.volumes.order_by('vol_number')
+        random_volume = random.choice(volumes)
+
     recent_posts = Post.objects.filter(add_date__gte=last_week, visibility=True).order_by('-add_date')
 
-    manga_dict = {}
-    for chapter in recent_chapters:
-        manga = chapter.volume.manga
-        if manga.id not in manga_dict:
-            # Получаем обложку последнего тома
-            latest_volume = manga.volumes.order_by('-vol_number').first()
-            cover = latest_volume.vol_cover if latest_volume else None
-
-            manga_dict[manga.id] = {
-                'manga': manga,
-                'cover': cover,
-                'chapters': []
-            }
-        manga_dict[manga.id]['chapters'].append(chapter)
+    if not recent_posts.exists():
+        recent_posts = {}
+        posts = Post.objects.exclude(visibility=0)
+        random_post = random.choice(list(posts))
 
     context = {
         'recent_manga': list(manga_dict.values()),
-        'recent_post': recent_posts
+        'recent_post': recent_posts,
+        'manga': random_manga,
+        'volume': random_volume,
+        'post': random_post
     }
     return render(request, 'main_page.html', context)
+
 
 def info_page(request):
     post = get_object_or_404(Post, post_slug='info')
