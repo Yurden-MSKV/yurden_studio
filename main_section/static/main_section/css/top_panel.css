@@ -56,7 +56,7 @@ body, html {
     /*color: var(--text-color);*/
     font-size: 18px;
     font-weight: bold;
-    transition: color 0.5s;
+    /*transition: color 0.5s;*/
 }
 
 .top_panel_button:hover {
@@ -104,7 +104,7 @@ body, html {
 .profile_button_block button p {
     font: bold 18px 'Nunito';
     color: var(--text-color);
-    transition: color 0.5s;
+    /*transition: color 0.5s;*/
 }
 
 .profile_button_block:hover {

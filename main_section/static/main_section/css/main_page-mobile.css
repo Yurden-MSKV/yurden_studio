@@ -68,6 +68,10 @@ body, html {
     height: fit-content;
 }
 
+.block a {
+    display: flex;
+}
+
 .post_block {
     display: flex;
     width: 100%;
@@ -106,8 +110,8 @@ body, html {
 
 .block_text h2 {
     margin-top: 0;
-    font-size: 17px;
-    font-weight: normal;
+    /*font-size: 17px;*/
+    font-weight: bold;
     /*border: 1px solid red;*/
 }
 
@@ -123,7 +127,7 @@ body, html {
     display: flex;
     justify-content: center;
     width: fit-content;
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
     box-sizing: border-box;
     border-radius: 10px;
 }
@@ -135,8 +139,8 @@ body, html {
     color: var(--text-color);
     margin: 0;
     padding: 5px 10px;
-    border-radius: 10px;
-    background: var(--element-color);
+    /*border-radius: 10px;*/
+    /*background: var(--element-color);*/
 }
 
 .block_chapters {
@@ -213,7 +217,7 @@ body, html {
 .post_block_title h1 {
     margin: 0;
     padding: 2px 5px;
-    font-size: 20px;
+    /*font-size: 20px;*/
 }
 
 .post_block_content {

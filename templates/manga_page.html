@@ -33,14 +33,14 @@
             <div class="chapters_block">
                 {% for volume in volumes %}
                     <div class="volume_container">
+                        <div class="volume_number">
+                            <h2>Том {{ volume.vol_number }}</h2>
+                        </div>
                         <div class="volume_cover">
                             <img src="{{ volume.vol_cover.url }}">
                         </div>
                         <div class="volume_content">
                             <div class="number_n_desc">
-                                <div class="volume_number">
-                                    <h2>Том {{ volume.vol_number }}</h2>
-                                </div>
 {#                                <div class="volume_desc">#}
 {#                                    <p>{{ volume.volume_description }}</p>#}
 {#                                </div>#}
@@ -57,7 +57,7 @@
                                                         </div>
                                                         <div class="ch_name">
                                                             <p>
-                                                                {{ chapter.ch_name|add_nbsp|split_by_width_ignore_html|safe }}</p>
+                                                                {{ chapter.ch_name|add_nbsp|safe }}</p>
                                                         </div>
                                                     </a>
                                                 </div>

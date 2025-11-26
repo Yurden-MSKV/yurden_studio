@@ -84,9 +84,10 @@ body, html {
 }
 
 .post_content blockquote {
-    background: var(--element-color);
+    /*background: var(--element-color);*/
     width: fit-content;
     margin-left: 10px;
+    margin-top: 25px;
     font-weight: 500;
     font-size: 17px;
     padding: 2px 8px;
@@ -95,7 +96,9 @@ body, html {
 }
 
 .post_content blockquote p {
-    margin: 0;
+    border-left: 5px solid var(--hover-color);
+    padding: 0 0 0 10px;
+    font-style: italic;
 }
 
 .side_bar {

@@ -14,9 +14,8 @@ body, html {
     flex-direction: column;
     width: 100vw;
     height: fit-content;
-    margin-top: 110px;
-    gap: 10px;
-    background-color: var(--block-color);
+    margin-top: 100px;
+    gap: 15px;
 }
 
 .post_link:first-child {
@@ -35,8 +34,8 @@ body, html {
     gap: 5px;
     width: auto;
     height: fit-content;
-    margin: 10px;
-    padding: 10px;
-    border-radius: 10px;
-    background: var(--element-color);
+    /*margin: 10px;*/
+    padding: 15px 25px;
+    border-radius: 5px;
+    background-color: var(--block-color);
 }

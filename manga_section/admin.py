@@ -68,7 +68,7 @@ class ChapterImageInline(admin.TabularInline):
     model = ChapterImage
     form = ChapterImageForm
     extra = 1
-    fields = ['page_number', 'page_image', 'preview', 'is_double_page']
+    fields = ['page_number', 'page_image', 'preview', 'is_double_page', 'is_placeholder']
     readonly_fields = ['preview']
     verbose_name = 'Изображение страницы'
     verbose_name_plural = 'Изображения страниц'

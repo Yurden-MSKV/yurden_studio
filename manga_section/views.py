@@ -130,17 +130,20 @@ def chapter_page(request, manga_slug, ch_number):
         pages = []
         i = 0
         while i < len(images):
-            pages.append(images[i])
-            i += 1
+            if not images[i].is_placeholder:
+                pages.append(images[i])
+                i += 1
+            else:
+                i += 1
+                continue
+
 
         return pages
 
     if request.is_mobile:
         page_pairs = page_mobile(images)
-        print("Ты зашёл с телефона!")
     else:
         page_pairs = create_page_pairs(images)
-        print("Ты зашёл с компа!")
 
     # Получаем статистику оценок
     likes_count = ChapterLike.objects.filter(chapter=chapter, is_like=True).count()
