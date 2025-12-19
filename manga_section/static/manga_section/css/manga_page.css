@@ -248,3 +248,51 @@ img.last_read {
     filter: var(--icon-hover-color);
     transition: filter 0.5s;
 }
+
+
+.side_bar {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: calc(95px);
+    right: calc(50% + 500px + 10px);
+    align-items: center;
+    width: fit-content;
+    height: fit-content;
+}
+
+.menu_block {
+    border-radius: 10px;
+    background-color: var(--block-color);
+}
+
+.menu_block a {
+    display: flex;
+    flex-direction: row;
+    padding: 3px 4px 3px 8px;
+    align-items: center;
+}
+
+.menu_block a p {
+    font-weight: 500;
+}
+
+.menu_block a img {
+    filter: var(--icon-color);
+    width: 24px
+}
+
+.menu_block:hover {
+    background-color: var(--hover-color);
+    transition: background-color 0.5s ease;
+}
+
+.menu_block:hover a p {
+    color: var(--hover-text-color) !important;
+    transition: color 0.5s ease;
+}
+
+.menu_block:hover a img {
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(16deg) brightness(111%) contrast(102%);
+    transition: filter 0.5s ease;
+}

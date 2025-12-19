@@ -10,9 +10,10 @@ from django.views.decorators.http import require_http_methods
 
 from main_section.forms import RegisterForm
 from manga_section.models import Chapter, Volume, Manga
+from post_section.forms import FAQform
 from post_section.models import Post
 
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -37,6 +38,8 @@ def register_view(request):
             user = form.save()
             login(request, user)
             messages.success(request, 'Регистрация прошла успешно!')
+            # TODO: придумать, как бы после регистрации возвращать пользователя на ссылку,
+            #  по которой он пришёл изначально
             return redirect('home-page')
     else:
         form = RegisterForm()
@@ -106,8 +109,19 @@ def main_page(request):
 def info_page(request):
     post = get_object_or_404(Post, post_slug='info')
 
+    if request.method == 'POST':
+        form = FAQform(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.author = request.user
+            message.save()
+            return HttpResponseRedirect('/info/')
+    else:
+        form = FAQform()
+
     context = {
         'post': post,
+        'form': form
     }
 
     return render(request, 'post_page.html', context)

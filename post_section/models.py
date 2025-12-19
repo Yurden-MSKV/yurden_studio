@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
 import re
@@ -49,3 +50,15 @@ class Post(models.Model):
     def short_for_catalog(self, max_length=250):
         from django.utils.safestring import mark_safe
         return mark_safe(self.get_short_content(max_length))
+
+class MessageFAQ(models.Model):
+    author = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Предложение от {self.author.username}"
+
+    class Meta:
+        verbose_name = 'Предложения'
+        verbose_name_plural  = 'Предложения'

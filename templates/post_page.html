@@ -134,6 +134,17 @@
                 <div class="post_content">
                     {{ post.content|add_nbsp|safe }}
 
+                    {% if post.post_slug == 'info' %}
+                        <form class="faq_form" action="{% url 'info' %}" method="post">
+                            {% csrf_token %}
+                            <textarea class="message_block" type="text" name="message" id="message" rows="4" 
+                                      required></textarea>
+                            <div class="send_block">
+                                <input class="send_btn" type="submit" value="Отправить">
+                            </div>
+                        </form>
+                    {% endif %}
+
                     <!-- Блок опроса -->
                     {% if poll %}
                         <div id="poll-container" class="poll-container">

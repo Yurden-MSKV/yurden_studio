@@ -66,7 +66,7 @@ body, html {
 }
 
 .post_content p {
-    margin-left: 10px;
+    margin: 0 10px;
     padding: 0;
 }
 
@@ -79,8 +79,8 @@ body, html {
 }
 
 .post_content a:link, .post_content a:visited {
-    color: blue;
-    text-decoration: none;
+    color: #2291ff;
+    text-decoration: underline;
 }
 
 .post_content blockquote {
@@ -350,3 +350,39 @@ body, html {
 .width-80 { width: 80% !important; }
 .width-90 { width: 90% !important; }
 .width-100 { width: 100% !important; }
+
+.faq_form {
+    display: flex;
+    /*height: 150px;*/
+    width: 50%;
+    background: var(--background-color);
+    border-radius: 5px;
+    margin-left: 8px;
+}
+
+.message_block {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    font: 13px 'Nunito';
+    /*box-sizing: border-box;*/
+    resize: vertical;
+    border: none;
+    border-radius: 5px;
+}
+
+.send_block {
+    display: block;
+    position: relative;
+}
+
+.send_btn {
+    position: absolute;
+    bottom: 10px;
+    right: -90px;
+    height: fit-content;
+    width: fit-content;
+    padding: 4px 8px;
+    /*margin: 120px 10px 10px auto;*/
+}

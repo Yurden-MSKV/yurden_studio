@@ -173,6 +173,14 @@
                 {% endfor %}
             </div>
         </div>
+        
+        {% if user.username == 'yurden' %}
+            <div class="side_bar">
+                <div class="menu_block">
+                    <a href="#"><p>Редактировать</p><img src="{% static 'manga_section/icons/edit_icon.svg' %}"></a>
+                </div>
+            </div>
+        {% endif %}    
 
     {% endif %}
 
