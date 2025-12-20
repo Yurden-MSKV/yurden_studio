@@ -195,19 +195,22 @@ def message_count(request):
     return messages_cnt
 
 def messages_page(request):
-    messages = MessageFAQ.objects.all()
-
     if request.user.username == 'yurden':
-        message_cnt = message_count(request)
+        messages = MessageFAQ.objects.all()
+
+        if request.user.username == 'yurden':
+            message_cnt = message_count(request)
+        else:
+            message_cnt = 0
+
+        context = {
+            'messages': messages,
+            'messages_cnt': message_cnt
+        }
+
+        return render(request, 'message_catalog.html', context)
     else:
-        message_cnt = 0
-
-    context = {
-        'messages': messages,
-        'messages_cnt': message_cnt
-    }
-
-    return render(request, 'message_catalog.html', context)
+        return redirect('home-page')
 
 def read_message(request, message_id):
     message = get_object_or_404(MessageFAQ, pk=message_id)
