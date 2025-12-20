@@ -59,7 +59,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-LOGIN_REDIRECT_URL = '/home/'  # Куда перенаправлять после успешного входа
+LOGIN_REDIRECT_URL = '/'  # Куда перенаправлять после успешного входа
 LOGOUT_REDIRECT_URL = '/login/'  # Куда перенаправлять после выхода
 LOGIN_URL = '/login/'      # URL для страницы входа
 

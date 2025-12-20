@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.views import LoginView
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
@@ -16,7 +17,7 @@ urlpatterns = [
     path('polls/', include('poll_section.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('register/', main_section_views.register_view, name='register'),
-    path('login/', CustomLoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('login/', LoginView.as_view(template_name='registration/login.html'), name='login'),
     path('logout/', main_section_views.custom_logout, name='logout'),
     path('info/', main_section_views.info_page, name='info'),
 path('api/save-theme/', main_section_views.save_theme_preference, name='save_theme'),

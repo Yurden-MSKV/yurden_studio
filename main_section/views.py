@@ -6,6 +6,7 @@ from django.db.models import Prefetch
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.contrib.auth import logout
+from django.utils.regex_helper import next_char
 from django.views.decorators.http import require_http_methods
 
 from main_section.forms import RegisterForm
@@ -32,19 +33,19 @@ def index(request):
 
 
 def register_view(request):
+    next_url = request.GET.get('next', '/')
+
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, 'Регистрация прошла успешно!')
-            # TODO: придумать, как бы после регистрации возвращать пользователя на ссылку,
-            #  по которой он пришёл изначально
-            return redirect('home-page')
+            next_from_form = request.POST.get('next', '/')
+            return redirect(next_from_form)
     else:
         form = RegisterForm()
 
-    return render(request, 'registration/register.html', {'form': form})
+    return render(request, 'registration/register.html', {'form': form, 'next': next_url})
 
 @require_http_methods(["GET"])
 def custom_logout(request):
@@ -53,7 +54,6 @@ def custom_logout(request):
 
 
 def main_page(request):
-
     random_manga = None
     random_post = None
     random_volume = None
@@ -105,7 +105,7 @@ def main_page(request):
     }
     return render(request, 'main_page.html', context)
 
-
+# @login_required(login_url='/login/')
 def info_page(request):
     post = get_object_or_404(Post, post_slug='info')
 

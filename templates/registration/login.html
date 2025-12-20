@@ -23,6 +23,8 @@
             
             <form method="post" class="login_form">
                 {% csrf_token %}
+
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
                 
                 <div class="input_block">
                     <label for="id_username">Никнейм</label>
@@ -39,7 +41,7 @@
                 </div>
             </form>
             <div class="another_action">
-                <p>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a></p>
+                <p>Нет аккаунта?<a href="{% url 'register' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}">Зарегистрироваться</a></p>
             </div>
         </div>
     </div>
