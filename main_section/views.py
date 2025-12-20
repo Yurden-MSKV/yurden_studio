@@ -4,6 +4,7 @@ from django.contrib.auth import login
 from django.contrib import messages
 from django.db.models import Prefetch
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
 from django.utils import timezone
 from django.contrib.auth import logout
 from django.utils.regex_helper import next_char
@@ -12,12 +13,14 @@ from django.views.decorators.http import require_http_methods
 from main_section.forms import RegisterForm
 from manga_section.models import Chapter, Volume, Manga
 from post_section.forms import FAQform
-from post_section.models import Post
+from post_section.models import Post, MessageFAQ
 
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 import json
+
+from django.middleware.csrf import get_token
 
 from django.contrib.auth.views import LoginView
 
@@ -96,12 +99,18 @@ def main_page(request):
         posts = Post.objects.exclude(visibility=0)
         random_post = random.choice(list(posts))
 
+    if request.user.username == 'yurden':
+        message_cnt = message_count(request)
+    else:
+        message_cnt = 0
+
     context = {
         'recent_manga': list(manga_dict.values()),
         'recent_post': recent_posts,
         'manga': random_manga,
         'volume': random_volume,
-        'post': random_post
+        'post': random_post,
+        'messages_cnt': message_cnt
     }
     return render(request, 'main_page.html', context)
 
@@ -119,9 +128,15 @@ def info_page(request):
     else:
         form = FAQform()
 
+    if request.user.username == 'yurden':
+        message_cnt = message_count(request)
+    else:
+        message_cnt = 0
+
     context = {
         'post': post,
-        'form': form
+        'form': form,
+        'messages_cnt': message_cnt
     }
 
     return render(request, 'post_page.html', context)
@@ -174,3 +189,42 @@ def save_theme_preference(request):
             return JsonResponse({'status': 'error', 'message': str(e)})
 
     return JsonResponse({'status': 'error', 'message': 'Метод не разрешен'})
+
+def message_count(request):
+    messages_cnt = MessageFAQ.objects.filter(is_read=False).count()
+    return messages_cnt
+
+def messages_page(request):
+    messages = MessageFAQ.objects.all()
+
+    if request.user.username == 'yurden':
+        message_cnt = message_count(request)
+    else:
+        message_cnt = 0
+
+    context = {
+        'messages': messages,
+        'messages_cnt': message_cnt
+    }
+
+    return render(request, 'message_catalog.html', context)
+
+def read_message(request, message_id):
+    message = get_object_or_404(MessageFAQ, pk=message_id)
+
+    message.is_read = not message.is_read
+    message.save()
+
+    unread_count = MessageFAQ.objects.filter(is_read=False).count()
+
+    csrf_token = get_token(request)
+
+    button_html = render_to_string('partials/message_read_block.html', {'message': message, 'csrf_token': csrf_token})
+
+    response = HttpResponse()
+    response.write(f'<div id="unread-counter" hx-swap-oob="true"><p>{unread_count}</p></div>')
+    response.write(button_html)
+
+    return response
+
+    # return render(request, 'partials/message_read_block.html', {'message': message})

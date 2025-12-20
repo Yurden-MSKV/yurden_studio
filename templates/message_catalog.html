@@ -1,0 +1,31 @@
+{% extends "top_panel.html" %}
+{% load nbsp_filters %}
+{% load static %}
+
+{% block title %}
+    <title>Все предложения</title>
+{% endblock %}
+
+{% block content %}
+
+    {% if request.is_mobile %}
+        <link rel="stylesheet" href="{% static 'main_section/css/message_catalog-mobile.css' %}">
+    {% else %}
+        <link rel="stylesheet" href="{% static 'main_section/css/message_catalog.css' %}"></link>
+    {% endif %}
+    
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
+    
+    <div class="main_container">
+        {% for message in messages %}
+            <div class="message_block">
+                <div class="content">
+                    <p>{{ message.author.username }}, {{ message.created_at }}</p>
+                    <p>{{ message.message }}</p>
+                </div>
+                {% include 'partials/message_read_block.html' with message=message %}
+            </div>
+        {% endfor %}
+    </div>
+    
+{% endblock %}

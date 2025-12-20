@@ -3,20 +3,32 @@ import json
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 
+from main_section.views import message_count
 from poll_section.models import Choice, Vote
 from post_section.models import Post
 
 def post_catalog(request):
     post_list = Post.objects.filter(visibility=True).order_by('-add_date')
 
+    if request.user.username == 'yurden':
+        message_cnt = message_count(request)
+    else:
+        message_cnt = 0
+
     context = {
         'post_list': post_list,
+        'messages_cnt': message_cnt,
     }
 
     return render(request, "post_catalog_page.html", context)
 
 def post_page(request, post_slug):
     post = get_object_or_404(Post, post_slug=post_slug)
+
+    if request.user.username == 'yurden':
+        message_cnt = message_count(request)
+    else:
+        message_cnt = 0
 
     poll = None
     choices = None
@@ -89,7 +101,8 @@ def post_page(request, post_slug):
         'poll': poll,
         'choices': choices,
         'user_vote': user_vote,
-        'results_data': results_data  # Передаем результаты в шаблон
+        'results_data': results_data,  # Передаем результаты в шаблон
+        'messages_cnt': message_cnt,
     })
 
 def get_poll_results(poll):

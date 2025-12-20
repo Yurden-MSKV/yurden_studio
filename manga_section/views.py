@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 
+from main_section.views import message_count
 from manga_section.models import Manga, Chapter, ChapterImage
 from main_section.models import ChapterLike, ChapterView
 
@@ -15,8 +16,14 @@ from django.shortcuts import render, get_object_or_404
 def catalog_page(request):
     manga_list = Manga.objects.all()
 
+    if request.user.username == 'yurden':
+        message_cnt = message_count(request)
+    else:
+        message_cnt = 0
+
     context = {
         'manga_list': manga_list,
+        'messages_cnt': message_cnt,
     }
 
     return render(request, "catalog_page.html", context)
@@ -44,6 +51,11 @@ def manga_page(request, slug):
     genres = manga.genres.all()
     authors = manga.authors.all()
 
+    if request.user.username == 'yurden':
+        message_cnt = message_count(request)
+    else:
+        message_cnt = 0
+
     context = {
         'manga': manga,
         'volumes': volumes,  # Добавляем тома в контекст
@@ -51,6 +63,7 @@ def manga_page(request, slug):
         'authors': authors,
         'viewed_chapters_dates': viewed_chapters_dates,
         'viewed_chapters': viewed_chapters,
+        'messages_cnt': message_cnt,
     }
     return render(request, 'manga_page.html', context)
 

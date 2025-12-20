@@ -239,6 +239,13 @@
                                 <p>ЧаВо</p>
                             </div>
                         </a>
+                        {% if user.username == 'yurden' %}
+                            <a class="top_panel_button" href="{% url 'messages' %}">
+                                <div class="button_block">
+                                    <p id="unread-counter">{{ messages_cnt }}</p>
+                                </div>
+                            </a>
+                        {% endif %}
                     </div>
                     <div class="profile_container">
                         {% if user.is_authenticated %}

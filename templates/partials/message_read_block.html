@@ -1,0 +1,23 @@
+{% load static %}
+
+<div class="read_button" id="read-button-{{ message.id }}" hx-swap-oob="true">
+    {% if message.is_read == False %}
+    <button class="read_btn no_read"
+            hx-post="{% url 'read-message' message_id=message.id %}"
+            hx-vals='{"is_read":true}'
+            hx-target="#read-button-{{ message.id }}"
+            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+            hx-swap="outerHTML">
+            Прочитать
+    </button>
+    {% else %}
+    <button class="read_btn is_read"
+            hx-post="{% url 'read-message' message_id=message.id %}"
+            hx-vals='{"is_read":false}'
+            hx-target="#read-button-{{ message.id }}"  
+            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+            hx-swap="outerHTML">
+            Прочитано
+    </button>
+    {% endif %}
+</div>

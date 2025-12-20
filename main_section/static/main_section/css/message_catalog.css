@@ -1,0 +1,62 @@
+@import url('../../../../static/css/themes.css');
+@import url('../../../../static/css/text.css');
+
+
+body, html {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito';
+    background: var(--background-color);
+}
+
+.main_container {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--block-color);
+    width: 1000px;
+    height: fit-content;
+    margin: 10px auto;
+    gap: 10px;
+    /*border: 2px solid #000000;*/
+    border-radius: 10px;
+}
+
+.message_block {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    margin: 0 10px 0 10px;
+}
+
+.message_block:first-child {
+    margin-top: 5px;
+}
+
+.message_block:last-child {
+    margin-bottom: 5px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+}
+
+.read_button {
+    margin: 5px 10px
+}
+
+.read_btn {
+    font: bold 17px "Nunito";
+    color: var(--text-color);
+    background: var(--block-color);
+    border: 2px solid var(--hover-color);
+    border-radius: 5px;
+    transition: background 0.3s, color 0.3s;
+}
+
+.read_btn:hover {
+    background: var(--hover-color);
+    color: var(--hover-text-color);
+    transition: background 0.3s, color 0.3s;
+}
