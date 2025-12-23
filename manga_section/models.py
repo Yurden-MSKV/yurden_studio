@@ -22,6 +22,7 @@ class Staff(models.Model):
     staff_name = models.CharField(max_length=50,)
     link_for_offers = models.URLField(max_length=250,
                                       verbose_name='Ссылка для связи')
+    is_private = models.BooleanField(default=True)
 
     def __str__(self):
         return self.staff_name

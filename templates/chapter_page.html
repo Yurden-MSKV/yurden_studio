@@ -289,14 +289,41 @@
                                      data-page-number="{{ pair.0.page_number }}"
                                      alt="Страница {{ pair.0.page_number }}">
                             </div>
-                        {% else %}
-                            <!-- Одиночная страница (последняя непарная) -->
-                            <div class="spread-container">
+                        {% elif forloop.first %}
+                            <div class="page-container left-page">
                                 <img src="{{ pair.0.page_image.url }}"
                                      class="page normal-page"
                                      data-page-number="{{ pair.0.page_number }}"
                                      alt="Страница {{ pair.0.page_number }}">
                             </div>
+                            <div style="background: white; width: 50vh" class="page-container right-page">
+{#                                <img src="{{ pair.0.page_image.url }}"#}
+{#                                     class="page normal-page"#}
+{#                                     data-page-number="{{ pair.0.page_number }}"#}
+{#                                     alt="Страница {{ pair.0.page_number }}">#}
+                            </div>
+                        {% elif forloop.last %}
+                            <div style="background: white; width: 50vh" class="page-container left-page">
+{#                                <img src="{{ pair.0.page_image.url }}"#}
+{#                                     class="page normal-page"#}
+{#                                     data-page-number="{{ pair.0.page_number }}"#}
+{#                                     alt="Страница {{ pair.0.page_number }}">#}
+                            </div>
+                            <div class="page-container right-page">
+                                <img src="{{ pair.0.page_image.url }}"
+                                     class="page normal-page"
+                                     data-page-number="{{ pair.0.page_number }}"
+                                     alt="Страница {{ pair.0.page_number }}">
+                            </div>
+
+{#                        {% else %}#}
+{#                            <!-- Одиночная страница (последняя непарная) -->#}
+{#                            <div class="spread-container">#}
+{#                                <img src="{{ pair.0.page_image.url }}"#}
+{#                                     class="page normal-page"#}
+{#                                     data-page-number="{{ pair.0.page_number }}"#}
+{#                                     alt="Страница {{ pair.0.page_number }}">#}
+{#                            </div>#}
                         {% endif %}
                         <div class="reader_buttons">
                             <div class="toggle_next read_btn">
@@ -316,38 +343,86 @@
                 <div class="current_ch">
                     <p>Глава {{ chapter.get_chapter_display }}</p>
                 </div>
-                <div class="credits">
-                    {% if chapter.interpreter.all %}
-                        <h1>Переводчик:</h1>
-                        {% for person in chapter.interpreter.all %}
-                            <a href="{{ person.link_for_offers }}"><h2>{{ person.staff_name }}</h2></a>{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if chapter.editor.all %}
-                        <h1>Редактор:</h1>
-                        {% for person in chapter.editor.all %}
-                            <a href="{{ person.link_for_offers }}"><h2>{{ person.staff_name }}</h2></a>{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if chapter.retoucher.all %}
-                        <h1>Ретушёр:</h1>
-                        {% for person in chapter.retoucher.all %}
-                            <a href="{{ person.link_for_offers }}"><h2>{{ person.staff_name }}</h2></a>{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if chapter.typesetter.all %}
-                        <h1>Верстальщик:</h1>
-                        {% for person in chapter.typesetter.all %}
-                            <a href="{{ person.link_for_offers }}"><h2>{{ person.staff_name }}</h2></a>{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if chapter.sfx_artist.all %}
-                        <h1>Художник по звукам:</h1>
-                        {% for person in chapter.sfx_artist.all %}
-                            <a href="{{ person.link_for_offers }}"><h2>{{ person.staff_name }}</h2></a>{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                </div>
+                {% for pair in page_pairs %}
+                    <p class="page_numbers {% if forloop.first %}active{% else %}hidden{% endif %}">
+                        {% if pair.1 %}
+                            {{ pair.1.page_number }} — {{ pair.0.page_number }}
+                        {% elif forloop.first or forloop.last %}
+                            {{ pair.0.page_number }}
+                        {% else %}
+                            {{ pair.0.page_number }} — {{ pair.0.page_number|add:-1 }}
+                        {% endif %}
+                    </p>
+                {% endfor %}
+                {% if chapter.interpreter.all or chapter.editor.all or chapter.retoucher.all or chapter.typesetter.all or chapter.sfx_artist.all %}
+                    <div class="credits">
+                        {% if chapter.interpreter.all %}
+                            <h1>Переводчик:</h1>
+                            {% for person in chapter.interpreter.all %}
+                                {% if person.is_private == 0 %}
+                                <a style="text-decoration: underline" href="{{ person.link_for_offers }}">
+                                    <h2>{{ person.staff_name }}</h2>
+                                </a>
+                                    {% if not forloop.last %}, {% endif %}
+                                {% else %}
+                                    <h2>{{ person.staff_name }}</h2>{% if not forloop.last %}, {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {% if chapter.editor.all %}
+                            <h1>Редактор:</h1>
+                            {% for person in chapter.editor.all %}
+                                {% if person.is_private == 0 %}
+                                <a style="text-decoration: underline" href="{{ person.link_for_offers }}">
+                                    <h2>{{ person.staff_name }}</h2>
+                                </a>
+                                    {% if not forloop.last %}, {% endif %}
+                                {% else %}
+                                    <h2>{{ person.staff_name }}</h2>{% if not forloop.last %}, {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {% if chapter.retoucher.all %}
+                            <h1>Ретушёр:</h1>
+                            {% for person in chapter.retoucher.all %}
+                                {% if person.is_private == 0 %}
+                                <a style="text-decoration: underline" href="{{ person.link_for_offers }}">
+                                    <h2>{{ person.staff_name }}</h2>
+                                </a>
+                                    {% if not forloop.last %}, {% endif %}
+                                {% else %}
+                                    <h2>{{ person.staff_name }}</h2>{% if not forloop.last %}, {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {% if chapter.typesetter.all %}
+                            <h1>Верстальщик:</h1>
+                            {% for person in chapter.typesetter.all %}
+                                {% if person.is_private == 0 %}
+                                <a style="text-decoration: underline" href="{{ person.link_for_offers }}">
+                                    <h2>{{ person.staff_name }}</h2>
+                                </a>
+                                    {% if not forloop.last %}, {% endif %}
+                                {% else %}
+                                    <h2>{{ person.staff_name }}</h2>{% if not forloop.last %}, {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {% if chapter.sfx_artist.all %}
+                            <h1>Художник по звукам:</h1>
+                            {% for person in chapter.sfx_artist.all %}
+                                {% if person.is_private == 0 %}
+                                <a style="text-decoration: underline" href="{{ person.link_for_offers }}">
+                                    <h2>{{ person.staff_name }}</h2>
+                                </a>
+                                    {% if not forloop.last %}, {% endif %}
+                                {% else %}
+                                    <h2>{{ person.staff_name }}</h2>{% if not forloop.last %}, {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                {% endif %}
     
                 <!-- Включаем partial напрямую -->
                 {% include 'partials/rating_block.html' with manga=manga chapter=chapter like_percentage=like_percentage user_rating=user_rating %}
@@ -362,6 +437,7 @@
             const next_chapter = {% if next_chapter %}"{{ next_chapter }}"{% else %}null{% endif %};
             const prev_chapter = {% if prev_chapter %}"{{ prev_chapter }}"{% else %}null{% endif %};
             const pagePairs = document.querySelectorAll('.page-pair');
+            const pageNumbers = document.querySelectorAll('.page_numbers');
     
             // Функция для обновления отображаемой пары страниц
             function updateDisplayedPair() {
@@ -370,10 +446,16 @@
                     pair.classList.add('hidden');
                     pair.classList.remove('active');
                 });
-    
+                pageNumbers.forEach(pair => {
+                    pair.classList.add('hidden');
+                    pair.classList.remove('active');
+                });
+
                 // Показываем текущую пару
                 pagePairs[currentPairIndex].classList.remove('hidden');
                 pagePairs[currentPairIndex].classList.add('active');
+                pageNumbers[currentPairIndex].classList.remove('hidden');
+                pageNumbers[currentPairIndex].classList.add('active');
     
                 // Обновляем информацию о текущих страницах
                 {#updatePageInfo();#}

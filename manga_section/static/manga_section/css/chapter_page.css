@@ -262,7 +262,7 @@ body, html {
 }
 
 .current_ch {
-    margin-bottom: 10px;
+    /*margin-bottom: 10px;*/
 }
 
 .current_ch p {
@@ -366,4 +366,14 @@ body, html {
     line-height: 1;
     margin: 0;
     padding: 0px 0px 2px 0px;
+}
+
+.page_numbers {
+    flex-direction: row;
+    width: 84px;
+    justify-content: center;
+}
+
+.page_numbers.active {
+    display: flex;
 }

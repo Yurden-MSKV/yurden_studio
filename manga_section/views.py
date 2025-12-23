@@ -123,7 +123,7 @@ def chapter_page(request, manga_slug, ch_number):
             current_page = images[i]
 
             # Если текущая страница - разворот
-            if current_page.is_double_page:
+            if current_page.is_double_page or current_page.page_number == 1:
                 pairs.append([current_page])  # Добавляем как одиночный элемент
                 i += 1
                 continue

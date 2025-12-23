@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.db import models
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
+from PIL import Image
 
 from manga_section.models import (Genre, Author, Manga, Volume, Chapter, ChapterImage, Staff)
 
@@ -144,33 +145,93 @@ class ChapterAdmin(admin.ModelAdmin):
 
     inlines = [ChapterImageInline]
 
+    # def response_change(self, request, obj):
+    #     """Обрабатываем массовую загрузку изображений"""
+    #     if 'upload_images' in request.POST:
+    #         # Обрабатываем загруженные файлы
+    #         files = request.FILES.getlist('images')
+    #         if files:
+    #             # Получаем следующий номер страницы
+    #             existing_pages = ChapterImage.objects.filter(chapter=obj)
+    #             if existing_pages.exists():
+    #                 next_page_number = existing_pages.aggregate(
+    #                     models.Max('page_number')
+    #                 )['page_number__max'] + 1
+    #             else:
+    #                 next_page_number = 1
+    #
+    #             # Сохраняем все файлы
+    #             success_count = 0
+    #             for i, file in enumerate(files):
+    #                 try:
+    #                     ChapterImage.objects.create(
+    #                         chapter=obj,
+    #                         page_number=next_page_number + i,
+    #                         page_image=file
+    #                     )
+    #                     success_count += 1
+    #                 except Exception as e:
+    #                     messages.error(request, f'Ошибка при загрузке файла {file.name}: {str(e)}')
+    #
+    #             if success_count > 0:
+    #                 messages.success(request, f'Успешно загружено {success_count} изображений')
+    #
+    #         return HttpResponseRedirect(request.path)
+    #
+    #     return super().response_change(request, obj)
+
     def response_change(self, request, obj):
         """Обрабатываем массовую загрузку изображений"""
         if 'upload_images' in request.POST:
-            # Обрабатываем загруженные файлы
             files = request.FILES.getlist('images')
             if files:
-                # Получаем следующий номер страницы
+                # Получаем текущую максимальную страницу
                 existing_pages = ChapterImage.objects.filter(chapter=obj)
                 if existing_pages.exists():
-                    next_page_number = existing_pages.aggregate(
+                    # Начинаем со следующего номера после максимального
+                    current_page = existing_pages.aggregate(
                         models.Max('page_number')
                     )['page_number__max'] + 1
                 else:
-                    next_page_number = 1
+                    current_page = 1
 
-                # Сохраняем все файлы
                 success_count = 0
-                for i, file in enumerate(files):
+
+                for file in files:
                     try:
+                        # Открываем изображение для определения размеров
+                        with Image.open(file) as img:
+                            width, height = img.size
+
+                        # Определяем ориентацию
+                        is_double_page = (width > height)
+
+                        # ЕСЛИ это разворот И текущий номер ЧЕТНЫЙ
+                        # то увеличиваем на 1, чтобы разворот получил нечетный номер
+                        if is_double_page:
+                            current_page += 1
+
+                        # Сбрасываем указатель файла для сохранения
+                        file.seek(0)
+
+                        # Сохраняем страницу с текущим номером
                         ChapterImage.objects.create(
                             chapter=obj,
-                            page_number=next_page_number + i,
-                            page_image=file
+                            page_number=current_page,
+                            page_image=file,
+                            is_double_page=is_double_page
                         )
+
                         success_count += 1
+
+                        # # Увеличиваем счетчик для следующей страницы
+                        # if is_double_page:
+                        #     current_page += 2  # Разворот занимает 2 номера
+                        # else:
+                        current_page += 1  # Обычная страница
+
                     except Exception as e:
-                        messages.error(request, f'Ошибка при загрузке файла {file.name}: {str(e)}')
+                        messages.error(request, f'Ошибка при загрузке {file.name}: {str(e)}')
 
                 if success_count > 0:
                     messages.success(request, f'Успешно загружено {success_count} изображений')
