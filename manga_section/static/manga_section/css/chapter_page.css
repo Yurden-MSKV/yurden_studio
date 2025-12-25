@@ -251,7 +251,7 @@ body, html {
     margin-top: 20px;
     left: calc(100% - 225px);
     align-items: center;
-    width: fit-content;
+    max-width: min-content;
     height: fit-content;
     gap: 10px;
     /*border: 2px solid black;*/
@@ -294,7 +294,7 @@ body, html {
 }
 
 .credits h2 {
-    text-align: right;
+    /*text-align: right;*/
 }
 
 .credits a {
