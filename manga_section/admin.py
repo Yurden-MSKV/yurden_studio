@@ -129,6 +129,7 @@ class ChapterAdmin(admin.ModelAdmin):
     list_display = ['get_manga_name', 'get_vol_number', 'ch_number', 'ch_name']
     search_fields = ['ch_number', 'ch_name']
     filter_horizontal = ['interpreter', 'editor', 'retoucher', 'typesetter', 'sfx_artist']
+    actions = ['delete_all_selected']
 
     # Добавляем кастомный шаблон для массовой загрузки
     change_form_template = 'admin/manga_section/chapter_change_form.html'
@@ -239,6 +240,15 @@ class ChapterAdmin(admin.ModelAdmin):
             return HttpResponseRedirect(request.path)
 
         return super().response_change(request, obj)
+
+        # Или использовать action с подтверждением для всех записей
+
+
+    def delete_all_selected(self):
+        """Удалить все объекты модели"""
+        ChapterImage.objects.filter(chapter=self).delete()
+
+    delete_all_selected.short_description = "Удалить ВСЕ записи"
 
 @admin.register(Staff)
 class StaffAdmin(admin.ModelAdmin):
