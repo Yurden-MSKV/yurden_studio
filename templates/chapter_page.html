@@ -361,11 +361,11 @@
                             {% for person in chapter.interpreter.all %}
                                 {% if person.is_private == 0 %}
                                 <a style="text-decoration: underline" href="{{ person.link_for_offers }}">
-                                    <h2>{{ person.staff_name }}</h2>
+                                    <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>
                                 </a>
-                                    {% if not forloop.last %}, {% endif %}
+                                    
                                 {% else %}
-                                    <h2>{{ person.staff_name }}</h2>{% if not forloop.last %}, {% endif %}
+                                    <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
@@ -374,11 +374,11 @@
                             {% for person in chapter.editor.all %}
                                 {% if person.is_private == 0 %}
                                 <a style="text-decoration: underline" href="{{ person.link_for_offers }}">
-                                    <h2>{{ person.staff_name }}</h2>
+                                    <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>
                                 </a>
-                                    {% if not forloop.last %}, {% endif %}
+                                    
                                 {% else %}
-                                    <h2>{{ person.staff_name }}</h2>{% if not forloop.last %}, {% endif %}
+                                    <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
@@ -387,11 +387,11 @@
                             {% for person in chapter.retoucher.all %}
                                 {% if person.is_private == 0 %}
                                 <a style="text-decoration: underline" href="{{ person.link_for_offers }}">
-                                    <h2>{{ person.staff_name }}</h2>
+                                    <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>
                                 </a>
-                                    {% if not forloop.last %}, {% endif %}
+                                    
                                 {% else %}
-                                    <h2>{{ person.staff_name }}</h2>{% if not forloop.last %}, {% endif %}
+                                    <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
@@ -400,11 +400,11 @@
                             {% for person in chapter.typesetter.all %}
                                 {% if person.is_private == 0 %}
                                 <a style="text-decoration: underline" href="{{ person.link_for_offers }}">
-                                    <h2>{{ person.staff_name }}</h2>
+                                    <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>
                                 </a>
-                                    {% if not forloop.last %}, {% endif %}
+                                    
                                 {% else %}
-                                    <h2>{{ person.staff_name }}</h2>{% if not forloop.last %}, {% endif %}
+                                    <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
@@ -413,11 +413,11 @@
                             {% for person in chapter.sfx_artist.all %}
                                 {% if person.is_private == 0 %}
                                 <a style="text-decoration: underline" href="{{ person.link_for_offers }}">
-                                    <h2>{{ person.staff_name }}</h2>
+                                    <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>
                                 </a>
-                                    {% if not forloop.last %}, {% endif %}
+                                    
                                 {% else %}
-                                    <h2>{{ person.staff_name }}</h2>{% if not forloop.last %}, {% endif %}
+                                    <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
