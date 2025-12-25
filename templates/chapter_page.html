@@ -409,7 +409,7 @@
                             {% endfor %}
                         {% endif %}
                         {% if chapter.sfx_artist.all %}
-                            <h1>Художник по звукам:</h1>
+                            <h1>Художник по&nbsp;звукам:</h1>
                             {% for person in chapter.sfx_artist.all %}
                                 {% if person.is_private == 0 %}
                                 <a style="text-decoration: underline" href="{{ person.link_for_offers }}">
