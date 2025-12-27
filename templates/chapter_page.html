@@ -44,6 +44,102 @@
             <p>На страницу манги</p>
         </a>
         </div>
+        {% include 'partials/rating_block.html' with manga=manga chapter=chapter like_percentage=like_percentage user_rating=user_rating %}
+        
+    
+{#        TODO: Оформление, JS-скрипт, вёрстка #}
+{#        <div class="menu-cont">#}
+{#            <div class="page-shadow" id="page-shadow"></div>#}
+{#            <div class="side_bar">#}
+{#                <div class="current_ch">#}
+{#                    <p>Глава {{ chapter.get_chapter_display }}</p>#}
+{#                </div>#}
+{#                {% for pair in page_pairs %}#}
+{#                    <p class="page_numbers {% if forloop.first %}active{% else %}hidden{% endif %}">#}
+{#                        {% if pair.1 %}#}
+{#                            {{ pair.1.page_number }} — {{ pair.0.page_number }}#}
+{#                        {% elif forloop.first or forloop.last %}#}
+{#                            {{ pair.0.page_number }}#}
+{#                        {% else %}#}
+{#                            {{ pair.0.page_number }} — {{ pair.0.page_number|add:-1 }}#}
+{#                        {% endif %}#}
+{#                    </p>#}
+{#                {% endfor %}#}
+{#                {% if chapter.interpreter.all or chapter.editor.all or chapter.retoucher.all or chapter.typesetter.all or chapter.sfx_artist.all %}#}
+{#                    <div class="credits">#}
+{#                        {% if chapter.interpreter.all %}#}
+{#                            <h1>Переводчик:</h1>#}
+{#                            {% for person in chapter.interpreter.all %}#}
+{#                                {% if person.is_private == 0 %}#}
+{#                                <a style="text-decoration: underline" href="{{ person.link_for_offers }}">#}
+{#                                    <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>#}
+{#                                </a>#}
+{##}
+{#                                {% else %}#}
+{#                                    <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>#}
+{#                                {% endif %}#}
+{#                            {% endfor %}#}
+{#                        {% endif %}#}
+{#                        {% if chapter.editor.all %}#}
+{#                            <h1>Редактор:</h1>#}
+{#                            {% for person in chapter.editor.all %}#}
+{#                                {% if person.is_private == 0 %}#}
+{#                                <a style="text-decoration: underline" href="{{ person.link_for_offers }}">#}
+{#                                    <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>#}
+{#                                </a>#}
+{##}
+{#                                {% else %}#}
+{#                                    <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>#}
+{#                                {% endif %}#}
+{#                            {% endfor %}#}
+{#                        {% endif %}#}
+{#                        {% if chapter.retoucher.all %}#}
+{#                            <h1>Ретушёр:</h1>#}
+{#                            {% for person in chapter.retoucher.all %}#}
+{#                                {% if person.is_private == 0 %}#}
+{#                                <a style="text-decoration: underline" href="{{ person.link_for_offers }}">#}
+{#                                    <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>#}
+{#                                </a>#}
+{##}
+{#                                {% else %}#}
+{#                                    <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>#}
+{#                                {% endif %}#}
+{#                            {% endfor %}#}
+{#                        {% endif %}#}
+{#                        {% if chapter.typesetter.all %}#}
+{#                            <h1>Верстальщик:</h1>#}
+{#                            {% for person in chapter.typesetter.all %}#}
+{#                                {% if person.is_private == 0 %}#}
+{#                                <a style="text-decoration: underline" href="{{ person.link_for_offers }}">#}
+{#                                    <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>#}
+{#                                </a>#}
+{##}
+{#                                {% else %}#}
+{#                                    <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>#}
+{#                                {% endif %}#}
+{#                            {% endfor %}#}
+{#                        {% endif %}#}
+{#                        {% if chapter.sfx_artist.all %}#}
+{#                            <h1>Художник по&nbsp;звукам:</h1>#}
+{#                            {% for person in chapter.sfx_artist.all %}#}
+{#                                {% if person.is_private == 0 %}#}
+{#                                <a style="text-decoration: underline" href="{{ person.link_for_offers }}">#}
+{#                                    <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>#}
+{#                                </a>#}
+{##}
+{#                                {% else %}#}
+{#                                    <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>#}
+{#                                {% endif %}#}
+{#                            {% endfor %}#}
+{#                        {% endif %}#}
+{#                    </div>#}
+{#                {% endif %}#}
+{##}
+{#                <!-- Включаем partial напрямую -->#}
+{#                {% include 'partials/rating_block.html' with manga=manga chapter=chapter like_percentage=like_percentage user_rating=user_rating %}#}
+{##}
+{#            </div>#}
+{#        </div>#}
         
         <div class="main_container">
     
@@ -90,6 +186,18 @@
                 {% endfor %}
             </div>
         
+        </div>
+        <div class="numbers_block">
+            {% for pair in page_pairs %}
+                <p class="page_numbers {% if forloop.first %}active{% else %}hidden{% endif %}">
+                {% if pair.is_double_page == False %}
+                    стр. {{ pair.page_number }}
+                {% else %}
+                    стр. {{ pair.page_number }} — {{ pair.page_number|add:-1 }}
+                {% endif %}
+                        
+                </p>
+            {% endfor %}
         </div>
     
 {#        <div class="side_bar">#}
@@ -142,6 +250,8 @@
             const next_chapter = {% if next_chapter %}"{{ next_chapter }}"{% else %}null{% endif %};
             const prev_chapter = {% if prev_chapter %}"{{ prev_chapter }}"{% else %}null{% endif %};
             const mobilepagePairs = document.querySelectorAll('.page-pair');
+            const pageNumbers = document.querySelectorAll('.page_numbers');
+            
     
             // Функция для обновления отображаемой пары страниц
             function updateDisplayedPair() {
@@ -150,10 +260,16 @@
                     pair.classList.add('hidden');
                     pair.classList.remove('active');
                 });
+                pageNumbers.forEach(pair => {
+                    pair.classList.add('hidden');
+                    pair.classList.remove('active');
+                });
     
                 // Показываем текущую пару
                 mobilepagePairs[currentPairIndex].classList.remove('hidden');
                 mobilepagePairs[currentPairIndex].classList.add('active');
+                pageNumbers[currentPairIndex].classList.remove('hidden');
+                pageNumbers[currentPairIndex].classList.add('active');
     
                 // Обновляем информацию о текущих страницах
                 {#updatePageInfo();#}
@@ -363,7 +479,7 @@
                                 <a style="text-decoration: underline" href="{{ person.link_for_offers }}">
                                     <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>
                                 </a>
-                                    
+
                                 {% else %}
                                     <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>
                                 {% endif %}
@@ -376,7 +492,7 @@
                                 <a style="text-decoration: underline" href="{{ person.link_for_offers }}">
                                     <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>
                                 </a>
-                                    
+
                                 {% else %}
                                     <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>
                                 {% endif %}
@@ -389,7 +505,7 @@
                                 <a style="text-decoration: underline" href="{{ person.link_for_offers }}">
                                     <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>
                                 </a>
-                                    
+
                                 {% else %}
                                     <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>
                                 {% endif %}
@@ -402,7 +518,7 @@
                                 <a style="text-decoration: underline" href="{{ person.link_for_offers }}">
                                     <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>
                                 </a>
-                                    
+
                                 {% else %}
                                     <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>
                                 {% endif %}
@@ -415,7 +531,7 @@
                                 <a style="text-decoration: underline" href="{{ person.link_for_offers }}">
                                     <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>
                                 </a>
-                                    
+
                                 {% else %}
                                     <h2>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</h2>
                                 {% endif %}

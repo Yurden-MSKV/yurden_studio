@@ -290,9 +290,15 @@ body, html {
 
 .rating_block {
     display: flex;
-    flex-direction: column;
+    position: fixed;
+    top: 20px;
+    right: 25px;
+    flex-direction: row ;
     align-items: center;
-    gap: 2px;
+    gap: 5px;
+    padding: 5px 0;
+    background: var(--block-color);
+    border-radius: 10px;
 }
 
 .like-btn,
@@ -300,7 +306,7 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 2px 5px;
+    padding: 10px;
     background: none;
     border: none;
     width: fit-content;
@@ -311,7 +317,7 @@ body, html {
 
 .like-btn img,
 .dislike-btn img {
-    width: 16px;
+    width: 40px;
     filter: var(--icon-color);
     margin: 0;
     padding: 0;
@@ -338,4 +344,20 @@ body, html {
     line-height: 1;
     margin: 0;
     padding: 0px 0px 2px 0px;
+    font-weight: bold;
+}
+
+.numbers_block {
+    display: flex;
+    position: fixed;
+    margin: 0 auto;
+    bottom: 10%
+}
+
+.page_numbers {
+    font-weight: bold;
+}
+
+.page_numbers.active {
+    display: flex;
 }
