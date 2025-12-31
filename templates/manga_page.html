@@ -53,11 +53,10 @@
                                                     <a href="
     {% url 'chapter-page' manga_slug=manga.manga_slug ch_number=chapter.get_chapter_display %}">
                                                         <div class="ch_number">
-                                                        <p>Глава {{ chapter.get_chapter_display}}</p>
+                                                        <p>Глава {{ chapter.get_chapter_display }}</p>
                                                         </div>
                                                         <div class="ch_name">
-                                                            <p>
-                                                                {{ chapter.ch_name|add_nbsp|safe }}</p>
+                                                            <p>{{ chapter.ch_name|add_nbsp|safe }}</p>
                                                         </div>
                                                     </a>
                                                 </div>
@@ -138,7 +137,7 @@
                                                         <a href="
         {% url 'chapter-page' manga_slug=manga.manga_slug ch_number=chapter.get_chapter_display %}">
                                                             <div class="ch_number">
-                                                            Глава {{ chapter.get_chapter_display}}
+                                                            Глава {{ chapter.get_chapter_display }}
                                                             </div>
                                                             <div class="ch_name">
                                                                 {{ chapter.ch_name|add_nbsp|smart_break:request|safe }}

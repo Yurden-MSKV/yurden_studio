@@ -9,7 +9,7 @@ register = template.Library()
 def smart_break(text, request=None):
 
     home_count = 23
-    manga_count = 41
+    manga_count = 50
     count = manga_count
 
     # Если передан request, определяем путь

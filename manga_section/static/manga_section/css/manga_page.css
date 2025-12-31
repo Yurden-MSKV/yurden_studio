@@ -87,7 +87,7 @@ body, html {
 
 .volume_cover {
     height: fit-content;
-    margin: 10px;
+    margin: 10px 10px 10px 20px;
 }
 
 .volume_cover img {
@@ -213,7 +213,7 @@ img.last_read {
 .chapter_rating {
     display: flex;
     align-items: center;
-    margin: 0 95px 0 auto;
+    margin: 0 0 0 auto;
     padding: 4px 8px 4px 6px;
     height: fit-content;
     background: var(--element-color);
