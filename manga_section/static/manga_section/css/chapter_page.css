@@ -378,3 +378,104 @@ body, html {
 .page_numbers.active {
     display: flex;
 }
+
+.tutorial_block {
+    display: flex;
+    flex-basis: 0;
+    position: absolute;
+    margin: auto;
+    background: rgba(75, 75, 75, 0.8);
+    /*opacity: 80%;*/
+    height: 100%;
+    width: 98%;
+    z-index: 2;
+}
+
+.left_edge {
+    display: flex;
+    flex-basis: 0;
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 30%;
+    background: #2291ff;
+    opacity: 80%;
+    z-index: 2;
+    align-items: center;
+    justify-content: center;
+    border: 4px dashed var(--hover-text-color);
+}
+
+.left_edge p, .right_edge p {
+    /*text-shadow: 2px 2px var(--hover-text-color);*/
+    font-size: 35px;
+    text-align: center;
+}
+
+.right_edge {
+    display: flex;
+    flex-basis: 0;
+    position: absolute;
+    right: 0;
+    height: 100%;
+    width: 30%;
+    background: limegreen;
+    opacity: 80%;
+    z-index: 2;
+    align-items: center;
+    justify-content: center;
+    border: 4px dashed var(--hover-text-color);
+}
+
+.rate {
+    display: flex;
+    flex-basis: 0;
+    position: fixed;
+    right: -75px;
+    top: 180px;
+    background: red;
+    opacity: 80%;
+    z-index: 3;
+    align-items: center;
+    justify-content: center;
+    border: 4px dashed var(--hover-text-color);
+    transform: rotate(90deg);
+}
+
+.rate p {
+    font-size: 35px;
+    text-align: center;
+    padding: 5px 10px;
+    /*transform: rotate(90deg);*/
+}
+
+.thanks_button {
+    display: flex;
+    position: relative;
+    bottom: -70%;
+    margin: 0 auto;
+    height: fit-content;
+
+}
+
+.thanks_button button {
+    background-color: var(--element-color);
+    border: 4px dashed var(--hover-color);
+    border-radius: 10px;
+}
+
+.thanks_button button:hover {
+    background-color: var(--hover-color);
+}
+
+/*.thanks_button*/
+
+.thanks_button p {
+    font: bold 30px "Nunito";
+    text-align: center;
+    padding: 5px 10px;
+    line-height: 1;
+}
+
+.tutorial_button_block {
+}

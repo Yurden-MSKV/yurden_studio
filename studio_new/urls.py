@@ -10,7 +10,8 @@ from main_section.views import CustomLoginView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', main_section_views.index),
+  path('close_tutorial/', main_section_views.close_tutorial, name='close-tutorial'),
+  path('', main_section_views.index),
     path('home/', main_section_views.main_page, name='home-page'),
     path('manga/', include('manga_section.urls')),
     path('post/', include('post_section.urls')),
@@ -22,8 +23,8 @@ urlpatterns = [
     path('info/', main_section_views.info_page, name='info'),
     path('messages/', main_section_views.messages_page, name='messages'),
     path('messages/read/<int:message_id>/', main_section_views.read_message, name='read-message'),
-path('api/save-theme/', main_section_views.save_theme_preference, name='save_theme'),
-path('api/get-theme/', main_section_views.get_theme_preference, name='get_theme'),
+    path('api/save-theme/', main_section_views.save_theme_preference, name='save_theme'),
+    path('api/get-theme/', main_section_views.get_theme_preference, name='get_theme'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

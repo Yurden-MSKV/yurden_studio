@@ -31,6 +31,7 @@ class Profile(models.Model):
         default='auto'
     )
     updated_at = models.DateTimeField(auto_now=True)
+    viewed_tutorial = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.username} - {self.get_theme_display()}"

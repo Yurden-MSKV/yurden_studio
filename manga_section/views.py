@@ -70,6 +70,7 @@ def manga_page(request, slug):
 
 @ensure_csrf_cookie
 def chapter_page(request, manga_slug, ch_number):
+
     # Ищем мангу по slug
     manga = get_object_or_404(Manga, manga_slug=manga_slug)
 

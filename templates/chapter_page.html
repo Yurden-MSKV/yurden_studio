@@ -18,7 +18,7 @@
 
 {% if request.is_mobile %}
 
-            <link rel="stylesheet" href="{% static 'manga_section/css/chapter_page-mobile.css' %}">
+        <link rel="stylesheet" href="{% static 'manga_section/css/chapter_page-mobile.css' %}">
         <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
         
         <script>
@@ -31,12 +31,12 @@
             });
         </script>
         
-    {#    <div class="reader_selector">#}
-    {#        <select onchange="changeReadingMode(this.value)">#}
-    {#            <option value="rtl" {% if reading_mode == 'rtl' %} selected {% endif %}>По-японски</option>#}
-    {#            <option value="vertical" {% if reading_mode == 'vertical' %} selected {% endif %}>Полотно</option>#}
-    {#        </select>#}
-    {#    </div>#}
+{#        <div class="reader_selector">#}
+{#            <select onchange="changeReadingMode(this.value)">#}
+{#                <option value="rtl" {% if reading_mode == 'rtl' %} selected {% endif %}>По-японски</option>#}
+{#                <option value="vertical" {% if reading_mode == 'vertical' %} selected {% endif %}>Полотно</option>#}
+{#            </select>#}
+{#        </div>#}
     <div class="total_container">
         <div class="back_to_manga">
         <a href="{% url 'manga-page' slug=manga.manga_slug %}">
@@ -142,7 +142,7 @@
 {#        </div>#}
         
         <div class="main_container">
-    
+
     {#        <div class="navigation">#}
     {#            <div class="manga_link">#}
     {#                <a href="{% url 'manga-page' slug=manga.manga_slug %}">#}
@@ -163,11 +163,23 @@
     {#        </div>#}
     
             <div class="read_container" id="reader">
-                <!-- Отображаем все пары страниц, но скрываем все кроме первой -->
+                {% if user.profile.viewed_tutorial == False %}
+                    <div class="tutorial_block" id="tutorial_block">
+                        <div class="left_edge">
+                            <p>Следующая страница&nbsp;/&nbsp;глава</p>
+                        </div>
+                        <div class="right_edge">
+                            <p>Предыдущая страница&nbsp;/&nbsp;глава</p>
+                        </div>
+                        <div class="rate"><p>Оценка&nbsp;главы</p></div>
+                        <div class="thanks_button">
+                            {% include 'partials/tutorial_button_block.html' %}
+                        </div>
+                    </div>
+                {% endif %}
                 {% for pair in page_pairs %}
                     <div class="page-pair {% if forloop.first %}active{% else %}hidden{% endif %}"
                          data-pair-index="{{ forloop.counter0 }}">
-                            <!-- Разворотная страница (занимает оба места) -->
                         <div class="spread-container">
                             <img src="{{ pair.page_image.url }}"
                                  class="page spread-page"
@@ -378,6 +390,20 @@
     {#        </div>#}
     
             <div class="read_container" id="reader">
+                {% if user.profile.viewed_tutorial == False %}
+                    <div class="tutorial_block" id="tutorial_block">
+                        <div class="left_edge">
+                            <p>Следующая страница&nbsp;/&nbsp;глава +&nbsp;стрелка&nbsp;← на&nbsp;клавиатуре</p>
+                        </div>
+                        <div class="right_edge">
+                            <p>Предыдущая страница&nbsp;/&nbsp;глава +&nbsp;стрелка&nbsp;→ на&nbsp;клавиатуре</p>
+                        </div>
+                        <div class="rate"><p>Оценка&nbsp;главы</p></div>
+                        <div class="thanks_button">
+                            {% include 'partials/tutorial_button_block.html' %}
+                        </div>
+                    </div>
+                {% endif %}
                 <!-- Отображаем все пары страниц, но скрываем все кроме первой -->
                 {% for pair in page_pairs %}
                     <div class="page-pair {% if forloop.first %}active{% else %}hidden{% endif %}"

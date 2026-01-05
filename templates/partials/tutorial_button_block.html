@@ -1,0 +1,10 @@
+{% load static %}
+
+<div class="tutorial_button_block" id="tutorial_button_block">
+    <button class="close_tutorial"
+            hx-post="{% url 'close-tutorial' %}"
+            hx-target="#tutorial_block"
+            hx-swap="outerHTML">
+        <p>Понятно</p>
+    </button>
+</div>

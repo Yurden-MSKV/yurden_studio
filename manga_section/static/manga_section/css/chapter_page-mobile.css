@@ -129,7 +129,101 @@ body, html {
     /*width: 95%;*/
     /*min-height: 600px;*/
     /*margin: 20px 0;*/
-    /*position: relative;*/
+    position: relative;
+}
+
+.tutorial_block {
+    display: flex;
+    flex-basis: 0;
+    position: absolute;
+    margin: auto;
+    background: var(--element-color);
+    opacity: 80%;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+}
+
+.left_edge {
+    display: flex;
+    flex-basis: 0;
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 30%;
+    background: #2291ff;
+    opacity: 80%;
+    z-index: 2;
+    align-items: center;
+    justify-content: center;
+}
+
+.left_edge p, .right_edge p {
+    transform: rotate(-90deg);
+    text-shadow: 2px 2px var(--hover-text-color);
+    font-size: 70px;
+    text-align: center;
+}
+
+.right_edge {
+    display: flex;
+    flex-basis: 0;
+    position: absolute;
+    right: 0;
+    height: 100%;
+    width: 30%;
+    background: limegreen;
+    opacity: 80%;
+    z-index: 2;
+    align-items: center;
+    justify-content: center;
+}
+
+.rate {
+    display: flex;
+    flex-basis: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 10%;
+    width: 40%;
+    background: red;
+    opacity: 80%;
+    z-index: 2;
+    align-items: center;
+    justify-content: center;
+}
+
+.rate p {
+    font-size: 50px;
+    text-align: center;
+}
+
+.thanks_button {
+    display: flex;
+    position: relative;
+    bottom: -103%;
+    margin: 0 auto;
+    height: fit-content;
+
+}
+
+.thanks_button button {
+    background: none;
+    border: 2px solid var(--hover-color);
+    border-radius: 10px;
+}
+
+/*.thanks_button*/
+
+.thanks_button p {
+    font-size: 50px;
+    text-align: center;
+    padding: 5px 10px;
+    line-height: 1;
+}
+
+.tutorial_button_block {
 }
 
 /* Стили для пар страниц */

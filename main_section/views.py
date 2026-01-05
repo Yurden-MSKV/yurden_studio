@@ -4,6 +4,7 @@ from django.contrib.auth import login
 from django.contrib import messages
 from django.db.models import Prefetch
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.defaulttags import csrf_token
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.contrib.auth import logout
@@ -231,3 +232,12 @@ def read_message(request, message_id):
     return response
 
     # return render(request, 'partials/message_read_block.html', {'message': message})
+
+def close_tutorial(request):
+    if request.method == 'POST':
+        user = request.user
+
+        user.profile.viewed_tutorial = True
+        user.profile.save()
+
+        return HttpResponse('<div id="tutorial_block"></div>')
