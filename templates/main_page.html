@@ -20,37 +20,37 @@
                     <h1>Новости студии</h1>
                 </div>
                 <div class="block_container">
-                    {% for post in recent_post %}
+{#                    {% for post in recent_post %}#}
                         <div class="post_block">
-                            <a href="{% url 'post-page' post_slug=post.post_slug %}">
+                            <a href="{% url 'post-page' post_slug=recent_post.post_slug %}">
                                 <div class="post_block_title">
-                                    <h1>{{ post.post_name }}
+                                    <h1>{{ recent_post.post_name }}
     {#                                    ({{ post.add_date|date:"d.m.Y" }})#}
                                     </h1>
                                 </div>
                                 <div class="post_block_content">
-                                    <p>{{ post.get_short_content_safe|add_nbsp }}</p>
+                                    <p>{{ recent_post.get_short_content_safe|add_nbsp }}</p>
                                 </div>
                             </a>
                         </div>
-                    {% endfor %}
+{#                    {% endfor %}#}
                 </div>
-                {% else %}
-                    <div class="block_title">
-                        <h1>Случайный пост</h1>
-                    </div>
-                    <div class="block_container">
-                        <div class="post_block">
-                            <a href="{% url 'post-page' post_slug=post.post_slug %}">
-                                <div class="post_block_title">
-                                    <h1>{{ post.post_name|add_nbsp|safe }}</h1>
-                                </div>
-                                <div class="post_block_content">
-                                    <p>{{ post.get_short_content_safe|add_nbsp }}</p>
-                                </div>
-                            </a>
-                            </div>
-                    </div>
+{#                {% else %}#}
+{#                    <div class="block_title">#}
+{#                        <h1>Случайный пост</h1>#}
+{#                    </div>#}
+{#                    <div class="block_container">#}
+{#                        <div class="post_block">#}
+{#                            <a href="{% url 'post-page' post_slug=post.post_slug %}">#}
+{#                                <div class="post_block_title">#}
+{#                                    <h1>{{ post.post_name|add_nbsp|safe }}</h1>#}
+{#                                </div>#}
+{#                                <div class="post_block_content">#}
+{#                                    <p>{{ post.get_short_content_safe|add_nbsp }}</p>#}
+{#                                </div>#}
+{#                            </a>#}
+{#                            </div>#}
+{#                    </div>#}
                 {% endif %}
             </div>
             <div class="updates_container contain_block">
@@ -196,35 +196,35 @@
                             <h2>Новости студии</h2>
                         </div>
                         <div class="block_container">
-                            {% for post in recent_post %}
+{#                            {% for post in recent_post %}#}
                                 <div class="post_block">
                                     <div class="post_block_title">
-                                        <a href="{% url 'post-page' post_slug=post.post_slug %}">
-                                            {{ post.post_name|split_post_title  }}
+                                        <a href="{% url 'post-page' post_slug=recent_post.post_slug %}">
+                                            {{ recent_post.post_name|split_post_title  }}
 {#                                            ({{ post.add_date|date:"d.m.Y" }})#}
                                         </a>
                                     </div>
                                     <div class="post_block_content">
-                                        <p>{{ post.get_short_content_safe|add_nbsp }}</p>
+                                        <p>{{ recent_post.get_short_content_safe|add_nbsp }}</p>
                                     </div>
                                 </div>
-                            {% endfor %}
+{#                            {% endfor %}#}
                         </div>
-                    {% else %}
-                        <div class="block_title">
-                            <h2>Случайный пост</h2>
-                        </div>
-                        <div class="block_container">
-                            <div class="post_block">
-                                    <div class="post_block_title">
-                                        <a href="{% url 'post-page' post_slug=post.post_slug %}">
-                                            {{ post.post_name|split_post_title }}</a>
-                                    </div>
-                                    <div class="post_block_content">
-                                        <p>{{ post.get_short_content_safe|add_nbsp }}</p>
-                                    </div>
-                                </div>
-                        </div>
+{#                    {% else %}#}
+{#                        <div class="block_title">#}
+{#                            <h2>Случайный пост</h2>#}
+{#                        </div>#}
+{#                        <div class="block_container">#}
+{#                            <div class="post_block">#}
+{#                                    <div class="post_block_title">#}
+{#                                        <a href="{% url 'post-page' post_slug=post.post_slug %}">#}
+{#                                            {{ post.post_name|split_post_title }}</a>#}
+{#                                    </div>#}
+{#                                    <div class="post_block_content">#}
+{#                                        <p>{{ post.get_short_content_safe|add_nbsp }}</p>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                        </div>#}
                     {% endif %}
                 </div>
             </div>

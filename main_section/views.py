@@ -93,12 +93,13 @@ def main_page(request):
         volumes = random_manga.volumes.order_by('vol_number')
         random_volume = random.choice(volumes)
 
-    recent_posts = Post.objects.filter(add_date__gte=last_week, visibility=True).order_by('-add_date')
+    # recent_posts = Post.objects.filter(add_date__gte=last_week, visibility=True).order_by('-add_date')
+    recent_posts = Post.objects.order_by('-add_date').first()
 
-    if not recent_posts.exists():
-        recent_posts = {}
-        posts = Post.objects.exclude(visibility=0)
-        random_post = random.choice(list(posts))
+    # if not recent_posts.exists():
+    #     recent_posts = {}
+    #     posts = Post.objects.exclude(visibility=0)
+    #     random_post = random.choice(list(posts))
 
     if request.user.username == 'yurden':
         message_cnt = message_count(request)
