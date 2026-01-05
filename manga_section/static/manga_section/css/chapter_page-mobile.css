@@ -156,6 +156,7 @@ body, html {
     z-index: 2;
     align-items: center;
     justify-content: center;
+    border: 4px dashed var(--hover-text-color);
 }
 
 .left_edge p, .right_edge p {
@@ -177,6 +178,8 @@ body, html {
     z-index: 2;
     align-items: center;
     justify-content: center;
+    border: 4px dashed var(--hover-text-color);
+
 }
 
 .rate {
@@ -192,6 +195,8 @@ body, html {
     z-index: 2;
     align-items: center;
     justify-content: center;
+    border: 4px dashed var(--hover-text-color);
+
 }
 
 .rate p {
@@ -209,15 +214,15 @@ body, html {
 }
 
 .thanks_button button {
-    background: none;
-    border: 2px solid var(--hover-color);
+    background-color: var(--element-color);
+    border: 4px dashed var(--hover-color);
     border-radius: 10px;
 }
 
 /*.thanks_button*/
 
 .thanks_button p {
-    font-size: 50px;
+    font: bold 50px "Nunito";
     text-align: center;
     padding: 5px 10px;
     line-height: 1;
