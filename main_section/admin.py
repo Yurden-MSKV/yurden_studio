@@ -2,8 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from main_section.models import ChapterLike, ChapterView
-from manga_section.models import Chapter
+from main_section.models import ChapterLike, ChapterView, Profile
 
 
 class CustomUserAdmin(BaseUserAdmin):
@@ -22,3 +21,8 @@ class ChapterLikeAdmin(admin.ModelAdmin):
 @admin.register(ChapterView)
 class ChapterViewAdmin(admin.ModelAdmin):
     list_display = ['user', 'manga', 'chapter', 'view_date']
+    ordering = ('-view_date',)
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'viewed_tutorial']
