@@ -9,6 +9,7 @@ class CustomUserAdmin(BaseUserAdmin):
     list_display = ['username', 'date_joined']
     # sortable_by = ('date_joined',)
     ordering = ('-date_joined',)
+    list_per_page = 10
 
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
@@ -17,11 +18,13 @@ admin.site.register(User, CustomUserAdmin)
 @admin.register(ChapterLike)
 class ChapterLikeAdmin(admin.ModelAdmin):
     list_display = ['user', 'chapter', 'is_like']
+    list_per_page = 10
 
 @admin.register(ChapterView)
 class ChapterViewAdmin(admin.ModelAdmin):
     list_display = ['user', 'manga', 'chapter', 'view_date']
     ordering = ('-view_date',)
+    list_per_page = 10
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
