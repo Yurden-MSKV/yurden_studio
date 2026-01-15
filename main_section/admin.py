@@ -17,7 +17,7 @@ admin.site.register(User, CustomUserAdmin)
 
 @admin.register(ChapterLike)
 class ChapterLikeAdmin(admin.ModelAdmin):
-    list_display = ['user', 'chapter', 'is_like']
+    list_display = ['user', 'manga', 'chapter', 'is_like']
     list_per_page = 10
 
 @admin.register(ChapterView)
