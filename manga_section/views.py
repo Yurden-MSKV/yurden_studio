@@ -41,8 +41,7 @@ def manga_page(request, slug):
     volumes = manga.volumes.all().order_by('vol_number')
 
     user_rates_list = list(ChapterLike.objects.filter(user=request.user, manga=manga).values_list('chapter_id', flat=True))
-    user_rates = set(user_rates_list)
-    print(user_rates)
+    user_rates = user_rates_list
 
     viewed_chapters_dates = list(ChapterView.objects.filter(
         user=request.user,
