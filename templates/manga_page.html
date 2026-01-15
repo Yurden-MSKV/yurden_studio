@@ -163,6 +163,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="chapter_rating">
+                                                    <div style="display: none">{{ user_rates }}</div>
                                                     {% if chapter.id in user_rates %}
                                                         <img src="{% static 'manga_section/icons/star-solid-full.svg' %}">
                                                     {% else %}
