@@ -40,6 +40,10 @@ def manga_page(request, slug):
     # Получаем тома, отсортированные по номеру
     volumes = manga.volumes.all().order_by('vol_number')
 
+    user_rates_list = list(ChapterLike.objects.filter(user=request.user, manga=manga).values_list('chapter_id', flat=True))
+    user_rates = set(user_rates_list)
+    print(user_rates)
+
     viewed_chapters_dates = list(ChapterView.objects.filter(
         user=request.user,
         manga=manga,
@@ -63,6 +67,7 @@ def manga_page(request, slug):
         'authors': authors,
         'viewed_chapters_dates': viewed_chapters_dates,
         'viewed_chapters': viewed_chapters,
+        'user_rates': user_rates,
         'messages_cnt': message_cnt,
     }
     return render(request, 'manga_page.html', context)

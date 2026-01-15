@@ -63,8 +63,11 @@
                                             </div>
                                             <div class="rate_and_mark">
                                                 <div class="chapter_rating">
-                                                    <img class="svg-icon" src=
-                                                            "{% static 'manga_section/icons/rate_star.svg' %}">
+                                                    {% if chapter.id in user_rates %}
+                                                        <img src="{% static 'manga_section/icons/star-solid-full.svg' %}">
+                                                    {% else %}
+                                                        <img src="{% static 'manga_section/icons/star-regular-full.svg' %}">
+                                                    {% endif %}
                                                     <p>{{ chapter.rate_percentage }}%</p>
                                                 </div>
                                                 <div class="view_sign">
@@ -160,7 +163,11 @@
                                                     </div>
                                                 </div>
                                                 <div class="chapter_rating">
-                                                    <img src="{% static 'manga_section/icons/rate_star.svg' %}">
+                                                    {% if chapter.id in user_rates %}
+                                                        <img src="{% static 'manga_section/icons/star-solid-full.svg' %}">
+                                                    {% else %}
+                                                        <img src="{% static 'manga_section/icons/star-regular-full.svg' %}">
+                                                    {% endif %}
                                                     <p>{{ chapter.rate_percentage }}%</p>
                                                 </div>
                                             </div>

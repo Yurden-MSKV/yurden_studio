@@ -230,6 +230,7 @@ img.last_read {
     padding: 4px 8px 4px 6px;
     /*background-color: var(--element-color);*/
     /*border-radius: 10px;*/
+    gap: 1px
 }
 
 .chapter_rating p {
@@ -240,7 +241,7 @@ img.last_read {
 .chapter_rating img {
     display: flex;
     filter: var(--icon-color);
-    width: 28px
+    width: 30px
 }
 
 .svg-icon {

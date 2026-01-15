@@ -219,6 +219,7 @@ img.last_read {
     background: var(--element-color);
     transition: background 0.5s;
     border-radius: 10px;
+    gap: 1px
 }
 
 .chapter_rating p {
@@ -232,6 +233,7 @@ img.last_read {
     display: flex;
     filter: var(--icon-color);
     transition: filter 0.5s;
+    width: 18px
 }
 
 .chapter_and_rate:hover .chapter_rating {

@@ -6,6 +6,7 @@ from manga_section.models import Chapter, Manga
 
 class ChapterLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    manga = models.ForeignKey(Manga, on_delete=models.CASCADE, null=True, blank=True)
     chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE,
                                 related_name='likes')
     is_like = models.BooleanField(blank=True, null=True)
