@@ -236,6 +236,7 @@ def rate_chapter(request, manga_slug, ch_number):
         # Если оценки нет - создаем новую
         ChapterLike.objects.create(
             user=request.user,
+            manga=manga,
             chapter=chapter,
             is_like=is_like
         )
