@@ -19,13 +19,19 @@ from post_section.models import Post, MessageFAQ
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from captcha.models import CaptchaStore
+from captcha.helpers import captcha_image_url
 import json
 
 from django.middleware.csrf import get_token
 
 from django.contrib.auth.views import LoginView
+from .forms import LoginFormWithCaptcha
 
 class CustomLoginView(LoginView):
+    form_class = LoginFormWithCaptcha
+    template_name = 'registration/login.html'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_mobile'] = getattr(self.request, 'is_mobile', False)
@@ -37,15 +43,18 @@ def index(request):
 
 
 def register_view(request):
-    next_url = request.GET.get('next', '/')
+    next_url = request.GET.get('next', '')
 
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            next_from_form = request.POST.get('next', '/')
-            return redirect(next_from_form)
+            next_from_form = request.POST.get('next')
+            if next_from_form and next_from_form.startswith('/'):
+                if next_from_form.strip() != '/':
+                    return redirect(next_from_form)
+            return redirect('home-page')
     else:
         form = RegisterForm()
 

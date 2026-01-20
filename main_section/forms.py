@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import AuthenticationForm
+from captcha.fields import CaptchaField
 
 
 class RegisterForm(UserCreationForm):
@@ -24,10 +26,21 @@ class RegisterForm(UserCreationForm):
             'placeholder': 'Подтверждение пароля'
         })
     )
+    captcha = CaptchaField(
+        label='Введите код с картинки',
+        error_messages={'invalid': 'Неправильный код с картинки'}
+    )
 
     class Meta:
         model = User
-        fields = ['username', 'password1', 'password2']
+        fields = ['username', 'password1', 'password2', 'captcha']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['captcha'].widget.attrs.update({
+            'class': 'form-control',
+            # 'placeholder': 'Введите код с картинки'
+        })
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
@@ -40,3 +53,26 @@ class RegisterForm(UserCreationForm):
         password2 = self.cleaned_data.get('password2')
         if password2 != password1:
             raise ValidationError("Пароли не совпадают")
+
+
+class LoginFormWithCaptcha(AuthenticationForm):
+    captcha = CaptchaField(
+        label='Введите код с картинки',
+        error_messages={'invalid': 'Неправильный код с картинки'}
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Настраиваем виджеты полей
+        self.fields['username'].widget.attrs.update({
+            'class': 'form-control',
+            # 'placeholder': 'Имя пользователя'
+        })
+        self.fields['password'].widget.attrs.update({
+            'class': 'form-control',
+            # 'placeholder': 'Пароль'
+        })
+        self.fields['captcha'].widget.attrs.update({
+            'class': 'form-control',
+            # 'placeholder': 'Введите код с картинки'
+        })

@@ -4,6 +4,7 @@
 <html>
 <head>
     <title>Вход</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 </head>
 <body>
     <div class="main_container {% if request.is_mobile %}mobile{% else %}desktop{% endif %}">
@@ -35,17 +36,104 @@
                     <label for="id_password">Пароль</label>
                     {{ form.password }}
                 </div>
+
+               <div class="input_block captcha-block">
+                    
+                    <div class="captcha-container">
+                        {{ form.captcha }}
+                    </div>
+                    
+                    {% if form.captcha.errors %}
+                        <div class="captcha-error">
+                            {% for error in form.captcha.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <label class="captcha-help">
+                        Кликни на картинку для новой капчи
+                    </label>
+                </div>
+
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const captchaImg = document.querySelector('img.captcha');
+                    if (!captchaImg) return;
+                    
+                    captchaImg.addEventListener('click', async function() {
+                        const imgElement = this;
+                        
+                        imgElement.style.opacity = '0.7';
+                        
+                        try {
+                            const response = await fetch('{% url "captcha-refresh" %}', {
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest'
+                                }
+                            });
+                            
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            
+                            const data = await response.json();
+                            
+                            const hiddenInput = document.querySelector('input[name="captcha_0"]');
+                            if (hiddenInput && data.key) {
+                                hiddenInput.value = data.key;
+                            }
+                            
+                            const newImg = new Image();
+                            
+                            newImg.onload = function() {
+                                imgElement.src = data.image_url + '?t=' + Date.now();
+                                imgElement.style.opacity = '1';
+                                
+                                const textInput = document.querySelector('input[name="captcha_1"]');
+                                if (textInput) {
+                                    textInput.value = '';
+                                    textInput.focus();
+                                }
+                            };
+                            
+                            newImg.onerror = function() {
+                                imgElement.src = imgElement.src.split('?')[0] + '?t=' + Date.now();
+                                imgElement.style.opacity = '1';
+                            };
+                            
+                            newImg.src = data.image_url;
+                            
+                        } catch (error) {
+                            console.error('Error refreshing captcha:', error);
+                            
+                            imgElement.src = imgElement.src.split('?')[0] + '?t=' + Date.now();
+                            imgElement.style.opacity = '1';
+                            
+                            const textInput = document.querySelector('input[name="captcha_1"]');
+                            if (textInput) {
+                                textInput.value = '';
+                            }
+                        }
+                    });
+                    
+                    captchaImg.style.cursor = 'pointer';
+                });
+                </script>
                 
                 <div class="btn_block">
                     <button class="login_btn" type="submit">Войти</button>
                 </div>
             </form>
+
             <div class="another_action">
                 <p>Нет аккаунта?<a href="{% url 'register' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}">Зарегистрироваться</a></p>
             </div>
         </div>
     </div>
 
+    
+    
     <script src="{% static 'js/theme.js' %}"></script>
 
 </body>

@@ -90,6 +90,16 @@ body, html {
     /*box-shadow: none; !* Убираем тень если есть *!*/
 }
 
+.captcha-container {
+    display: flex;
+    gap: 5px
+}
+
+.captcha-help {
+    font-size: 12px !important;
+    font-style: italic;
+}
+
 .btn_block {
     display: flex;
     width: fit-content;
@@ -149,6 +159,7 @@ body, html {
                 border-top-color 0.5s ease,
                 border-left-color 0.5s ease,
                 border-right-color 0.5s ease;
+    margin-left: 3px;
 }
 
 .another_action a:hover {

@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'poll_section',
     'ckeditor',
     'ckeditor_uploader',
-    # 'livereload'
+    'captcha'
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -82,7 +82,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'main_section.middleware.AuthRequiredMiddleware',
     'studio_new.middleware.MobileDetectionMiddleware',
-    # 'livereload.middleware.LiveReloadScript',
 ]
 
 MEDIA_URL = '/media/'
@@ -186,3 +185,11 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100 MB
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 
 SILENCED_SYSTEM_CHECKS = ['ckeditor.W001']
+
+# CAPTCHA_IMAGE_TAG = """
+# <img src="%s" alt="captcha" class="captcha" onclick="this.src=this.src" />
+# """
+
+CAPTCHA_LENGTH = 6
+CAPTCHA_FONT_SIZE = 24
+CAPTCHA_TIMEOUT = 2

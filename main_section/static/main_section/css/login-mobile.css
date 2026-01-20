@@ -126,6 +126,26 @@ body, html {
                 /*border-right-color 0.5s ease;*/
 }
 
+.captcha-block {
+    margin-top: 10px;
+}
+
+.captcha-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.captcha {
+    width: 70%;
+}
+
+.captcha-help {
+    font-size: 30px !important;
+    font-style: italic;
+}
+
 .another_action {
     margin: 5px auto 0 auto;
     transition: var(--tran-back);
