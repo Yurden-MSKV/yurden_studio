@@ -1,0 +1,552 @@
+@import url('../../../../static/css/themes.css');
+@import url('../../../../static/css/text.css');
+
+/*@import url('../../../../static/css/text-mobile.css');*/
+
+body, html {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito';
+    background: var(--background-color);
+}
+
+.active {
+    display: flex;
+}
+
+.hidden {
+    display: none;
+}
+
+.global_container {
+    display: flex;
+    overflow: hidden;
+    height: 100vh;
+}
+
+.chapter_container {
+    display: flex;
+    margin: auto;
+    position: sticky;
+}
+
+.aside_button {
+    background: none !important;
+}
+
+.page_block.active {
+    display: flex;
+}
+
+.page_block.hidden {
+    display: none;
+}
+
+.page_block img {
+    display: block;
+    max-height: 100vh;
+    max-width: 100vw;
+}
+
+@media (orientation: portrait) {
+    .double_page {
+        display: none;
+    }
+    .single_page {
+        display: flex;
+    }
+    .comment_menu {
+        width: 100%;
+    }
+    .page_number.desktop {
+        display: none;
+    }
+    .comment_info img {
+        width: 2.6vw !important;
+        filter: var(--icon-color)
+    }
+    .author {
+        font-weight: bold;
+        font-size: 3.5vw !important;
+    }
+    .comment_date {
+        font-size: 2.5vw !important;
+        padding-top: 5px
+    }
+    .comment_text {
+        font-size: 3.5vw !important;
+    }
+    .no_comments p {
+        font-size: 3.5vw !important;
+        font-style: italic;
+    }
+    .page_number.mobile p {
+        font-size: 3.5vw !important;
+    }
+    .comment_area {
+        font-size: 30px !important;
+    }
+    .send_comment_block {
+        width: fit-content;
+        margin: 10px 10px 10px auto;
+    }
+    .send_comment {
+        background: none;
+        color: var(--text-color);
+        font: bold 3.5vw "Nunito" !important;
+        border: none;
+        box-shadow: 0 0 4px var(--hover-color);
+        border-radius: 5px;
+        padding: 5px 10px;
+    }
+    .comment_info img {
+        filter: var(--icon-color);
+        width: 35px
+    }
+    .comment_info p:not(:last-child) {
+        margin-right: 3px
+    }
+    .rate_percentage p {
+        font-size: 3vw !important;
+        font-weight: bold;
+        color: white !important;
+    }
+    .rating_block button {
+        width: fit-content;
+    }
+    .rating_block img {
+        width: 2vh;
+        filter: invert(100%) sepia(2%) saturate(9%) hue-rotate(16deg) brightness(103%) contrast(100%);
+    }
+
+    .like-btn:hover img,
+    .like-btn.active img {
+        width: 2vh;
+        filter: invert(40%) sepia(99%) saturate(433%) hue-rotate(121deg) brightness(94%) contrast(101%);
+    }
+
+    .dislike-btn:hover img,
+    .dislike-btn.active img {
+        width: 2vh;
+        filter: invert(37%) sepia(65%) saturate(1293%) hue-rotate(321deg) brightness(98%) contrast(96%);
+    }
+
+}
+
+@media (orientation: landscape) {
+    .single_page {
+        display: none;
+    }
+    .double_page {
+        display: flex;
+    }
+    .page_number.mobile {
+        display: none;
+    }
+    .comment_menu {
+        position: absolute;
+        width: 50%;
+        bottom: 0;
+    }
+    .left_page_comment {
+        left: 0;
+    }
+    .right_page_comment {
+        right: 0;
+    }
+    .top_container {
+    display: flex;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    }
+    .top_container p {
+        font-size: 30px;
+    }
+    .top_element {
+        display: flex;
+        width: 200px;
+        height: 60px;
+        position: absolute;
+        top: 50%;
+        margin-top: -30px;
+        align-items: center;
+        justify-content: center;
+        background: var(--block-color);
+        border-radius: 10px;
+    }
+    .back {
+        left: 3%;
+    }
+    .page_num {
+        left: 29%
+    }
+    .ch_num {
+        right: 29%;
+    }
+    .rate_block {
+        right: 3%;
+    }
+
+    .rate_block img {
+        width: 30px;
+        height: 30px;
+    }
+    .comment_info p, .comment_text {
+        font-size: 2.5vh;
+    }
+    .author {
+        font-weight: bold;
+    }
+    .comment_date {
+        font-size: 1.9vh !important;
+        padding-top: 3px;
+    }
+    .comment_info p:not(:last-child) {
+        margin-right: 3px
+    }
+    .no_comments p {
+        font-style: italic;
+        font-size: 2.5vh !important;
+    }
+    .send_comment_block {
+        width: fit-content;
+        margin: 10px 15px 10px auto;
+    }
+    .rate_percentage p {
+        font-size: 20px !important;
+        font-weight: bold;
+        color: white !important;
+    }
+    .rating_block button {
+        width: fit-content;
+    }
+
+    .rating_block img {
+        width: 3vh;
+        filter: invert(100%) sepia(2%) saturate(9%) hue-rotate(16deg) brightness(103%) contrast(100%);
+    }
+
+    .like-btn:hover img,
+    .like-btn.active img {
+        width: 3vh;
+        filter: invert(40%) sepia(99%) saturate(433%) hue-rotate(121deg) brightness(94%) contrast(101%);
+    }
+
+    .dislike-btn:hover img,
+    .dislike-btn.active img {
+        width: 3vh;
+        filter: invert(37%) sepia(65%) saturate(1293%) hue-rotate(321deg) brightness(98%) contrast(96%);
+    }
+
+    .send_comment {
+        background: none;
+        color: var(--text-color);
+        font: bold 2.5vh "Nunito" !important;
+        border: none;
+        box-shadow: 0 0 4px var(--hover-color);
+        transition: box-shadow 0.2s;
+        border-radius: 5px;
+        padding: 5px 15px;
+    }
+
+    .send_comment:hover {
+        box-shadow: none;
+        transition: box-shadow 0.2s;
+    }
+}
+
+.chapter_menu {
+    width: 100%;
+    height: 12%;
+    background: rgba(75, 75, 75, 0.8);
+    position: absolute;
+    top: 0;
+    /*border-bottom: 5px dashed black;*/
+    box-sizing: border-box;
+}
+
+.chapter_top_menu.active {
+    display: flex;
+    background: rgba(75, 75, 75, 0.8);
+    /*justify-content: space-between;*/
+    width: 100%;
+    height: 12%;
+    position: absolute;
+    top: 0;
+    box-sizing: border-box;
+    align-items: center;
+}
+
+.chapter_top_menu p {
+    font-size: 3vh !important;
+    font-weight: bold;
+    color: white !important;
+}
+
+.back_to_manga {
+    height: fit-content;
+    margin-left: 20px
+}
+
+.back_to_manga p, .rate_percentage p {
+    font-size: 3vh !important;
+    font-weight: bold;
+    color: white !important;
+}
+
+.chapter_info {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.hide_top {
+    display: flex;
+    margin: 0 auto;
+    position: absolute;
+    top: 20px;
+    right: 50%
+}
+
+.single_rate_block, .double_rate_block {
+    display: flex;
+    margin: 0 2vw 0 auto;
+}
+
+.rating_block {
+    display: flex;
+    flex-direction: row;
+}
+
+.rating_block button {
+    background: none;
+    border: none;
+}
+
+.credits {
+    background: rgba(75, 75, 75, 0.8);
+    border-radius: 5px;
+    padding: 10px;
+    gap: 5px;
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: fit-content;
+}
+
+.credits p, .credits h2 {
+    width: fit-content;
+}
+
+.credits h2, .credits p {
+    display: flex;
+    margin-right: auto;
+}
+
+.credits p {
+    /*display: flex;*/
+    /*margin: 0 auto;*/
+    /*font-style: italic;*/
+}
+
+.credits p:not(:last-child) {
+    /*margin-bottom: 10px;*/
+}
+
+.top_panel_chapter {
+    width: 100%;
+    height: 12%;
+    position: absolute;
+    top: 0;
+    box-sizing: border-box;
+}
+
+.read_btn {
+    width: 20%;
+    height: 76%;
+    background: red;
+    opacity: 50%;
+    position: absolute;
+    top: 12%;
+    box-sizing: border-box;
+}
+
+.toggle_next {
+    left: 0;
+    /*border-right: 5px dashed black;*/
+}
+
+.toggle_prev {
+    right: 0;
+    /*border-left: 5px dashed black;*/
+}
+
+.aside_button button {
+    background: none;
+    border: none;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+}
+
+.comment_menu {
+    /*width: 100%;*/
+    height: 12%;
+    /*background: limegreen;*/
+    /*opacity: 50%;*/
+    position: absolute;
+    bottom: 0;
+    /*border-top: 5px dashed black;*/
+    box-sizing: border-box;
+}
+
+.single_comments_container.active {
+    display: flex;
+    top: 5%;
+    right: 5%;
+    width: 90%;
+    height: 80%;
+    position: absolute;
+    background: rgba(75, 75, 75, 0.95);
+    border-radius: 10px;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px
+}
+
+.comments_container.active {
+    display: flex;
+    width: 40%;
+    height: 90%;
+    position: absolute;
+    background: rgba(75, 75, 75, 0.95);
+    border-radius: 10px;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px
+}
+
+.comments_container.hidden, .single_comments_container.hidden {
+    display: none;
+}
+
+.right_page {
+    top: 5%;
+    right: 50%;
+}
+
+.left_page {
+    top: 5%;
+    left: 50%;
+}
+
+.page_number {
+    width: fit-content;
+    margin: 5px auto -5px auto;
+}
+
+.page_number p {
+    font-weight: bold;
+    font-size: 2.5vh !important;
+}
+
+.comments_list {
+    display: flex;
+    flex-direction: column;
+    width: 93%;
+    height: 80%;
+    /*border: 2px solid white;*/
+    margin: 0 auto;
+    gap: 1.5vh;
+    overflow: auto;
+    box-shadow: 0 0 4px var(--hover-color);
+    padding: 5px
+}
+
+.comment_show, .single_comment_show {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+}
+
+.comment_info {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+    align-items: center;
+}
+
+.comment_info img {
+    width: 2.7vh;
+    filter: var(--icon-color)
+}
+
+.comment_form {
+    display: flex;
+    flex-direction: column;
+}
+
+.comment_area {
+    width: 93%;
+    padding: 5px;
+    margin: 0 auto;
+    border: none;
+    box-shadow: 0 0 4px var(--hover-color);
+    background: none;
+    resize: none;
+    color: var(--text-color);
+    font-family: "Nunito" !important;
+    font-size: 1.9vh !important;
+}
+
+.comment_area:focus-visible {
+    outline: none;
+}
+
+.single_chapter_top_menu.active {
+    display: flex;
+    background: rgba(75, 75, 75, 0.8);
+    /*justify-content: space-between;*/
+    width: 100%;
+    height: 12%;
+    position: absolute;
+    top: 0;
+    box-sizing: border-box;
+    align-items: center;
+}
+
+.single_chapter_top_menu p {
+    font-size: 3vw !important;
+    font-weight: bold;
+    color: white !important;
+}
+
+.single_back_to_manga {
+    height: fit-content;
+    margin-left: 2vw
+}
+
+.single_back_to_manga p {
+    font-size: 3vw !important;
+    font-weight: bold;
+    color: white !important;
+}
+
+.single_chapter_info {
+    display: flex;
+    flex-direction: row;
+    gap: 2vw;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}

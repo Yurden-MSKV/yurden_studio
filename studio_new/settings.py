@@ -50,9 +50,10 @@ INSTALLED_APPS = [
     'manga_section',
     'post_section',
     'poll_section',
+    'django_htmx',
     'ckeditor',
     'ckeditor_uploader',
-    'captcha'
+    'captcha',
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -82,6 +83,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'main_section.middleware.AuthRequiredMiddleware',
     'studio_new.middleware.MobileDetectionMiddleware',
+    'django_htmx.middleware.HtmxMiddleware',
 ]
 
 MEDIA_URL = '/media/'

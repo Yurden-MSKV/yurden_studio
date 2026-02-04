@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -149,3 +150,23 @@ class ChapterImage(models.Model):
 
     def __str__(self):
         return f"Страница {self.page_number}"
+
+class Comment(models.Model):
+    author = models.ForeignKey(User,
+                               on_delete=models.CASCADE,
+                               verbose_name='Автор',
+                               related_name='comments')
+    manga = models.ForeignKey(Manga,
+                              on_delete=models.CASCADE,
+                              verbose_name='Манга',
+                              related_name='comments')
+    chapter = models.ForeignKey(Chapter,
+                                on_delete=models.CASCADE,
+                                verbose_name='Глава',
+                                related_name='comments')
+    page = models.ForeignKey(ChapterImage,
+                             on_delete=models.CASCADE,
+                             verbose_name='Страница',
+                             related_name='comments')
+    text = models.TextField(verbose_name='Содержание')
+    created_at = models.DateTimeField(auto_now_add=True,)

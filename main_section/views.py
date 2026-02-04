@@ -12,7 +12,7 @@ from django.utils.regex_helper import next_char
 from django.views.decorators.http import require_http_methods
 
 from main_section.forms import RegisterForm
-from manga_section.models import Chapter, Volume, Manga
+from manga_section.models import Chapter, Volume, Manga, ChapterImage
 from post_section.forms import FAQform
 from post_section.models import Post, MessageFAQ
 
@@ -27,6 +27,8 @@ from django.middleware.csrf import get_token
 
 from django.contrib.auth.views import LoginView
 from .forms import LoginFormWithCaptcha
+from .models import ChapterLike
+
 
 class CustomLoginView(LoginView):
     form_class = LoginFormWithCaptcha
@@ -251,3 +253,64 @@ def close_tutorial(request):
         user.profile.save()
 
         return HttpResponse('<div id="tutorial_block"></div>')
+
+def test_new_ch_page(request):
+
+    manga = get_object_or_404(Manga, pk=1)
+    chapter = get_object_or_404(Chapter, pk=17)
+    pages = ChapterImage.objects.filter(chapter=chapter).order_by('page_number')
+
+    single_page_mode = []
+    i = 0
+    while i < len(pages):
+        single_page_mode.append(pages[i])
+        i += 1
+
+    double_page_mode = []
+    i = 0
+    while i < len(pages):
+        current_page = pages[i]
+
+        # Если текущая страница - разворот
+        if current_page.is_double_page or current_page.page_number == 1:
+            double_page_mode.append([current_page])  # Добавляем как одиночный элемент
+            i += 1
+            continue
+
+        # Если следующая страница существует и не является разворотом
+        if i + 1 < len(pages) and not pages[i + 1].is_double_page:
+            double_page_mode.append([current_page, pages[i + 1]])
+            i += 2
+        else:
+            # Если следующая страница - разворот или последняя страница
+            double_page_mode.append([current_page])
+            i += 1
+
+    likes_count = ChapterLike.objects.filter(chapter=chapter, is_like=True).count()
+    dislikes_count = ChapterLike.objects.filter(chapter=chapter, is_like=False).count()
+    total_ratings = likes_count + dislikes_count
+
+    if total_ratings > 0:
+        like_percentage = round((likes_count / total_ratings) * 100)
+    else:
+        like_percentage = 0
+
+    # Проверяем оценку текущего пользователя
+    user_rating = None
+    if request.user.is_authenticated:
+        try:
+            user_like = ChapterLike.objects.get(user=request.user, chapter=chapter)
+            user_rating = 'like' if user_like.is_like else 'dislike'
+        except ChapterLike.DoesNotExist:
+            pass
+
+    context = {
+        'manga': manga,
+        'chapter': chapter,
+        'single_page_mode': single_page_mode,
+        'double_page_mode': double_page_mode,
+        'like_percentage': like_percentage,
+        'user_rating': user_rating
+    }
+
+    return render(request, 'new_chapter_page.html', context)

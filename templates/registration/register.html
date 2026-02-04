@@ -57,13 +57,13 @@
                         {{ form.captcha }}
                     </div>
 
-                    {% if form.captcha.errors %}
-                        <div class="captcha-error">
-                            {% for error in form.captcha.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+{#                    {% if form.captcha.errors %}#}
+{#                        <div class="captcha-error">#}
+{#                            {% for error in form.captcha.errors %}#}
+{#                                <span>{{ error }}</span>#}
+{#                            {% endfor %}#}
+{#                        </div>#}
+{#                    {% endif %}#}
 
                     <label class="captcha-help">
                         Кликни на картинку для новой капчи

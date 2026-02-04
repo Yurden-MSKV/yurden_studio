@@ -33,6 +33,8 @@ class Profile(models.Model):
     )
     updated_at = models.DateTimeField(auto_now=True)
     viewed_tutorial = models.BooleanField(default=False)
+    viewed_single = models.BooleanField(default=False)
+    viewed_double = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.username} - {self.get_theme_display()}"

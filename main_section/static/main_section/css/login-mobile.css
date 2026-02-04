@@ -172,3 +172,7 @@ body, html {
                 border-left-color 0.5s ease,
                 border-right-color 0.5s ease;
 }
+
+.alert li {
+    color: red;
+}

@@ -1,0 +1,55 @@
+{% load static %}
+{% load custom_filters %}
+
+{% block commentblock %}
+    <div class="page_number desktop">
+        {% if not page.is_double_page %}
+            {% if page.page_number|mod:2 != 0 %}
+            <p>← Страница {{ page.page_number }}</p>
+            {% else %}
+            <p>Страница {{ page.page_number }} →</p>
+            {% endif %}
+        {% else %}
+            <p>Разворот {{ page.page_number }} — {{ page.page_number|add:-1 }}</p>
+        {% endif %}
+    </div>
+    <div class="page_number mobile">
+        {% if not page.is_double_page %}
+            <p>Страница {{ page.page_number }}</p>
+        {% else %}
+            <p>Разворот {{ page.page_number }} — {{ page.page_number|add:-1 }}</p>
+        {% endif %}
+    </div>
+    <div class="comments_list">
+        {% if comments %}
+        {% for comment in comments %}
+            <div class="comment_element">
+                <div class="comment_info">
+                    <img src="{% static 'main_section/icons/profile_icon.svg' %}">
+                    <p class="author">{{ comment.author }}</p>
+                    <p class="comment_date">{{ comment.created_at|date:"d.m.Y H:i" }}</p>
+                </div>
+                <p class="comment_text">{{ comment.text }}</p>
+            </div>
+        {% endfor %}
+        {% else %}
+            <div class="no_comments">
+                <p>У этой страницы нет комментариев. Напишешь первый?</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <form id="comment-form-{{ page_id }}"
+          class="comment_form"
+          hx-post="{% url 'find-comments' page.id %}"
+          hx-target="#comments-page-list-{{ page_id }}"
+          hx-swap="innerHTML"
+          hx-trigger="submit">
+        {% csrf_token %}
+        {{ form.text }}
+        <div class="send_comment_block">
+        <input type="submit" class="send_comment" value="Отправить">
+        </div>
+    </form>
+
+{% endblock %}

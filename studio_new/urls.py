@@ -34,3 +34,7 @@ if settings.DEBUG:
 urlpatterns += [
     path('captcha/', include('captcha.urls')),
 ]
+
+urlpatterns += [
+    path('test/', main_section_views.test_new_ch_page, name='test'),
+]

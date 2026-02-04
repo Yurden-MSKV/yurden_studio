@@ -10,7 +10,7 @@ from django.db import models
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from PIL import Image
 
-from manga_section.models import (Genre, Author, Manga, Volume, Chapter, ChapterImage, Staff)
+from manga_section.models import (Genre, Author, Manga, Volume, Chapter, ChapterImage, Staff, Comment)
 
 
 # Кастомный виджет для множественной загрузки файлов
@@ -253,3 +253,7 @@ class ChapterAdmin(admin.ModelAdmin):
 @admin.register(Staff)
 class StaffAdmin(admin.ModelAdmin):
     list_display = ['staff_name', 'link_for_offers']
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['author', 'manga', 'chapter', 'page', 'text']

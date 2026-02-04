@@ -1,12 +1,14 @@
-from django.http import Http404, JsonResponse
+from django.http import Http404, JsonResponse, HttpResponse
 from decimal import Decimal
 
 from django.contrib.auth.decorators import login_required
+from django.template.loader import render_to_string
 from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 
 from main_section.views import message_count
+from manga_section.forms import CommentForm
 from manga_section.models import Manga, Chapter, ChapterImage
 from main_section.models import ChapterLike, ChapterView
 
@@ -28,6 +30,7 @@ def catalog_page(request):
 
     return render(request, "catalog_page.html", context)
 
+
 def manga_page(request, slug):
     # Получаем мангу с предзагрузкой всех связанных данных
     manga = get_object_or_404(Manga.objects.prefetch_related(
@@ -40,7 +43,8 @@ def manga_page(request, slug):
     # Получаем тома, отсортированные по номеру
     volumes = manga.volumes.all().order_by('vol_number')
 
-    user_rates_list = list(ChapterLike.objects.filter(user=request.user, manga=manga).values_list('chapter_id', flat=True))
+    user_rates_list = list(
+        ChapterLike.objects.filter(user=request.user, manga=manga).values_list('chapter_id', flat=True))
     user_rates = user_rates_list
 
     viewed_chapters_dates = list(ChapterView.objects.filter(
@@ -74,7 +78,6 @@ def manga_page(request, slug):
 
 @ensure_csrf_cookie
 def chapter_page(request, manga_slug, ch_number):
-
     # Ищем мангу по slug
     manga = get_object_or_404(Manga, manga_slug=manga_slug)
 
@@ -155,7 +158,6 @@ def chapter_page(request, manga_slug, ch_number):
                 i += 1
                 continue
 
-
         return pages
 
     if request.is_mobile:
@@ -218,6 +220,9 @@ def rate_chapter(request, manga_slug, ch_number):
 
     is_like = is_like.lower() == 'true'
 
+    # Определяем, из какого блока пришел запрос
+    source_block = request.POST.get('source_block', 'single')
+
     # Проверяем, есть ли уже оценка от пользователя
     try:
         existing_like = ChapterLike.objects.get(user=request.user, chapter=chapter)
@@ -252,10 +257,71 @@ def rate_chapter(request, manga_slug, ch_number):
     else:
         like_percentage = 0
 
-    # Возвращаем HTML фрагмент
-    return render(request, 'partials/rating_block.html', {
+    context = {
         'manga': manga,
         'chapter': chapter,
         'like_percentage': like_percentage,
         'user_rating': user_rating
+    }
+
+    if request.htmx:
+        # Рендерим оба блока
+        single_html = render_to_string('partials/single_rating_block.html', context)
+        double_html = render_to_string('partials/double_rating_block.html', context)
+
+        # Возвращаем оба блока с использованием hx-swap-oob
+        response_html = f"""
+        <div hx-swap-oob="outerHTML:.single_rating">{single_html}</div>
+        <div hx-swap-oob="outerHTML:.double_rating">{double_html}</div>
+        """
+
+        # Для совместимости с исходным запросом, также возвращаем основной контент
+        if source_block == 'single':
+            response_html = single_html + f"\n<div hx-swap-oob=\"outerHTML:.double_rating\">{double_html}</div>"
+        else:
+            response_html = double_html + f"\n<div hx-swap-oob=\"outerHTML:.single_rating\">{single_html}</div>"
+
+        return HttpResponse(response_html)
+
+    # Для не-HTML запросов (на всякий случай)
+    return JsonResponse({
+        'like_percentage': like_percentage,
+        'user_rating': user_rating
     })
+
+
+def find_comments(request, page_id):
+    page = get_object_or_404(ChapterImage, pk=page_id)
+    comments = page.comments.all().order_by('-created_at')
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.manga = page.chapter.volume.manga
+            comment.chapter = page.chapter
+            comment.page = page
+            comment.save()
+            form = CommentForm()
+
+            comments = page.comments.all().order_by('-created_at')
+
+            return render(request, 'partials/comments_block.html', {
+                'page': page,
+                'page_id': page_id,
+                'comments': comments,
+                'form': form,
+            })
+
+    else:
+        form = CommentForm()
+
+    context = {
+        'page': page,
+        'page_id': page_id,
+        'comments': comments,
+        'form': form,
+    }
+
+    return render(request, 'partials/comments_block.html', context)

@@ -1,0 +1,741 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="htmx-config" content='{"debug":true}'>
+    <title>{{ manga.manga_name }} — Глава {{ chapter.get_chapter_display }}</title>
+</head>
+<body class="dark-theme">
+    <link rel="stylesheet" href="{% static 'manga_section/css/new_chapter_page.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            htmx.config.useTemplateFragments = true;
+
+            document.body.addEventListener('htmx:configRequest', function(evt) {
+            evt.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+            });
+        });
+
+        function simpleOrientationTracker() {
+            const mediaQuery = window.matchMedia('(orientation: landscape)');
+
+            const handleOrientationChange = (e) => {
+                if (e.matches) {
+                    // ЛАНДШАФТ
+                    console.log('🔄 Повернули в ЛАНДШАФТ');
+                    updateDoublePage();
+                    let rotationBlock = document.querySelector('.single_comments_container')
+                    let rotationComment = document.querySelector('.single_comment_show')
+                    if (rotationComment) {
+                        rotationComment.removeAttribute('id')
+                        rotationBlock.classList.remove('active')
+                        rotationBlock.classList.add('hidden')
+                    }
+                } else {
+                    // ПОРТРЕТ
+                    console.log('🔄 Повернули в ПОРТРЕТ');
+                    updateSinglePage();
+                    let rotationBlock = document.querySelector('.comments_container')
+                    let rotationComment = document.querySelector('.comment_show')
+                    if (rotationComment) {
+                        rotationComment.removeAttribute('id')
+                        rotationBlock.classList.remove('active')
+                        rotationBlock.classList.add('hidden')
+                    }
+                }
+            };
+
+            mediaQuery.addEventListener('change', handleOrientationChange);
+
+            // Вызвать сразу при загрузке
+            handleOrientationChange(mediaQuery);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            simpleOrientationTracker();
+        });
+
+        let currentSingle = 0;
+        let currentDouble = 0;
+        const manga_slug = "{{ manga.manga_slug }}";
+        console.log(manga_slug);
+    </script>
+
+
+    <div class="global_container">
+        
+        <div class="chapter_container">
+
+            <!--Одностраничный вывод-->
+            <div class="single_page page_container">
+            
+                {% for stranica in single_page_mode %}
+                <div class="single page_block {% if forloop.first %}active{% else %}hidden{% endif %}">
+                    <img src="{{ stranica.page_image.url }}"
+                                 class="page spread-page"
+                                 data-page-id="{{ stranica.id }}">
+                </div>
+                {% endfor %}
+
+                <aside class="top_panel_chapter aside_button">
+                    <button class="active" id="single-chapter-top-menu-button" onclick="openSingleChapterMenu(this)
+"></button>
+                </aside>
+                 <aside class="toggle_next read_btn aside_button">
+                    <button id="next_page" onclick="debouncedGoToNextSingle()"></button>
+                </aside>
+                <aside class="toggle_prev read_btn aside_button">
+                    <button id="prev_page" onclick="debouncedGoToPreviousSingle()"></button>
+                </aside>
+                <aside class="comment_menu aside_button">
+                    <button onclick="loadSinglePageContent()"></button>
+                </aside>
+
+                <div class="single_comments_container hidden">
+                    <div class="single_comment_show">
+                        {% block singlecommentblock %}
+                        {% endblock %}
+                    </div>
+                </div>
+            
+                <div class="single_chapter_top_menu hidden">
+                    <a class="single_back_to_manga" href="#"><p>← К манге</p></a>
+                    <div class="single_chapter_info">
+                        <p class="single_chapter_number">Глава {{ chapter.volume.vol_number }}-{{ chapter.get_chapter_display }}</p>
+                        <p>|</p>
+                        {% for pair in double_page_mode %}
+                        <p class="single_page_numbers {% if forloop.first %}active{% else %}hidden{% endif %}">
+                            {% if pair.1 %}
+                                Страницы {{ pair.1.page_number }} — {{ pair.0.page_number }}
+                            {% elif forloop.first or forloop.last %}
+                                Страница {{ pair.0.page_number }}
+                            {% else %}
+                                Разворот {{ pair.0.page_number }} — {{ pair.0.page_number|add:-1 }}
+                            {% endif %}
+                        </p>
+                        {% endfor %}
+                    </div>
+{#                    <button class="hide_top"><p>Скрыть</p></button>#}
+                    <div class="single_rate_block">
+                        {% include 'partials/single_rating_block.html' with manga=manga chapter=chapter like_percentage=like_percentage user_rating=user_rating %}
+                    </div>
+                
+{#                    {% if chapter.interpreter.all or chapter.editor.all or chapter.retoucher.all or chapter.typesetter.all or chapter.sfx_artist.all %}#}
+{#                    <div class="credits">#}
+{#                        {% if chapter.interpreter.all %}#}
+{#                            <div class="staff_block">#}
+{#                                <p>Переводчик:</p>#}
+{#                                {% for person in chapter.interpreter.all %}#}
+{#                                    {% if person.is_private == 0 %}#}
+{#                                    <a style="text-decoration: underline" href="{{ person.link_for_offers }}">#}
+{#                                        <p>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</p>#}
+{#                                    </a>#}
+{#    #}
+{#                                    {% else %}#}
+{#                                        <p>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</p>#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                            </div>#}
+{#                        {% endif %}#}
+{#                        #}
+{#                        {% if chapter.editor.all %}#}
+{#                            <div class="staff_block">#}
+{#                                <p>Редактор:</p>#}
+{#                                {% for person in chapter.editor.all %}#}
+{#                                    {% if person.is_private == 0 %}#}
+{#                                    <a style="text-decoration: underline" href="{{ person.link_for_offers }}">#}
+{#                                        <p>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</p>#}
+{#                                    </a>#}
+{#    #}
+{#                                    {% else %}#}
+{#                                        <p>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</p>#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                            </div>#}
+{#                        {% endif %}#}
+{#                        {% if chapter.retoucher.all %}#}
+{#                            <div class="staff_block">#}
+{#                                <p>Ретушёр:</p>#}
+{#                                {% for person in chapter.retoucher.all %}#}
+{#                                    {% if person.is_private == 0 %}#}
+{#                                    <a style="text-decoration: underline" href="{{ person.link_for_offers }}">#}
+{#                                        <p>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</p>#}
+{#                                    </a>#}
+{#    #}
+{#                                    {% else %}#}
+{#                                        <p>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</p>#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                            </div>#}
+{#                        {% endif %}#}
+{#                        {% if chapter.typesetter.all %}#}
+{#                            <div class="staff_block">#}
+{#                                <p>Верстальщик:</p>#}
+{#                                {% for person in chapter.typesetter.all %}#}
+{#                                    {% if person.is_private == 0 %}#}
+{#                                    <a style="text-decoration: underline" href="{{ person.link_for_offers }}">#}
+{#                                        <p>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</p>#}
+{#                                    </a>#}
+{#        #}
+{#                                    {% else %}#}
+{#                                        <p>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</p>#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                            </div>#}
+{#                        {% endif %}#}
+{#                        {% if chapter.sfx_artist.all %}#}
+{#                            <div class="staff_block">#}
+{#                                <p>Художник<br>по&nbsp;звукам:</p>#}
+{#                                {% for person in chapter.sfx_artist.all %}#}
+{#                                    {% if person.is_private == 0 %}#}
+{#                                    <a style="text-decoration: underline" href="{{ person.link_for_offers }}">#}
+{#                                        <p>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</p>#}
+{#                                    </a>#}
+{#    #}
+{#                                    {% else %}#}
+{#                                        <p>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</p>#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                            </div>#}
+{#                        {% endif %}#}
+{#                    </div>#}
+{#                {% endif %}#}
+
+                </div>
+            
+                <script>
+                    function openSingleChapterMenu(button) {
+                        const singleMenu = document.querySelector('.single_chapter_top_menu');
+                        const menuSingleButton = button;
+                        singleMenu.classList.remove('hidden');
+                        singleMenu.classList.add('active');
+                        menuSingleButton.classList.remove('active');
+                        menuSingleButton.classList.add('hidden');
+                    }
+                    
+                    document.addEventListener('click', function(event) {
+                        const singleMenu = document.querySelector('.single_chapter_top_menu');
+                        const menuSingleButton = document.getElementById('single-chapter-top-menu-button')
+                        
+                        if (singleMenu.classList.contains('active') &&
+                            !singleMenu.contains(event.target) &&
+                            !menuSingleButton.contains(event.target)) {
+                            
+                            singleMenu.classList.remove('active');
+                            singleMenu.classList.add('hidden');
+                            menuSingleButton.classList.remove('hidden');
+                            menuSingleButton.classList.add('active');
+                        }
+                    })
+                </script>
+
+                <script>
+                    function findSinglePageID() {
+                        let pair = document.querySelector('.single.active');
+                        console.log(pair);
+                        let page = pair.firstElementChild;
+                        console.log(page.getAttribute('data-page-id'));
+                        return page.getAttribute('data-page-id');
+                    }
+
+                    function loadSinglePageContent() {
+                        let windowComment = document.querySelector('.single_comments_container');
+
+                        if (windowComment.classList.contains('hidden')) {
+                            windowComment.classList.remove('hidden');
+                            windowComment.classList.add('active');
+                            let pageId = findSinglePageID();
+                            if (!pageId) {
+                                console.error('pageId не найден');
+                                return;
+                            }
+                            let commentWindow = document.querySelector('.single_comment_show');
+                            commentWindow.id = 'comments-page-list-' + pageId;
+                            htmx.ajax('GET', `../manga/page/${pageId}/comments/`, {
+                                    target: `#comments-page-list-${pageId}`,
+                                    swap: `innerHTML`,
+                                    onSuccess: function (data) {
+                                        console.log(`Успешный ответ:`, data);
+                                        console.log(`Длина HTML:`, data.length);
+                                    },
+                                    onError: function (error) {
+                                        console.error(`Ошибка:`, error);
+                                    },
+                                }
+                            )
+                        } else {
+                            windowComment.classList.remove('active');
+                            windowComment.classList.add('hidden');
+                        }
+                    }
+                </script>
+
+            </div>
+
+            <script>
+                {#let currentSingle = 1;#}
+                const totalPages = {{ single_page_mode|length }};
+                {#console.log("Страниц:", totalPages);#}
+                const pageSingle = document.querySelectorAll('.single');
+                const singlePageNumbers = document.querySelectorAll('.single_page_numbers');
+
+                function checkImageOrientation(imgElement) {
+                    if (imgElement.complete) { // Изображение уже загружено
+                        return imgElement.naturalWidth > imgElement.naturalHeight;
+                    }
+                    return null; // Ещё не загружено
+                }
+
+                function updateSinglePage() {
+                        const commentWindow = document.querySelector('.single_comments_container');
+                        if (commentWindow.classList.contains('active')) {
+                            commentWindow.classList.remove('active');
+                            commentWindow.classList.add('hidden');
+                        }
+                        pageSingle.forEach(page => {
+                            page.classList.add('hidden');
+                            page.classList.remove('active');});
+                        singlePageNumbers.forEach(page => {
+                            page.classList.add('hidden');
+                            page.classList.remove('active');
+                        });                        
+                        pageSingle[currentSingle].classList.remove('hidden');
+                        pageSingle[currentSingle].classList.add('active');
+                        singlePageNumbers[currentSingle].classList.remove('hidden');
+                        singlePageNumbers[currentSingle].classList.add('active');
+                        {#console.log(getCurrentPageNumber())#}
+                    }
+
+                function goToNextSingle() {
+                        if (currentSingle < totalPages - 1) {
+                            const currentImage = pageSingle[currentSingle].querySelector('.page');
+                            let orientation = null;
+
+                            if (currentImage) {
+                                orientation = checkImageOrientation(currentImage);
+                            }
+
+                            if (orientation) {
+                                currentSingle += 1;
+                                currentDouble += 1;
+
+                            } else {
+                                if (currentSingle % 2 !== 0 || currentSingle === 0) {
+                                    currentDouble++
+                                }
+                                currentSingle += 1;
+
+                            }
+                            console.log("Номер страницы", currentSingle);
+                            console.log("Эта страница из пары:", currentDouble);
+                            updateSinglePage();
+                            updateDoublePage();
+                        }
+                        {#else if (currentPairIndex === totalPairs - 1 && next_chapter) {#}
+                        {#    window.location.href = `/manga/${manga_slug}/chapter/${next_chapter}/`;}#}
+                        {#else if (currentPairIndex === totalPairs - 1 && !next_chapter) {#}
+                        {#    window.location.href = `/manga/${manga_slug}/`;}#}
+                    }
+
+                function goToPreviousSingle() {
+                        if (currentSingle > 0) {
+                            const currentImage = pageDouble[currentDouble].querySelector('.page');
+                            let orientation = null;
+                            if (currentImage) {
+                                orientation = checkImageOrientation(currentImage);
+                            }
+                            if (currentSingle % 2 === 0 || orientation) {
+                                currentDouble--
+                            }
+                            currentSingle--;
+                            console.log("Номер страницы", currentSingle);
+                            console.log("Эта страница из пары:", currentDouble);
+                            updateSinglePage();
+                            updateDoublePage();
+                        }
+                        {#else if (currentPairIndex === 0 && prev_chapter) {#}
+                        {#    window.location.href = `/manga/${manga_slug}/chapter/${prev_chapter}/`;}#}
+                        {#else if (currentPairIndex === 0 && !prev_chapter) {#}
+                        {#    window.location.href = `/manga/${manga_slug}/`;}#}
+                    }
+
+                updateSinglePage();
+            </script>
+
+            <!--Двухстраничный вывод-->
+            <div class="double_page page_container">
+                {% for pair in double_page_mode %}
+                    <div class="double page_block {% if forloop.first %}active{% else %}hidden{% endif %}">
+                        {% if pair|length == 1 and pair.0.is_double_page %}
+                            <!-- Разворотная страница (занимает оба места) -->
+                            <img src="{{ pair.0.page_image.url }}"
+                                 class="page spread-page"
+                                 data-page-id="{{ pair.0.id }}">
+                        {% elif pair|length == 2 %}
+                            <!-- Две обычные страницы -->
+                            <img src="{{ pair.1.page_image.url }}"
+                                 class="page normal-page"
+                                 data-page-id="{{ pair.1.id }}">
+                            <img src="{{ pair.0.page_image.url }}"
+                                 class="page normal-page"
+                                 data-page-id="{{ pair.0.id }}">
+                        {% elif forloop.first %}
+                            <img src="{{ pair.0.page_image.url }}"
+                                 class="page normal-page"
+                                 data-page-id="{{ pair.0.id }}">
+                            <div style="background: white; width: 66.7vh" class="page-container right-page"></div>
+                        {% elif forloop.last %}
+                            <div style="background: white; width: 66.7vh" class="page-container left-page"></div>
+                            <img src="{{ pair.0.page_image.url }}"
+                                 class="page normal-page"
+                                 data-page-id="{{ pair.0.id }}">
+                        {% endif %}
+                        {# TODO: если эксперимент удастся, заменить page_number на id в одностраничном блоке #}
+                    </div>
+                {% endfor %}
+
+                
+
+                <aside class="top_panel_chapter aside_button">
+                    <button class="active" id="chapter-top-menu-button" onclick="openChapterMenu(this)"></button>
+                </aside>
+                 <aside class="toggle_next read_btn aside_button">
+                    <button id="next_page" onclick="debouncedGoToNextDouble()"></button>
+                </aside>
+                <aside class="toggle_prev read_btn aside_button">
+                    <button id="prev_page" onclick="debouncedGoToPreviousDouble()"></button>
+                </aside>
+                <aside class="comment_menu aside_button left_page_comment">
+                    <button id="left_comment" onclick="loadDoublePageContent(this)"></button>
+                </aside>
+                <aside class="comment_menu aside_button right_page_comment">
+                    <button id="right_comment" onclick="loadDoublePageContent(this)"></button>
+                </aside>
+
+                <div class="comments_container hidden">
+                    <div class="comment_show">
+                        {% block commentblock %}
+                        {% endblock %}
+                    </div>
+                </div>
+            
+                <div class="chapter_top_menu hidden">
+                    <a class="back_to_manga" href="#"><p>← К манге</p></a>
+                    <div class="chapter_info">
+                        <p class="chapter_number">Глава {{ chapter.volume.vol_number }}-{{ chapter.get_chapter_display }}</p>
+                        <p>|</p>
+                        {% for pair in double_page_mode %}
+                        <p class="page_numbers {% if forloop.first %}active{% else %}hidden{% endif %}">
+                            {% if pair.1 %}
+                                Страницы {{ pair.1.page_number }} — {{ pair.0.page_number }}
+                            {% elif forloop.first or forloop.last %}
+                                Страница {{ pair.0.page_number }}
+                            {% else %}
+                                Разворот {{ pair.0.page_number }} — {{ pair.0.page_number|add:-1 }}
+                            {% endif %}
+                        </p>
+                        {% endfor %}
+                    </div>
+{#                    <button class="hide_top"><p>Скрыть</p></button>#}
+                    <div class="double_rate_block">
+                        {% include 'partials/double_rating_block.html' with manga=manga chapter=chapter like_percentage=like_percentage user_rating=user_rating %}
+                    </div>
+{#                    {% if chapter.interpreter.all or chapter.editor.all or chapter.retoucher.all or chapter.typesetter.all or chapter.sfx_artist.all %}#}
+{#                        <div class="credits">#}
+{#                            {% if chapter.interpreter.all %}#}
+{#                                <h2>Переводчик:</h2>#}
+{#                                {% for person in chapter.interpreter.all %}#}
+{#                                    {% if person.is_private == 0 %}#}
+{#                                    <a style="text-decoration: underline" href="{{ person.link_for_offers }}">#}
+{#                                        <p>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</p>#}
+{#                                    </a>#}
+{#    #}
+{#                                    {% else %}#}
+{#                                        <p>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</p>#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                            {% endif %}#}
+{#                            {% if chapter.editor.all %}#}
+{#                                <h2>Редактор:</h2>#}
+{#                                {% for person in chapter.editor.all %}#}
+{#                                    {% if person.is_private == 0 %}#}
+{#                                    <a style="text-decoration: underline" href="{{ person.link_for_offers }}">#}
+{#                                        <p>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</p>#}
+{#                                    </a>#}
+{#    #}
+{#                                    {% else %}#}
+{#                                        <p>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</p>#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                            {% endif %}#}
+{#                            {% if chapter.retoucher.all %}#}
+{#                                <h2>Ретушёр:</h2>#}
+{#                                {% for person in chapter.retoucher.all %}#}
+{#                                    {% if person.is_private == 0 %}#}
+{#                                    <a style="text-decoration: underline" href="{{ person.link_for_offers }}">#}
+{#                                        <p>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</p>#}
+{#                                    </a>#}
+{#    #}
+{#                                    {% else %}#}
+{#                                        <p>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</p>#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                            {% endif %}#}
+{#                            {% if chapter.typesetter.all %}#}
+{#                                <h2>Верстальщик:</h2>#}
+{#                                {% for person in chapter.typesetter.all %}#}
+{#                                    {% if person.is_private == 0 %}#}
+{#                                    <a style="text-decoration: underline" href="{{ person.link_for_offers }}">#}
+{#                                        <p>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</p>#}
+{#                                    </a>#}
+{#    #}
+{#                                    {% else %}#}
+{#                                        <p>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</p>#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                            {% endif %}#}
+{#                            {% if chapter.sfx_artist.all %}#}
+{#                                <h2>Художник<br>по&nbsp;звукам:</h2>#}
+{#                                {% for person in chapter.sfx_artist.all %}#}
+{#                                    {% if person.is_private == 0 %}#}
+{#                                    <a style="text-decoration: underline" href="{{ person.link_for_offers }}">#}
+{#                                        <p>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</p>#}
+{#                                    </a>#}
+{#    #}
+{#                                    {% else %}#}
+{#                                        <p>{{ person.staff_name }}{% if not forloop.last %}, {% endif %}</p>#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                            {% endif %}#}
+{#                        </div>#}
+{#                    {% endif %}#}
+                </div>
+            
+                <script>
+                    function openChapterMenu(button) {
+                        const menu = document.querySelector('.chapter_top_menu');
+                        const menuButton = button;
+                        menu.classList.remove('hidden');
+                        menu.classList.add('active');
+                        {#menuButton.classList.remove('active');#}
+                        {#menuButton.classList.add('hidden');#}
+                    }
+                    
+                    document.addEventListener('click', function(event) {
+                        const menu = document.querySelector('.chapter_top_menu');
+                        const menuButton = document.getElementById('chapter-top-menu-button')
+                        
+                        if (menu.classList.contains('active') &&
+                            !menu.contains(event.target) &&
+                            !menuButton.contains(event.target)) {
+                            
+                            menu.classList.remove('active');
+                            menu.classList.add('hidden');
+                            menuButton.classList.remove('hidden');
+                            menuButton.classList.add('active');
+                        }
+                    })
+                </script>
+
+                <script>
+
+                    const pageNumbers = document.querySelectorAll('.page_numbers');
+                    console.log(pageNumbers);
+
+                    function findDoublePageID(buttonId) {
+                        let pair = document.querySelector('.double.active');
+                        let page;
+                        if (buttonId === 'left_comment') {
+                            page = pair.firstElementChild;
+                        } else if (buttonId === 'right_comment') {
+                            page = pair.lastElementChild;
+                        }
+                        return page.getAttribute('data-page-id');
+                    }
+
+                    function loadDoublePageContent(button) {
+                        let buttonId = button.id;
+                        let windowComment = document.querySelector('.comments_container');
+
+                        if (windowComment.classList.contains('hidden')) {
+                            windowComment.classList.remove('hidden');
+                            if (buttonId === 'left_comment') {
+                                windowComment.classList.remove('active', 'right_page');
+                                windowComment.classList.add('active', 'left_page');
+                            } else if (buttonId === 'right_comment') {
+                                windowComment.classList.remove('active', 'left_page');
+                                windowComment.classList.add('active', 'right_page');
+                            }
+                            let pageId = findDoublePageID(buttonId);
+                            if (!pageId) {
+                                console.error('pageId не найден');
+                                return;
+                            }
+                            const commentWindow = document.querySelector('.comment_show');
+                            commentWindow.id = 'comments-page-list-' + pageId;
+                            htmx.ajax('GET', `../manga/page/${pageId}/comments/`, {
+                                    target: `#comments-page-list-${pageId}`,
+                                    swap: `innerHTML`,
+                                    onSuccess: function (data) {
+                                        console.log(`Успешный ответ:`, data);
+                                        console.log(`Длина HTML:`, data.length);
+                                    },
+                                    onError: function (error) {
+                                        console.error(`Ошибка:`, error);
+                                    },
+                                }
+                            )
+                        } else {
+                            windowComment.classList.remove('active', 'left_page', 'right_page');
+                            windowComment.classList.add('hidden');
+                        }
+                    }
+                </script>
+            </div>
+
+            {#<aside class="chapter_menu">#}
+                {#{% include 'chapter_htmx/chapter_top_panel.html' %}#}
+            {# </aside>#}
+
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.addEventListener('htmx:configRequest', function(evt) {
+                const elt = evt.detail.elt;
+                if (elt.closest('.single_rating, .double_rating')) {
+                    evt.detail.parameters.source_block = elt.closest('.single_rating') ? 'single' : 'double';
+                }
+            });
+        });
+    </script>
+
+    <script>
+        {#let currentDouble = 0;#}
+        const totalDouble = {{ double_page_mode|length }};
+        {#console.log("Пар:", totalPairs)#}
+        const pageDouble = document.querySelectorAll('.double');
+
+        <!-- TODO: Здесь вставить переменные next_ и prev_chapter -->
+
+        {#function getCurrentPageNumber() {#}
+        {#        const currentBlock = pageDouble[currentDouble];#}
+        {#        const pageImage = currentBlock.querySelector('.page');#}
+        {#        return pageImage.getAttribute('data-page-number');#}
+        {#    }#}
+
+        function checkImageOrientation(imgElement) {
+                    if (imgElement.complete) { // Изображение уже загружено
+                        return imgElement.naturalWidth > imgElement.naturalHeight;
+                    }
+                    return null; // Ещё не загружено
+                }
+
+        function updateDoublePage() {
+                const commentWindow = document.querySelector('.comments_container');
+                if (commentWindow.classList.contains('active')) {
+                    commentWindow.classList.remove('active');
+                    commentWindow.classList.add('hidden');
+                }
+                pageDouble.forEach(pair => {
+                    pair.classList.add('hidden');
+                    pair.classList.remove('active');});
+                pageNumbers.forEach(pair => {
+                    pair.classList.add('hidden');
+                    pair.classList.remove('active');
+                });
+                pageDouble[currentDouble].classList.remove('hidden');
+                pageDouble[currentDouble].classList.add('active');
+                pageNumbers[currentDouble].classList.remove('hidden');
+                pageNumbers[currentDouble].classList.add('active');
+                {#console.log(getCurrentPageNumber())#}
+            }
+
+        function goToNextDouble() {
+                if (currentDouble < totalDouble - 1) {
+                    const currentImage = pageSingle[currentSingle].querySelector('.page');
+                    let orientation = null;
+                    if (currentImage) {
+                        orientation = checkImageOrientation(currentImage);
+                    }
+                    currentDouble++;
+                    console.log("Переход на пару:", currentDouble);
+                    if (currentSingle === 0 || orientation) {
+                        currentSingle += 1
+                    } else {
+                        currentSingle += 2
+                    }
+                    console.log("Номер страницы справа:", currentSingle);
+                    updateDoublePage();
+                    updateSinglePage();
+                }
+                {#else if (currentPairIndex === totalPairs - 1 && next_chapter) {#}
+                {#    window.location.href = `/manga/${manga_slug}/chapter/${next_chapter}/`;}#}
+                {#else if (currentPairIndex === totalPairs - 1 && !next_chapter) {#}
+                {#    window.location.href = `/manga/${manga_slug}/`;}#}
+            }
+
+        function goToPreviousDouble() {
+                if (currentDouble > 0) {
+                    const currentImage = pageDouble[currentDouble - 1].querySelector('.page');
+                    let orientation = null;
+                    if (currentImage) {
+                        orientation = checkImageOrientation(currentImage);
+                    }
+                    currentDouble--;
+                    console.log("Переход на пару:", currentDouble);
+                    if (currentSingle % 2 !== 0 && orientation) {
+                        currentSingle -= 2
+                    } else if (currentSingle === 1 || orientation) {
+                        currentSingle -= 1
+                    } else {
+                        currentSingle -= 2;
+                    }
+                    console.log("Номер страницы справа:", currentSingle);
+                    updateDoublePage();
+                    updateSinglePage();
+                }
+                {#else if (currentPairIndex === 0 && prev_chapter) {#}
+                {#    window.location.href = `/manga/${manga_slug}/chapter/${prev_chapter}/`;}#}
+                {#else if (currentPairIndex === 0 && !prev_chapter) {#}
+                {#    window.location.href = `/manga/${manga_slug}/`;}#}
+            }
+            
+        document.addEventListener('keydown', function(event) {
+                if (event.key === 'ArrowRight') {
+                    goToPreviousDouble();
+                } else if (event.key === 'ArrowLeft') {
+                    goToNextDouble();
+                }
+            });
+
+        updateDoublePage();
+
+    </script>
+
+    <script>
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+        const debouncedGoToNextSingle = debounce(goToNextSingle, 150);
+        const debouncedGoToNextDouble = debounce(goToNextDouble, 150);
+        const debouncedGoToPreviousSingle = debounce(goToPreviousSingle, 150);
+        const debouncedGoToPreviousDouble = debounce(goToPreviousDouble, 150);
+    </script>
+
+</body>
+</html>

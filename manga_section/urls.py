@@ -8,4 +8,5 @@ urlpatterns = [
     path('<slug:slug>/', views.manga_page, name='manga-page'),
     path('<slug:manga_slug>/chapter/<str:ch_number>/', views.chapter_page, name='chapter-page'),
     path('<slug:manga_slug>/chapter/<str:ch_number>/rate/', views.rate_chapter, name='rate-chapter'),
+    path('page/<int:page_id>/comments/', views.find_comments, name='find-comments'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

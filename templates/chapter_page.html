@@ -7,7 +7,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>{{ manga.manga_name }} - Глава {{ chapter.get_chapter_display }}</title>
+    <title>{{ manga.manga_name }} — Глава {{ chapter.get_chapter_display }}</title>
     
     <link rel="icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
@@ -44,7 +44,7 @@
             <p>На страницу манги</p>
         </a>
         </div>
-        {% include 'partials/rating_block.html' with manga=manga chapter=chapter like_percentage=like_percentage user_rating=user_rating %}
+        {% include 'partials/double_rating_block.html' with manga=manga chapter=chapter like_percentage=like_percentage user_rating=user_rating %}
         
     
 {#        TODO: Оформление, JS-скрипт, вёрстка #}
@@ -136,7 +136,7 @@
 {#                {% endif %}#}
 {##}
 {#                <!-- Включаем partial напрямую -->#}
-{#                {% include 'partials/rating_block.html' with manga=manga chapter=chapter like_percentage=like_percentage user_rating=user_rating %}#}
+{#                {% include 'partials/double_rating_block.html' with manga=manga chapter=chapter like_percentage=like_percentage user_rating=user_rating %}#}
 {##}
 {#            </div>#}
 {#        </div>#}
@@ -250,7 +250,7 @@
 {#                </div>#}
 {#    #}
 {#                <!-- Включаем partial напрямую -->#}
-{#                {% include 'partials/rating_block.html' with manga=manga chapter=chapter like_percentage=like_percentage user_rating=user_rating %}#}
+{#                {% include 'partials/double_rating_block.html' with manga=manga chapter=chapter like_percentage=like_percentage user_rating=user_rating %}#}
 {#        </div>#}
     
     </div>
@@ -567,7 +567,7 @@
                 {% endif %}
     
                 <!-- Включаем partial напрямую -->
-                {% include 'partials/rating_block.html' with manga=manga chapter=chapter like_percentage=like_percentage user_rating=user_rating %}
+                {% include 'partials/double_rating_block.html' with manga=manga chapter=chapter like_percentage=like_percentage user_rating=user_rating %}
     
             </div>
     </div>
