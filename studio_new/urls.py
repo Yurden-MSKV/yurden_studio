@@ -37,4 +37,5 @@ urlpatterns += [
 
 urlpatterns += [
     path('test/', main_section_views.test_new_ch_page, name='test'),
+    path('new_test/', main_section_views.new_test)
 ]

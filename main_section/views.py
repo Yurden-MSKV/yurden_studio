@@ -314,3 +314,6 @@ def test_new_ch_page(request):
     }
 
     return render(request, 'new_chapter_page.html', context)
+
+def new_test(request):
+    return HttpResponse('Ну это-то должно работать!')
