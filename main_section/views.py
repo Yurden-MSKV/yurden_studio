@@ -254,7 +254,7 @@ def close_tutorial(request):
 
         return HttpResponse('<div id="tutorial_block"></div>')
 
-def test_new_ch_page(request):
+def new_reader(request):
 
     manga = get_object_or_404(Manga, pk=1)
     chapter = get_object_or_404(Chapter, pk=17)
