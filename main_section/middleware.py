@@ -14,7 +14,6 @@ class AuthRequiredMiddleware:
             re.compile(r'^/register/$'),
             re.compile(r'^/logout/$'),
             re.compile(r'^/admin/login/$'),
-            re.compile(r'^/test/$'), # Мало ли, проверю
             re.compile(r'^/static/'),
             re.compile(r'^/media/'),
             re.compile(r'^/captcha/'),  # ВСЕ URL с captcha

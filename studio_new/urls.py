@@ -26,6 +26,8 @@ urlpatterns = [
     path('messages/read/<int:message_id>/', main_section_views.read_message, name='read-message'),
     path('api/save-theme/', main_section_views.save_theme_preference, name='save_theme'),
     path('api/get-theme/', main_section_views.get_theme_preference, name='get_theme'),
+    path('test_reader/', main_section_views.test_new_ch_page, name='test'),
+    path('new_test/', main_section_views.new_test)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
@@ -33,9 +35,4 @@ if settings.DEBUG:
 
 urlpatterns += [
     path('captcha/', include('captcha.urls')),
-]
-
-urlpatterns += [
-    path('test/', main_section_views.test_new_ch_page, name='test'),
-    path('new_test/', main_section_views.new_test)
 ]
