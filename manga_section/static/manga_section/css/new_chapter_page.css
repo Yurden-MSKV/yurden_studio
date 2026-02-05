@@ -550,3 +550,145 @@ body, html {
     left: 50%;
     transform: translateX(-50%);
 }
+
+
+.tutorial_block {
+    display: flex;
+    flex-basis: 0;
+    position: absolute;
+    margin: auto;
+    background: rgba(75, 75, 75, 0.8);
+    /*opacity: 80%;*/
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+}
+
+.top_edge {
+    display: flex;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 12%;
+    border: 4px dashed var(--hover-text-color);
+    align-items: center;
+    justify-content: center;
+    background: #613cff;
+    opacity: 80%;
+    box-sizing: border-box;
+}
+
+.left_edge {
+    display: flex;
+    flex-basis: 0;
+    position: absolute;
+    left: 0;
+    top: 12%;
+    height: 76%;
+    width: 20%;
+    background: #2291ff;
+    opacity: 80%;
+    z-index: 2;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 4px dashed var(--hover-text-color);
+}
+
+.tutorial_block p {
+    /*font-size: 35px;*/
+    text-align: center;
+}
+
+.right_edge {
+    display: flex;
+    flex-basis: 0;
+    position: absolute;
+    right: 0;
+    top: 12%;
+    height: 76%;
+    width: 20%;
+    background: limegreen;
+    opacity: 80%;
+    z-index: 2;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 4px dashed var(--hover-text-color);
+}
+
+.bottom_edge {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 12%;
+    border: 4px dashed var(--hover-text-color);
+    background: #ff3c3c;
+    align-items: center;
+    box-sizing: border-box;
+    justify-content: center;
+}
+
+.bottom_edge_left {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50%;
+    height: 12%;
+    border: 4px dashed var(--hover-text-color);
+    background: #ffa43c;
+    align-items: center;
+    box-sizing: border-box;
+    justify-content: center;
+}
+
+.bottom_edge_right {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 50%;
+    height: 12%;
+    border: 4px dashed var(--hover-text-color);
+    background: #3cd2ff;
+    align-items: center;
+    box-sizing: border-box;
+    justify-content: center;
+}
+
+.thanks_button {
+    display: flex;
+    position: absolute;
+    left: 50%;
+    bottom: 20%;
+    transform: translateX(-50%)
+}
+
+.close_tutorial {
+    background: rgba(126, 0, 23, 0.8);
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 5px var(--hover-color);
+}
+
+.close_tutorial p {
+    color: var(--text-color);
+    font-weight: bold;
+    padding: 5px 15px;
+}
+
+@media (orientation: portrait) {
+    .tutorial_block p {
+        font-size: 2vh !important;
+    }
+    .left_edge p, .right_edge p {
+        transform: rotate(90deg);
+    }
+}
+@media (orientation: landscape) {
+    .tutorial_block p {
+        font-size: 3vh;
+    }
+}

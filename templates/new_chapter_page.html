@@ -73,7 +73,28 @@
 
             <!--Одностраничный вывод-->
             <div class="single_page page_container">
-            
+
+                {% if user.profile.viewed_single == False %}
+                    <div class="tutorial_block" id="single_tutorial_block">
+                        <div class="top_edge">
+                            <p>Навигация и оценка главы<br>(чтобы убрать панель,<br>нажми в пустой области ниже)</p>
+                        </div>
+                        <div class="left_edge">
+                            <p>Следующая страница&nbsp;/&nbsp;глава</p>
+                        </div>
+                        <div class="right_edge">
+                            <p>Предыдущая страница&nbsp;/&nbsp;глава</p>
+                        </div>
+{#                        <div class="rate"><p>Оценка&nbsp;главы</p></div>#}
+                        <div class="bottom_edge">
+                            <p>Комментарии<br>(чтобы убрать окно, нажми на эту же кнопку. пока так.)</p>
+                        </div>
+                        <div class="thanks_button">
+                            {% include 'partials/single_tutorial_button_block.html' %}
+                        </div>
+                    </div>
+                {% endif %}
+
                 {% for stranica in single_page_mode %}
                 <div class="single page_block {% if forloop.first %}active{% else %}hidden{% endif %}">
                     <img src="{{ stranica.page_image.url }}"
@@ -102,7 +123,7 @@
                         {% endblock %}
                     </div>
                 </div>
-            
+
                 <div class="single_chapter_top_menu hidden">
                     <a class="single_back_to_manga" href="#"><p>← К манге</p></a>
                     <div class="single_chapter_info">
@@ -124,7 +145,7 @@
                     <div class="single_rate_block">
                         {% include 'partials/single_rating_block.html' with manga=manga chapter=chapter like_percentage=like_percentage user_rating=user_rating %}
                     </div>
-                
+
 {#                    {% if chapter.interpreter.all or chapter.editor.all or chapter.retoucher.all or chapter.typesetter.all or chapter.sfx_artist.all %}#}
 {#                    <div class="credits">#}
 {#                        {% if chapter.interpreter.all %}#}
@@ -207,7 +228,7 @@
 {#                {% endif %}#}
 
                 </div>
-            
+
                 <script>
                     function openSingleChapterMenu(button) {
                         const singleMenu = document.querySelector('.single_chapter_top_menu');
@@ -217,15 +238,15 @@
                         menuSingleButton.classList.remove('active');
                         menuSingleButton.classList.add('hidden');
                     }
-                    
+
                     document.addEventListener('click', function(event) {
                         const singleMenu = document.querySelector('.single_chapter_top_menu');
                         const menuSingleButton = document.getElementById('single-chapter-top-menu-button')
-                        
+
                         if (singleMenu.classList.contains('active') &&
                             !singleMenu.contains(event.target) &&
                             !menuSingleButton.contains(event.target)) {
-                            
+
                             singleMenu.classList.remove('active');
                             singleMenu.classList.add('hidden');
                             menuSingleButton.classList.remove('hidden');
@@ -303,7 +324,7 @@
                         singlePageNumbers.forEach(page => {
                             page.classList.add('hidden');
                             page.classList.remove('active');
-                        });                        
+                        });
                         pageSingle[currentSingle].classList.remove('hidden');
                         pageSingle[currentSingle].classList.add('active');
                         singlePageNumbers[currentSingle].classList.remove('hidden');
@@ -369,6 +390,31 @@
 
             <!--Двухстраничный вывод-->
             <div class="double_page page_container">
+
+                {% if user.profile.viewed_double == False %}
+                    <div class="tutorial_block" id="double_tutorial_block">
+                        <div class="top_edge">
+                            <p>Навигация и оценка главы<br>(чтобы убрать панель, нажми в пустой области ниже)</p>
+                        </div>
+                        <div class="left_edge">
+                            <p>Следующая страница&nbsp;/&nbsp;глава</p>
+                        </div>
+                        <div class="right_edge">
+                            <p>Предыдущая страница&nbsp;/&nbsp;глава</p>
+                        </div>
+{#                        <div class="rate"><p>Оценка&nbsp;главы</p></div>#}
+                        <div class="bottom_edge_left">
+                            <p>Комментарии к странице слева<br>(чтобы убрать окно, нажми на эту же кнопку. пока так.)</p>
+                        </div>
+                        <div class="bottom_edge_right">
+                            <p>Комментарии к странице справа<br>(чтобы убрать окно, нажми на эту же кнопку. пока так.)</p>
+                        </div>
+                        <div class="thanks_button">
+                            {% include 'partials/double_tutorial_button_block.html' %}
+                        </div>
+                    </div>
+                {% endif %}
+
                 {% for pair in double_page_mode %}
                     <div class="double page_block {% if forloop.first %}active{% else %}hidden{% endif %}">
                         {% if pair|length == 1 and pair.0.is_double_page %}
@@ -399,7 +445,7 @@
                     </div>
                 {% endfor %}
 
-                
+
 
                 <aside class="top_panel_chapter aside_button">
                     <button class="active" id="chapter-top-menu-button" onclick="openChapterMenu(this)"></button>
@@ -423,7 +469,7 @@
                         {% endblock %}
                     </div>
                 </div>
-            
+
                 <div class="chapter_top_menu hidden">
                     <a class="back_to_manga" href="#"><p>← К манге</p></a>
                     <div class="chapter_info">
@@ -515,7 +561,7 @@
 {#                        </div>#}
 {#                    {% endif %}#}
                 </div>
-            
+
                 <script>
                     function openChapterMenu(button) {
                         const menu = document.querySelector('.chapter_top_menu');
@@ -525,15 +571,15 @@
                         {#menuButton.classList.remove('active');#}
                         {#menuButton.classList.add('hidden');#}
                     }
-                    
+
                     document.addEventListener('click', function(event) {
                         const menu = document.querySelector('.chapter_top_menu');
                         const menuButton = document.getElementById('chapter-top-menu-button')
-                        
+
                         if (menu.classList.contains('active') &&
                             !menu.contains(event.target) &&
                             !menuButton.contains(event.target)) {
-                            
+
                             menu.classList.remove('active');
                             menu.classList.add('hidden');
                             menuButton.classList.remove('hidden');
@@ -604,7 +650,7 @@
 
         </div>
     </div>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.body.addEventListener('htmx:configRequest', function(evt) {
@@ -706,7 +752,7 @@
                 {#else if (currentPairIndex === 0 && !prev_chapter) {#}
                 {#    window.location.href = `/manga/${manga_slug}/`;}#}
             }
-            
+
         document.addEventListener('keydown', function(event) {
                 if (event.key === 'ArrowRight') {
                     goToPreviousDouble();

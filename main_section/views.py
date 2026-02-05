@@ -254,6 +254,24 @@ def close_tutorial(request):
 
         return HttpResponse('<div id="tutorial_block"></div>')
 
+def single_close_tutorial(request):
+    if request.method == 'POST':
+        user = request.user
+
+        user.profile.viewed_single = True
+        user.profile.save()
+
+        return HttpResponse('<div id="tutorial_block"></div>')
+
+def double_close_tutorial(request):
+    if request.method == 'POST':
+        user = request.user
+
+        user.profile.viewed_double = True
+        user.profile.save()
+
+        return HttpResponse('<div id="tutorial_block"></div>')
+
 def new_reader(request):
 
     manga = get_object_or_404(Manga, pk=1)

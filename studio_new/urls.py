@@ -11,6 +11,8 @@ from main_section import views as main_section_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('close_tutorial/', main_section_views.close_tutorial, name='close-tutorial'),
+    path('single_close_tutorial/', main_section_views.single_close_tutorial, name='single-close-tutorial'),
+    path('double_close_tutorial/', main_section_views.double_close_tutorial, name='double-close-tutorial'),
     path('', main_section_views.index),
     path('home/', main_section_views.main_page, name='home-page'),
     path('manga/', include('manga_section.urls')),
