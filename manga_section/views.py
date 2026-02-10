@@ -423,6 +423,7 @@ def remove_comment(request, comment_id):
     else:
         return HttpResponse("<p style='color: red'>Это не твой комментарий.</p>")
 
+@login_required
 def edit_comment(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     if comment.author == request.user:
