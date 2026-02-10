@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="htmx-config" content='{"debug":true}'>
     <title>{{ manga.manga_name }} — Глава {{ chapter.get_chapter_display }}</title>
 </head>
@@ -59,7 +59,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             simpleOrientationTracker();
         });
-        
+
         <!--NOTE: Было по нулям-->
         let currentSingle = 0;
         let currentDouble = 0;
