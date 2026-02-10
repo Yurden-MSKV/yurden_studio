@@ -202,7 +202,7 @@ def new_reader(request, manga_slug, ch_number):
     chapter_number_decimal = Decimal(ch_number)
     chapter = get_object_or_404(Chapter.objects.filter(volume__manga=manga), ch_number=chapter_number_decimal)
 
-    if request.user.is_superuser:
+    if not request.user.is_superuser:
         chapter_view, created = ChapterView.objects.update_or_create(
             user=request.user,
             chapter=chapter,
