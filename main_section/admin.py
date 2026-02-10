@@ -28,4 +28,4 @@ class ChapterViewAdmin(admin.ModelAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ['user', 'viewed_tutorial', 'viewed_single', 'viewed_double']
+    list_display = ['user', 'viewed_single', 'viewed_double']

@@ -32,7 +32,7 @@ class Profile(models.Model):
         default='auto'
     )
     updated_at = models.DateTimeField(auto_now=True)
-    viewed_tutorial = models.BooleanField(default=False)
+    # viewed_tutorial = models.BooleanField(default=False)
     viewed_single = models.BooleanField(default=False)
     viewed_double = models.BooleanField(default=False)
 
