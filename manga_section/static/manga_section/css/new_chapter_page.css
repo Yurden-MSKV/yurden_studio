@@ -29,6 +29,7 @@ body, html {
     display: flex;
     margin: auto;
     position: sticky;
+    overflow: hidden;
 }
 
 .aside_button {
