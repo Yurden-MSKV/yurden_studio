@@ -410,6 +410,7 @@ def find_comments(request, page_id):
 
     return render(request, 'partials/comments_block.html', context)
 
+@login_required
 def remove_comment(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     page = comment.page
