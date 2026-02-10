@@ -27,7 +27,7 @@
             const handleOrientationChange = (e) => {
                 if (e.matches) {
                     // ЛАНДШАФТ
-                    console.log('🔄 Повернули в ЛАНДШАФТ');
+                    {#console.log('🔄 Повернули в ЛАНДШАФТ');#}
                     updateDoublePage();
                     let rotationBlock = document.querySelector('.single_comments_container')
                     let rotationComment = document.querySelector('.single_comment_show')
@@ -38,7 +38,7 @@
                     }
                 } else {
                     // ПОРТРЕТ
-                    console.log('🔄 Повернули в ПОРТРЕТ');
+                    {#console.log('🔄 Повернули в ПОРТРЕТ');#}
                     updateSinglePage();
                     let rotationBlock = document.querySelector('.comments_container')
                     let rotationComment = document.querySelector('.comment_show')
@@ -59,11 +59,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             simpleOrientationTracker();
         });
-
+        
+        <!--NOTE: Было по нулям-->
         let currentSingle = 0;
         let currentDouble = 0;
         const manga_slug = "{{ manga.manga_slug }}";
-        console.log(manga_slug);
+        const next_chapter = {% if next_chapter %}"{{ next_chapter }}"{% else %}null{% endif %};
+        const prev_chapter = {% if prev_chapter %}"{{ prev_chapter }}"{% else %}null{% endif %};
+        {#console.log(manga_slug);#}
     </script>
 
 
@@ -125,18 +128,15 @@
                 </div>
 
                 <div class="single_chapter_top_menu hidden">
-                    <a class="single_back_to_manga" href="#"><p>← К манге</p></a>
+                    <a class="single_back_to_manga" href="{% url 'manga-page' slug=manga.manga_slug %}"><p>← К манге</p></a>
                     <div class="single_chapter_info">
                         <p class="single_chapter_number">Глава {{ chapter.volume.vol_number }}-{{ chapter.get_chapter_display }}</p>
-                        <p>|</p>
-                        {% for pair in double_page_mode %}
+                        {% for page in single_page_mode %}
                         <p class="single_page_numbers {% if forloop.first %}active{% else %}hidden{% endif %}">
-                            {% if pair.1 %}
-                                Страницы {{ pair.1.page_number }} — {{ pair.0.page_number }}
-                            {% elif forloop.first or forloop.last %}
-                                Страница {{ pair.0.page_number }}
+                            {% if not page.is_double_page %}
+                                Страница {{ page.page_number }}
                             {% else %}
-                                Разворот {{ pair.0.page_number }} — {{ pair.0.page_number|add:-1 }}
+                                Разворот {{ page.page_number }} — {{ page.page_number|add:-1 }}
                             {% endif %}
                         </p>
                         {% endfor %}
@@ -258,9 +258,9 @@
                 <script>
                     function findSinglePageID() {
                         let pair = document.querySelector('.single.active');
-                        console.log(pair);
+                        {#console.log(pair);#}
                         let page = pair.firstElementChild;
-                        console.log(page.getAttribute('data-page-id'));
+                        {#console.log(page.getAttribute('data-page-id'));#}
                         return page.getAttribute('data-page-id');
                     }
 
@@ -277,16 +277,14 @@
                             }
                             let commentWindow = document.querySelector('.single_comment_show');
                             commentWindow.id = 'comments-page-list-' + pageId;
-                            htmx.ajax('GET', `../manga/page/${pageId}/comments/`, {
+                            htmx.ajax('GET', `/manga/page/${pageId}/comments/`, {
                                     target: `#comments-page-list-${pageId}`,
                                     swap: `innerHTML`,
-                                    onSuccess: function (data) {
-                                        console.log(`Успешный ответ:`, data);
-                                        console.log(`Длина HTML:`, data.length);
-                                    },
-                                    onError: function (error) {
-                                        console.error(`Ошибка:`, error);
-                                    },
+                                    {#onSuccess: function (data) {#}
+                                    {#    console.log(`Успешный ответ:`, data);#}
+                                    {#    console.log(`Длина HTML:`, data.length);},#}
+                                    {#onError: function (error) {#}
+                                    {#    console.error(`Ошибка:`, error);},#}
                                 }
                             )
                         } else {
@@ -352,15 +350,14 @@
                                 currentSingle += 1;
 
                             }
-                            console.log("Номер страницы", currentSingle);
-                            console.log("Эта страница из пары:", currentDouble);
+                            {#console.log("Номер страницы", currentSingle);#}
+                            {#console.log("Эта страница из пары:", currentDouble);#}
                             updateSinglePage();
                             updateDoublePage();
-                        }
-                        {#else if (currentPairIndex === totalPairs - 1 && next_chapter) {#}
-                        {#    window.location.href = `/manga/${manga_slug}/chapter/${next_chapter}/`;}#}
-                        {#else if (currentPairIndex === totalPairs - 1 && !next_chapter) {#}
-                        {#    window.location.href = `/manga/${manga_slug}/`;}#}
+                        } else if (currentSingle === totalPages - 1 && next_chapter) {
+                            window.location.href = `/manga/${manga_slug}/chapter/${next_chapter}/`;
+                        } else if (currentSingle === totalPages - 1 && !next_chapter) {
+                            window.location.href = `/manga/${manga_slug}/`;}
                     }
 
                 function goToPreviousSingle() {
@@ -374,15 +371,16 @@
                                 currentDouble--
                             }
                             currentSingle--;
-                            console.log("Номер страницы", currentSingle);
-                            console.log("Эта страница из пары:", currentDouble);
+                            {#console.log("Номер страницы", currentSingle);#}
+                            {#console.log("Эта страница из пары:", currentDouble);#}
                             updateSinglePage();
                             updateDoublePage();
                         }
-                        {#else if (currentPairIndex === 0 && prev_chapter) {#}
-                        {#    window.location.href = `/manga/${manga_slug}/chapter/${prev_chapter}/`;}#}
-                        {#else if (currentPairIndex === 0 && !prev_chapter) {#}
-                        {#    window.location.href = `/manga/${manga_slug}/`;}#}
+                        else if (currentSingle === 0 && prev_chapter) {
+                            window.location.href = `/manga/${manga_slug}/chapter/${prev_chapter}/`;
+                        }
+                        else if (currentSingle === 0 && !prev_chapter) {
+                            window.location.href = `/manga/${manga_slug}/`;}
                     }
 
                 updateSinglePage();
@@ -471,7 +469,7 @@
                 </div>
 
                 <div class="chapter_top_menu hidden">
-                    <a class="back_to_manga" href="#"><p>← К манге</p></a>
+                    <a class="back_to_manga" href="{% url 'manga-page' slug=manga.manga_slug %}"><p>← К манге</p></a>
                     <div class="chapter_info">
                         <p class="chapter_number">Глава {{ chapter.volume.vol_number }}-{{ chapter.get_chapter_display }}</p>
                         <p>|</p>
@@ -591,7 +589,7 @@
                 <script>
 
                     const pageNumbers = document.querySelectorAll('.page_numbers');
-                    console.log(pageNumbers);
+                    {#console.log(pageNumbers);#}
 
                     function findDoublePageID(buttonId) {
                         let pair = document.querySelector('.double.active');
@@ -624,16 +622,14 @@
                             }
                             const commentWindow = document.querySelector('.comment_show');
                             commentWindow.id = 'comments-page-list-' + pageId;
-                            htmx.ajax('GET', `../manga/page/${pageId}/comments/`, {
+                            htmx.ajax('GET', `/manga/page/${pageId}/comments/`, {
                                     target: `#comments-page-list-${pageId}`,
                                     swap: `innerHTML`,
-                                    onSuccess: function (data) {
-                                        console.log(`Успешный ответ:`, data);
-                                        console.log(`Длина HTML:`, data.length);
-                                    },
-                                    onError: function (error) {
-                                        console.error(`Ошибка:`, error);
-                                    },
+                                    {#onSuccess: function (data) {#}
+                                    {#    console.log(`Успешный ответ:`, data);#}
+                                    {#    console.log(`Длина HTML:`, data.length);},#}
+                                    {#onError: function (error) {#}
+                                    {#    console.error(`Ошибка:`, error);},#}
                                 }
                             )
                         } else {
@@ -711,20 +707,22 @@
                         orientation = checkImageOrientation(currentImage);
                     }
                     currentDouble++;
-                    console.log("Переход на пару:", currentDouble);
+                    {#console.log("Переход на пару:", currentDouble);#}
                     if (currentSingle === 0 || orientation) {
                         currentSingle += 1
                     } else {
                         currentSingle += 2
                     }
-                    console.log("Номер страницы справа:", currentSingle);
+                    {#console.log("Номер страницы справа:", currentSingle);#}
                     updateDoublePage();
                     updateSinglePage();
                 }
-                {#else if (currentPairIndex === totalPairs - 1 && next_chapter) {#}
-                {#    window.location.href = `/manga/${manga_slug}/chapter/${next_chapter}/`;}#}
-                {#else if (currentPairIndex === totalPairs - 1 && !next_chapter) {#}
-                {#    window.location.href = `/manga/${manga_slug}/`;}#}
+                else if (currentDouble === totalDouble - 1 && next_chapter) {
+                    window.location.href = `/manga/${manga_slug}/chapter/${next_chapter}/`;
+                }
+                else if (currentDouble === totalDouble - 1 && !next_chapter) {
+                    window.location.href = `/manga/${manga_slug}/`;
+                }
             }
 
         function goToPreviousDouble() {
@@ -735,7 +733,7 @@
                         orientation = checkImageOrientation(currentImage);
                     }
                     currentDouble--;
-                    console.log("Переход на пару:", currentDouble);
+                    {#console.log("Переход на пару:", currentDouble);#}
                     if (currentSingle % 2 !== 0 && orientation) {
                         currentSingle -= 2
                     } else if (currentSingle === 1 || orientation) {
@@ -743,14 +741,16 @@
                     } else {
                         currentSingle -= 2;
                     }
-                    console.log("Номер страницы справа:", currentSingle);
+                    {#console.log("Номер страницы справа:", currentSingle);#}
                     updateDoublePage();
                     updateSinglePage();
                 }
-                {#else if (currentPairIndex === 0 && prev_chapter) {#}
-                {#    window.location.href = `/manga/${manga_slug}/chapter/${prev_chapter}/`;}#}
-                {#else if (currentPairIndex === 0 && !prev_chapter) {#}
-                {#    window.location.href = `/manga/${manga_slug}/`;}#}
+                else if (currentDouble === 0 && prev_chapter) {
+                    window.location.href = `/manga/${manga_slug}/chapter/${prev_chapter}/`;
+                }
+                else if (currentDouble === 0 && !prev_chapter) {
+                    window.location.href = `/manga/${manga_slug}/`;
+                }
             }
 
         document.addEventListener('keydown', function(event) {

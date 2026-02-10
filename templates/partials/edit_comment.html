@@ -1,0 +1,12 @@
+<form id="comment-form-{{ comment.page.id }}"
+      class="comment_form"
+      hx-post="{% url 'edit-comment' comment.id %}"
+      hx-target="#comments-page-list-{{ comment.page.id }}"
+      hx-swap="innerHTML"
+      hx-trigger="submit">
+    {% csrf_token %}
+    {{ form.text }}
+    <div class="send_comment_block">
+    <input type="submit" class="send_comment" value="Отправить">
+    </div>
+</form>

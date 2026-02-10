@@ -63,7 +63,7 @@ body, html {
         display: none;
     }
     .comment_info img {
-        width: 2.6vw !important;
+        width: 4vw !important;
         filter: var(--icon-color)
     }
     .author {
@@ -116,20 +116,32 @@ body, html {
         width: fit-content;
     }
     .rating_block img {
-        width: 2vh;
+        width: 2.5vh;
         filter: invert(100%) sepia(2%) saturate(9%) hue-rotate(16deg) brightness(103%) contrast(100%);
     }
 
     .like-btn:hover img,
     .like-btn.active img {
-        width: 2vh;
+        width: 2.5vh;
         filter: invert(40%) sepia(99%) saturate(433%) hue-rotate(121deg) brightness(94%) contrast(101%);
     }
 
     .dislike-btn:hover img,
     .dislike-btn.active img {
-        width: 2vh;
+        width: 2.5vh;
         filter: invert(37%) sepia(65%) saturate(1293%) hue-rotate(321deg) brightness(98%) contrast(96%);
+    }
+    .comment_buttons {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    .comment_buttons button {
+        width: 7vw !important;
+        height: 7vw !important;
+        background: none;
+        border: none;
+        filter: var(--icon-color)
     }
 
 }
@@ -201,8 +213,8 @@ body, html {
         font-weight: bold;
     }
     .comment_date {
-        font-size: 1.9vh !important;
-        padding-top: 3px;
+        font-size: 1.6vh !important;
+        padding-top: 4px;
     }
     .comment_info p:not(:last-child) {
         margin-right: 3px
@@ -255,6 +267,17 @@ body, html {
     .send_comment:hover {
         box-shadow: none;
         transition: box-shadow 0.2s;
+    }
+    .comment_buttons {
+        display: flex;
+        flex-direction: column;
+    }
+    .comment_buttons button {
+        width: 28px;
+        height: 28px;
+        background: none;
+        border: none;
+        filter: var(--icon-color)
     }
 }
 
@@ -322,6 +345,7 @@ body, html {
 .rating_block {
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
 .rating_block button {
@@ -469,7 +493,9 @@ body, html {
     gap: 1.5vh;
     overflow: auto;
     box-shadow: 0 0 4px var(--hover-color);
-    padding: 5px
+    padding: 5px;
+    scrollbar-width: none;
+
 }
 
 .comment_show, .single_comment_show {
@@ -526,9 +552,12 @@ body, html {
 }
 
 .single_chapter_top_menu p {
-    font-size: 3vw !important;
+    font-size: 4vw !important;
     font-weight: bold;
     color: white !important;
+    text-align: center;
+    padding: 0;
+    line-height: 1;
 }
 
 .single_back_to_manga {
@@ -537,14 +566,14 @@ body, html {
 }
 
 .single_back_to_manga p {
-    font-size: 3vw !important;
+    font-size: 4vw !important;
     font-weight: bold;
     color: white !important;
 }
 
 .single_chapter_info {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 2vw;
     position: absolute;
     left: 50%;
@@ -691,4 +720,17 @@ body, html {
     .tutorial_block p {
         font-size: 3vh;
     }
+}
+
+.comment_element {
+    display: flex;
+    justify-content: space-between;
+}
+
+.comment_edit:hover {
+    filter: invert(79%) sepia(42%) saturate(3057%) hue-rotate(0deg) brightness(107%) contrast(104%);
+}
+
+.comment_remove:hover {
+    filter: invert(11%) sepia(77%) saturate(6437%) hue-rotate(2deg) brightness(91%) contrast(115%);
 }

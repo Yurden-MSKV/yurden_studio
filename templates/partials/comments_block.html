@@ -23,13 +23,35 @@
     <div class="comments_list">
         {% if comments %}
         {% for comment in comments %}
-            <div class="comment_element">
-                <div class="comment_info">
-                    <img src="{% static 'main_section/icons/profile_icon.svg' %}">
-                    <p class="author">{{ comment.author }}</p>
-                    <p class="comment_date">{{ comment.created_at|date:"d.m.Y H:i" }}</p>
+            <div class="comment_element" id="comment-{{ comment.id }}">
+                <div class="comment_content">
+                    <div class="comment_info">
+                        <img src="{% static 'main_section/icons/profile_icon.svg' %}">
+                        <p class="author">{{ comment.author }}</p>
+                        <p class="comment_date">{{ comment.created_at|date:"d.m.Y H:i" }}</p>
+                    </div>
+                    <p class="comment_text">{{ comment.text }}</p>
                 </div>
-                <p class="comment_text">{{ comment.text }}</p>
+                {% if request.user == comment.author or request.user.username == 'yurden' %}
+                <div class="comment_buttons">
+                    {% if request.user == comment.author %}
+                    <button class="comment_edit"
+                            hx-get="{% url 'edit-comment' comment.id %}"
+                            hx-target="#comment-{{ comment.id }}"
+                            hx-swap="innerHTML">
+                        <img src="{% static 'manga_section/icons/comment_edit.svg' %}">
+                    </button>
+                    {% endif %}
+                    {% if request.user == comment.author or request.user.username == 'yurden' %}
+                    <button class="comment_remove"
+                            hx-post="{% url 'remove-comment' comment.id %}"
+                            hx-target="#comment-{{ comment.id }}"
+                            hx-swap="outerHTML">
+                        <img src="{% static 'manga_section/icons/comment_remove.svg' %}">
+                    </button>
+                    {% endif %}
+                </div>
+                {% endif %}
             </div>
         {% endfor %}
         {% else %}

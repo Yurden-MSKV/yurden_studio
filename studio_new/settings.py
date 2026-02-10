@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'post_section',
     'poll_section',
     'django_htmx',
+    'widget_tweaks',
     'ckeditor',
     'ckeditor_uploader',
     'captcha',
