@@ -414,7 +414,7 @@ def find_comments(request, page_id):
 def remove_comment(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     page = comment.page
-    if comment.author == request.user or request.user.username == 'yurden':
+    if comment.author == request.user or request.user.is_superuser:
         comment.delete()
         if page.comments.count() > 0:
             return HttpResponse("<div style='display: none'></div>")
