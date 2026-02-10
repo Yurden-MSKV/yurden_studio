@@ -196,6 +196,7 @@ def chapter_page(request, manga_slug, ch_number):
     }
     return render(request, 'chapter_page.html', context)
 
+@login_required
 def new_reader(request, manga_slug, ch_number):
 
     manga = get_object_or_404(Manga, manga_slug=manga_slug)
