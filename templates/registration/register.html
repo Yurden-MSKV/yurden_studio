@@ -18,17 +18,12 @@
             <h1>Регистрация</h1>
             
             {% if form.errors %}
-                <div class="alert alert-danger">
-                    <ul class="mb-0">
-                        {% for field in form %}
-                            {% for error in field.errors %}
-                                <li>{{ error }}</li>
-                            {% endfor %}
+                <div class="login-error">
+                    {% for field, errors in form.errors.items reversed %}
+                        {% for error in errors %}
+                            <p>{{ error }}</p>
                         {% endfor %}
-                        {% for error in form.non_field_errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                    </ul>
+                    {% endfor %}
                 </div>
             {% endif %}
             
@@ -56,14 +51,6 @@
                     <div class="captcha-container">
                         {{ form.captcha }}
                     </div>
-
-{#                    {% if form.captcha.errors %}#}
-{#                        <div class="captcha-error">#}
-{#                            {% for error in form.captcha.errors %}#}
-{#                                <span>{{ error }}</span>#}
-{#                            {% endfor %}#}
-{#                        </div>#}
-{#                    {% endif %}#}
 
                     <label class="captcha-help">
                         Кликни на картинку для новой капчи
