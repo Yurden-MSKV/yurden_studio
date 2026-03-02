@@ -28,7 +28,7 @@ from django.middleware.csrf import get_token
 
 from django.contrib.auth.views import LoginView
 from .forms import LoginFormWithCaptcha
-from .models import ChapterLike, ChapterView
+from .models import ChapterLike, ChapterView, Profile
 
 
 class CustomLoginView(LoginView):
@@ -272,3 +272,13 @@ def double_close_tutorial(request):
         user.profile.save()
 
         return HttpResponse('<div id="tutorial_block"></div>')
+
+def top_panel_test(request):
+    return render(request, 'new/new_top_panel.html', {})
+
+def reset_reader(request):
+    profile = Profile.objects.get(user=request.user)
+    profile.viewed_single = False
+    profile.viewed_double = False
+    profile.save()
+    return HttpResponse('<button class="reset_success" disabled><p>Сброшено!</p></button>')

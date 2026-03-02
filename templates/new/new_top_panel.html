@@ -1,0 +1,142 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'main_section/css/new_top_panel.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <script>
+        (function() {
+            function getInitialTheme() {
+                try {
+                    const savedState = localStorage.getItem('themeState');
+                    if (savedState && ['auto', 'light', 'dark'].includes(savedState)) {
+                        return savedState;
+                    }
+                } catch (e) {
+                }
+                return 'auto';
+            }
+            
+            function applyInitialTheme() {
+                const themeState = getInitialTheme();
+                let actualTheme = 'light';
+                
+                if (themeState === 'auto') {
+                    const hour = new Date().getHours();
+                    actualTheme = (hour >= 19 || hour < 7) ? 'dark' : 'light';
+                } else {
+                    actualTheme = themeState;
+                }
+                document.body.classList.add(actualTheme + '-theme');
+            }
+            
+            if (document.body) {
+                applyInitialTheme();
+            } else {
+                const observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        if (mutation.addedNodes) {
+                            for (let i = 0; i < mutation.addedNodes.length; i++) {
+                                if (mutation.addedNodes[i].tagName === 'BODY') {
+                                    applyInitialTheme();
+                                    observer.disconnect();
+                                    break;
+                                }
+                            }
+                        }
+                    });
+                });
+                
+                observer.observe(document.documentElement, { childList: true, subtree: true });
+            }
+        })();
+    </script>
+    
+    {% block title %}
+        
+    {% endblock %}
+</head>
+<body>
+    {% block top_panel %}
+        
+        <!-- NOTE: Landscape версия -->
+        <div class="top_panel_container landscape">
+            <a class="site_name" href="#"><h1>Студия Юрия Московцева</h1></a>
+            <div class="buttons_container">
+                <a class="top_panel_button" href="{% url 'catalog-page' %}">
+                    <div class="button_block">
+                        <p>Каталог</p>
+                    </div>
+                </a>
+                <a class="top_panel_button" href="{% url 'post-catalog' %}">
+                    <div class="button_block">
+                        <p>Посты</p>
+                    </div>
+                </a>
+                <a class="top_panel_button" href="{% url 'info' %}">
+                    <div class="button_block">
+                        <p>ЧаВо</p>
+                    </div>
+                </a>
+{#                {% if user.username == 'yurden' %}#}
+{#                    <a class="top_panel_button" href="{% url 'messages' %}">#}
+{#                        <div class="button_block">#}
+{#                            <p id="unread-counter">{{ messages_cnt }}</p>#}
+{#                        </div>#}
+{#                    </a>#}
+{#                {% endif %}#}
+            </div>
+            <div class="profile_container">
+                <button class="profile_menu_btn" onclick="toggleMenu()">
+                    <img class="icon" src="{% static "icons/user-regular-full.svg" %}">
+                    <p>{{ user.username }}</p>
+                </button>
+            </div>
+            <div class="profile_menu" id="userMenu">
+                {% if user.username == 'yurden' %}
+                    <div class="menu_item">
+                        <a href="/admin/"><img src="{% static 'main_section/icons/admin.svg' %}"><p>Админка</p></a>
+                    </div>
+                {% endif %}
+                <div class="menu_item">
+                    <button id="themeToggle" class="theme-toggle" aria-label="Переключить тему">
+                        <span class="theme-icon light-icon"><img src="{% static 'icons/sun-regular-full.svg' %}"><p>Светлая</p></span>
+                        <span class="theme-icon dark-icon"><img src="{% static 'icons/moon-regular-full.svg' %}"><p>Тёмная</p></span>
+                        <span class="theme-icon auto-icon show"><img src="{% static 'icons/time_mode.svg' %}"><p>Авто</p></span>
+                    </button>
+                </div>
+                <div class="menu_item">
+                    <a href="{% url 'logout' %}"><img src="{% static 'icons/arrow-right-from-bracket-solid-full.svg' %}"><p>Выйти</p></a>
+                </div>
+            </div>
+        </div>
+        
+        
+        <!-- NOTE: Portrait версия -->
+        <div class="top_panel_container portrait">
+            <a href="#"><h1>Студия Юрия Московцева</h1></a>
+            <div class="top_menu_block">
+                <a class="top_panel_button" href="{% url 'catalog-page' %}">
+                    <div class="button_block">
+                        <p>Каталог</p>
+                    </div>
+                </a>
+                <a class="top_panel_button" href="{% url 'post-catalog' %}">
+                    <div class="button_block">
+                        <p>Посты</p>
+                    </div>
+                </a>
+                <a class="top_panel_button" href="{% url 'info' %}">
+                    <div class="button_block">
+                        <p>ЧаВо</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+    {% endblock %}
+</body>
+</html>

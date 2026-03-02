@@ -28,6 +28,8 @@ urlpatterns = [
     path('messages/read/<int:message_id>/', main_section_views.read_message, name='read-message'),
     path('api/save-theme/', main_section_views.save_theme_preference, name='save_theme'),
     path('api/get-theme/', main_section_views.get_theme_preference, name='get_theme'),
+    path('new-top/', main_section_views.top_panel_test, name='top-panel-test'),
+    path('reset-reader/', main_section_views.reset_reader, name='reset_reader'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

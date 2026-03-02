@@ -63,7 +63,7 @@ body::-webkit-scrollbar, html::-webkit-scrollbar {
     border: none;
 }
 
-.toggle_btn img {
+.toggle_btn img, .reset_reader img {
     filter: var(--icon-color);
     width: 50px;
 }
@@ -184,6 +184,25 @@ body::-webkit-scrollbar, html::-webkit-scrollbar {
     width: 50px;
     filter: var(--icon-color);
     margin-right: 1px;
+}
+
+.reset_reader {
+    display: flex;
+    align-items: center;
+}
+
+.reset_reader p {
+    font: bold 50px 'Nunito';
+    text-align: left;
+    line-height: 1.25;
+}
+
+.reset_reader img {
+    margin-right: 5px
+}
+
+.reset_success p {
+    font: bold 50px 'Nunito'
 }
 
 .login {

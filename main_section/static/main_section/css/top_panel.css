@@ -95,7 +95,7 @@ body, html {
     gap: 3px;
 }
 
-.profile_button_block button img {
+.profile_button_block button img, .reset_reader img {
     width: 24px;
     filter: var(--icon-color);
     transition: filter 0.5s;
@@ -239,6 +239,19 @@ body, html {
 .menu_item:hover span p {
     color: var(--hover-text-color);
     transition: color 0.5s ease;
+}
+
+.reset_reader {
+    display: flex;
+    align-items: center;
+}
+
+.reset_reader p {
+    font: 17px 'Nunito'
+}
+
+.reset_success p {
+    font: bold 17px 'Nunito'
 }
 
 .login {

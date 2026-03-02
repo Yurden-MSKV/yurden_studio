@@ -7,7 +7,7 @@
 
     <link rel="icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
-
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
     <script>
     // Мгновенное применение темы до полной загрузки страницы
     (function() {
@@ -128,6 +128,17 @@
                                         <span class="theme-icon light-icon"><img src="{% static 'main_section/icons/light_mode.svg' %}"> Светлая</span>
                                         <span class="theme-icon dark-icon"><img src="{% static 'main_section/icons/dark_mode.svg' %}"> Тёмная</span>
                                         <span class="theme-icon auto-icon show"><img src="{% static 'main_section/icons/time_mode.svg' %}"> Авто</span>
+                                    </button>
+                                </div>
+                                <div class="menu_item">
+                                    <button id="resetReaderMobile"
+                                            class="reset_reader"
+                                            hx-post="{% url 'reset_reader' %}"
+                                            hx-target="#resetReaderMobile"
+                                            hx-swap="outerHTML"
+                                            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+                                        <img src="{% static 'icons/reset.svg' %}">
+                                        <p>Сброс<br>обучалки</p>
                                     </button>
                                 </div>
                                 <div class="menu_item">
@@ -282,6 +293,17 @@
 {% static 'main_section/icons/dark_mode.svg' %}"><p>Тёмная</p></span>
                                 <span class="theme-icon auto-icon show"><img src="
 {% static 'main_section/icons/time_mode.svg' %}"><p>Авто</p></span>
+                            </button>
+                        </div>
+                        <div class="menu_item">
+                            <button id="resetReaderDesktop"
+                                    class="reset_reader"
+                                    hx-post="{% url 'reset_reader' %}"
+                                    hx-target="#resetReaderDesktop"
+                                    hx-swap="outerHTML"
+                                    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+                                <img src="{% static 'icons/reset.svg' %}">
+                                <p>Сброс обучалки</p>
                             </button>
                         </div>
                         <div class="menu_item">

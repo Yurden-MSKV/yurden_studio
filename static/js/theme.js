@@ -18,7 +18,7 @@ function isUserAuthenticated() {
 // Функция определения темы по времени
 function getThemeByTime() {
     const hour = new Date().getHours();
-    return (hour >= 19 || hour < 7) ? THEME_STATES.DARK : THEME_STATES.LIGHT;
+    return (hour >= 16 || hour < 9) ? THEME_STATES.DARK : THEME_STATES.LIGHT;
 }
 
 // Функция применения темы к body

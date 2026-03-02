@@ -1,0 +1,81 @@
+@import url('../../../../static/css/themes.css');
+@import url('../../../../static/css/text.css');
+
+body, html {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito';
+    background: var(--background-color);
+}
+
+.icon {
+    filter: var(--icon-color);
+    margin: 0;
+    padding: 0;
+}
+@media (orientation: portrait) {
+    .icon {
+
+    }
+}
+@media (orientation: landscape) {
+    .icon {
+        width: 3vh
+    }
+}
+
+
+
+@media (orientation: portrait) {
+    .landscape {
+        display: none;
+    }
+    .portrait {
+        display: flex;
+    }
+}
+
+@media (orientation: landscape) {
+    .portrait {
+        display: none;
+    }
+    .landscape {
+        display: flex;
+    }
+    .top_panel_container {
+        margin: 0 auto;
+        width: 80%;
+        height: 4%;
+        border: 2px solid red;
+        justify-content: space-between;
+    }
+    .site_name {
+        height: fit-content;
+    }
+    .site_name h1 {
+        margin: 0;
+        padding: 0;
+    }
+    .buttons_container {
+        display: flex;
+        flex-direction: row;
+    }
+    .top_panel_button {
+        height: fit-content;
+    }
+    .profile_menu_btn {
+        display: flex;
+        flex-direction: row;
+        background: none;
+        border: none;
+        margin: 0;
+        padding: 0;
+        width: fit-content;
+        height: fit-content;
+        cursor: pointer;
+    }
+    .profile_menu {
+        display: none;
+    }
+}

@@ -1,10 +1,12 @@
 {% load static %}
+{% load main_filters %}
 
 <!DOCTYPE html>
 <html>
 <head>
     <title>Вход</title>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <meta name="viewport" content="maximum-scale=0.7">
 </head>
 <body>
     <div class="main_container {% if request.is_mobile %}mobile{% else %}desktop{% endif %}">
@@ -19,7 +21,13 @@
             <h1>Вход в аккаунт</h1>
             
             {% if form.errors %}
-                <p style="color: red;">Неверное имя пользователя или пароль.</p>
+                <div class="login-error">
+                    {% for field, errors in form.errors.items reversed %}
+                        {% for error in errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
             {% endif %}
             
             <form method="post" class="login_form">
@@ -38,19 +46,9 @@
                 </div>
 
                <div class="input_block captcha-block">
-                    
                     <div class="captcha-container">
                         {{ form.captcha }}
                     </div>
-                    
-                    {% if form.captcha.errors %}
-                        <div class="captcha-error">
-                            {% for error in form.captcha.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                    
                     <label class="captcha-help">
                         Кликни на картинку для новой капчи
                     </label>

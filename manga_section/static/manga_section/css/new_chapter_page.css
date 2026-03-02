@@ -48,18 +48,17 @@ body, html {
     display: none;
 }
 
-.page_block img {
-    display: block;
-    max-height: 100vh;
-    max-width: 100vw;
-}
-
 @media (orientation: portrait) {
     .double_page {
         display: none;
     }
     .single_page {
         display: flex;
+    }
+    .page_block img {
+        display: block;
+        max-height: 100vh;
+        max-width: 100vw;
     }
     .comment_menu {
         width: 100%;
@@ -157,6 +156,11 @@ body, html {
     }
     .double_page {
         display: flex;
+    }
+    .page_block img {
+        display: block;
+        max-height: 100vh;
+        max-width: 50vw;
     }
     .page_number.mobile {
         display: none;

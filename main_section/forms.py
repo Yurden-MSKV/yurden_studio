@@ -109,3 +109,7 @@ class LoginFormWithCaptcha(AuthenticationForm):
             'class': 'form-control',
             # 'placeholder': 'Введите код с картинки'
         })
+
+    error_messages = {
+        'invalid_login': 'Неверный никнейм или пароль'
+    }

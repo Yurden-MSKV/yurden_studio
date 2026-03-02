@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'captcha',
+    'sslserver'
 ]
 
 AUTHENTICATION_BACKENDS = [

@@ -100,6 +100,18 @@ body, html {
     font-style: italic;
 }
 
+.login-error {
+    display: flex;
+    flex-direction: column;
+    margin: 0 20px;
+}
+
+.login-error p {
+    margin-top: 5px;
+    font: italic 15px 'Nunito';
+    color: red
+}
+
 .btn_block {
     display: flex;
     width: fit-content;

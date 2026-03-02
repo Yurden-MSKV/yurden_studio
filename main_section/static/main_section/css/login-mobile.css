@@ -119,11 +119,8 @@ body, html {
     border-radius: 10px;
     /*cursor: pointer;*/
     color: var(--text-color);
-    transition: var(--tran-back),
-                /*border-bottom-color 0.5s ease,*/
-                /*border-top-color 0.5s ease,*/
-                /*border-left-color 0.5s ease,*/
-                /*border-right-color 0.5s ease;*/
+    transition: var(--tran-back);
+    text-decoration: underline;
 }
 
 .captcha-block {
@@ -146,6 +143,18 @@ body, html {
     font-style: italic;
 }
 
+.login-error {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+}
+
+.login-error p {
+    margin-top: 5px;
+    font: italic 35px 'Nunito';
+    color: red;
+}
+
 .another_action {
     margin: 5px auto 0 auto;
     transition: var(--tran-back);
@@ -158,7 +167,6 @@ body, html {
 }
 
 .another_action a {
-    text-decoration: none;
     font-weight: bold;
     font-size: 35px;
     color: var(--text-color);
@@ -166,11 +174,7 @@ body, html {
     /*border: 2px solid darkgray;*/
     border: none;
     border-radius: 10px;
-    transition: var(--tran-back),
-                border-bottom-color 0.5s ease,
-                border-top-color 0.5s ease,
-                border-left-color 0.5s ease,
-                border-right-color 0.5s ease;
+    text-decoration: underline;
 }
 
 .alert li {
