@@ -18,8 +18,8 @@
 
 ## 🛠 Стек технологий
 
-*   **Backend:** Python, Django (включая миграции, админ-панель)
-*   **Frontend:** HTML, CSS, JavaScript (используется для динамики в «читалке»)
+*   **Backend:** Python, Django
+*   **Frontend:** HTML, CSS, JavaScript, HTMX
 *   **База данных:** SQLite (разработка), возможность лёгкого перехода на PostgreSQL
 *   **Версионный контроль:** Git
 
@@ -62,8 +62,8 @@ This repository showcases my skills as a full-stack developer, demonstrating the
 
 ## 🛠 Tech Stack
 
-*   **Backend:** Python, Django (including Migrations, Admin Panel)
-*   **Frontend:** HTML, CSS, JavaScript (used for dynamic reader features)
+*   **Backend:** Python, Django
+*   **Frontend:** HTML, CSS, JavaScript, HTMX
 *   **Database:** SQLite (development), designed for easy migration to PostgreSQL
 *   **Version Control:** Git
 
