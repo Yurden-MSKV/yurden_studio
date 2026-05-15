@@ -1,19 +1,28 @@
-@import url('../../../../static/css/themes.css');
-@import url('../../../../static/css/text.css');
+@import url('../../../../static/css/new_themes.css');
+@import url('../../../../static/css/new_text.css');
 
 body, html {
     width: 100%;
+    height: 100%;
     margin: 0;
     padding: 0;
-    font-family: 'Nunito';
+    font-family: 'Ubuntu';
     background: var(--background-color);
+    /*scrollbar-width: none;*/
+    /*overflow: hidden;*/
 }
 
+/* MENTION: ИКОНКИ */
 .icon {
     filter: var(--icon-color);
     margin: 0;
     padding: 0;
 }
+button {
+    background: none;
+    border: none;
+}
+
 @media (orientation: portrait) {
     .icon {
 
@@ -21,21 +30,152 @@ body, html {
 }
 @media (orientation: landscape) {
     .icon {
-        width: 3vh
+        width: 20px;
+        margin-right: 5px;
     }
 }
+/* MENTION: ИКОНКИ */
 
-
-
+/* MENTION: Mobile режим */
 @media (orientation: portrait) {
     .landscape {
-        display: none;
+        display: none !important;
     }
     .portrait {
         display: flex;
     }
+    .top_panel_container {
+        display: flex;
+        background: var(--block-color);
+        width: 1040px;
+        height: 80px;
+        position: fixed;
+        left: calc(50% - 520px);
+        top: 20px;
+        border-radius: 5px;
+        align-items: center;
+    }
+    .site_name {
+        margin-left: 30px;
+    }
+    .profile_menu_btn_mobile {
+        width: 64px;
+        height: auto;
+        margin: 0 20px 0 auto;
+    }
+    .menu-icon-mobile {
+        display: none;
+    }
+    .menu-icon-mobile.show {
+        display: flex;
+    }
+    .profile_menu_mobile {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        position: fixed;
+        top: 120px;
+        right: 20px;
+        width: 450px;
+        height: fit-content;
+        padding: 20px 0;
+        background: var(--block-color);
+        border-radius: 5px;
+        transition: opacity 0.3s, transform 0.3s;
+        opacity: 0;
+        transform: scale(0.7); /* Уменьшенный */
+        transform-origin: top right;
+    }
+    .profile_menu_mobile.show {
+        opacity: 1;
+        transform: scale(1);
+    }
+    .profile_block {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 20px;
+    }
+    .settings_block {
+        display: flex;
+        flex-direction: column;
+        /*justify-content: space-between;*/
+        /*align-items: center;*/
+        margin: 0 20px;
+        gap: 20px;
+    }
+    .profile_element, .exit_mobile, .theme_block {
+        display: flex;
+        flex-direction: row;
+        gap: 3px
+    }
+    .profile_icon, .logout_icon {
+        width: 40px
+    }
+    .reader_block {
+        display: flex;
+    }
+    .theme_block, .reader_block {
+        gap: 15px !important;
+        align-items: start;
+    }
+    .reader_button_block {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    .theme-icon, .reader-icon {
+        display: none;
+    }
+    .theme-icon.show, .reader-icon.show, .reset_reader_mobile {
+        display: flex;
+        gap: 5px;
+    }
+    .theme-icon .icon, .reader-icon .icon, .reset-icon {
+        width: 40px !important;
+    }
+    .reader-icon .icon {
+        width: 40px !important;
+    }
+    .exit_mobile h3, .theme_block h2, .theme-icon h2, .reader_block h2 {
+        font-weight: 500 !important;
+        font-family: 'Ubuntu'
+    }
+    .reader_block h2 {
+        text-align: start;
+    }
+    .theme-toggle, .reader-toggle, .reset_reader_mobile {
+        background: var(--element-color);
+        border-radius: 5px;
+        padding: 6px 10px;
+    }
+    .theme-toggle {
+        padding: 6px 12px 6px 10px !important;
+    }
+    .reader-toggle {
+        width: fit-content;
+        padding: 6px 12px 6px 10px !important;
+    }
+    .links_block {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin: 0 30px;
+    }
+    .link {
+        border-left: 5px solid var(--text-color);
+        padding-left: 10px;
+    }
 }
 
+.page_container {
+    display: flex;
+    flex-direction: column;
+    height: inherit;
+}
+
+/* MENTION: Desktop режим */
 @media (orientation: landscape) {
     .portrait {
         display: none;
@@ -44,38 +184,116 @@ body, html {
         display: flex;
     }
     .top_panel_container {
-        margin: 0 auto;
+        background: var(--block-color);
+        margin: 10px auto;
+        padding: 5px 0;
         width: 80%;
-        height: 4%;
-        border: 2px solid red;
+        height: 5%;
+        /*border: 2px solid red;*/
+        border-radius: 5px;
         justify-content: space-between;
+        align-items: center;
+        /*position: fixed;*/
+        left: 10%;
+        /*top: 0*/
     }
     .site_name {
         height: fit-content;
+        margin: 0 20px;
     }
     .site_name h1 {
         margin: 0;
         padding: 0;
     }
-    .buttons_container {
+    .top_buttons {
         display: flex;
         flex-direction: row;
+        gap: 40px;
+        margin: 0 20px;
     }
     .top_panel_button {
         height: fit-content;
+    }
+    .top_panel_button p {
+        font: bold 20px 'Nunito'
     }
     .profile_menu_btn {
         display: flex;
         flex-direction: row;
         background: none;
         border: none;
-        margin: 0;
+        margin: 0 20px;
         padding: 0;
         width: fit-content;
         height: fit-content;
         cursor: pointer;
     }
+    .profile_menu_btn p {
+        font: bold 20px 'Nunito'
+    }
     .profile_menu {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        position: absolute;
+        top: 8%;
+        right: 10%;
+        background: var(--block-color);
+        border-radius: 5px;
+        padding: 10px;
+        transition: opacity 0.3s, transform 0.3s;
+        opacity: 0;
+        transform: scale(0.7); /* Уменьшенный */
+        transform-origin: top right;
+    }
+
+    .profile_menu.show {
+        opacity: 1;
+        transform: scale(1);
+    }
+    .menu_item {
+        display: flex;
+        width: fit-content;
+    }
+    .menu_item a, .menu_item button {
+        display: flex;
+        background: none;
+        border: none;
+        padding: 3px 6px;
+        /*padding: 0;*/
+        margin: 0;
+    }
+    .menu_item a {
+        display: flex;
+    }
+    .menu_item p {
+        color: var(--text-color);
+        font: bold 20px 'Nunito';
+    }
+    .theme-toggle, .reset_reader {
+        background: none;
+        border: none
+    }
+    .theme-icon {
         display: none;
+    }
+    .theme-icon.show {
+        display: flex;
+    }
+    .reader-toggle {
+        display: flex;
+    }
+    .reader-icon {
+        display: none;
+    }
+    .reader-icon.show {
+        display: flex;
+    }
+    .reader-icon img {
+        margin-right: 5px;
+    }
+    .reader-icon p, .reset_reader p {
+        text-align: start;
+        line-height: 1.1;
     }
 }

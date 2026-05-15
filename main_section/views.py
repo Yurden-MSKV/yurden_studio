@@ -1,34 +1,31 @@
 import random
-from decimal import Decimal
+from itertools import chain
 
 from django.contrib.auth import login
-from django.contrib import messages
 from django.db.models import Prefetch
 from django.shortcuts import render, redirect, get_object_or_404
-from django.template.defaulttags import csrf_token
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.contrib.auth import logout
-from django.utils.regex_helper import next_char
 from django.views.decorators.http import require_http_methods
 
 from main_section.forms import RegisterForm
-from manga_section.models import Chapter, Volume, Manga, ChapterImage
+from manga_section.models import Chapter, Volume, Manga
 from post_section.forms import FAQform
 from post_section.models import Post, MessageFAQ
 
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from captcha.models import CaptchaStore
-from captcha.helpers import captcha_image_url
 import json
 
 from django.middleware.csrf import get_token
 
 from django.contrib.auth.views import LoginView
 from .forms import LoginFormWithCaptcha
-from .models import ChapterLike, ChapterView, Profile
+from .models import Profile
+
+from django.core.paginator import Paginator
 
 
 class CustomLoginView(LoginView):
@@ -39,6 +36,7 @@ class CustomLoginView(LoginView):
         context = super().get_context_data(**kwargs)
         context['is_mobile'] = getattr(self.request, 'is_mobile', False)
         return context
+
 
 def index(request):
     # return render(request, 'top_panel.html')
@@ -62,6 +60,7 @@ def register_view(request):
         form = RegisterForm()
 
     return render(request, 'registration/register.html', {'form': form, 'next': next_url})
+
 
 @require_http_methods(["GET"])
 def custom_logout(request):
@@ -127,6 +126,73 @@ def main_page(request):
         'messages_cnt': message_cnt
     }
     return render(request, 'main_page.html', context)
+
+
+def new_home_page(request):
+    all_items = get_all_items()
+    paginator = Paginator(all_items, 5)
+    page = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page)
+
+    context = {
+        'feed': page_obj
+    }
+
+    if request.headers.get('HX-Request') == 'true':
+        print(f'Отдаю страницу {page}')
+        return render(request, 'new/feed_items.html', context)
+    else:
+        return render(request, 'new/new_home_page.html', context)
+
+
+def get_all_items():
+    chapters = Chapter.objects.all().select_related('volume__manga')
+    posts = Post.objects.all()
+
+    all_items = sorted(
+        chain(chapters, posts),
+        key=lambda x: x.add_date,
+        reverse=True
+    )
+
+    print(len(all_items))
+
+    grouped_items = []
+    i = 0
+    while i < len(all_items):
+        item = all_items[i]
+        print(item.add_date.strftime("%d.%m.%Y %H:%M"))
+
+        if item.__class__ == Chapter:
+            manga = item.volume.manga
+            group = {
+                'manga': manga,
+                'cover': get_latest_cover(manga),
+                'chapters': [item]
+            }
+
+            j = 1
+            while i + j < len(all_items) and all_items[i + j].__class__ == Chapter:
+                next_item = all_items[i + j]
+                if next_item.volume.manga == manga:
+                    group['chapters'].append(next_item)
+                    j += 1
+                else:
+                    break
+
+            grouped_items.append(group)
+            i += j
+        else:
+            grouped_items.append({'post': item})
+            i += 1
+
+    return grouped_items
+
+
+def get_latest_cover(manga):
+    latest_volume = manga.volumes.order_by('-vol_number').first()
+    return latest_volume.vol_cover if latest_volume else None
+
 
 # @login_required(login_url='/login/')
 def info_page(request):
@@ -204,9 +270,38 @@ def save_theme_preference(request):
 
     return JsonResponse({'status': 'error', 'message': 'Метод не разрешен'})
 
+
+@login_required
+def get_reader_mode(request):
+    user_mode = request.user.profile.reader_mode
+    # print(f"Режим при загрузке: {user_mode}")
+    return JsonResponse({
+        'status': 'success',
+        'mode': user_mode
+    })
+
+
+@csrf_exempt
+@login_required
+def save_reader_mode(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        mode = data.get('mode')
+        # print(f"Режим после замены: {mode}")
+        request.user.profile.reader_mode = mode
+        request.user.profile.save()
+
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Режим чтения изменён',
+            'mode': mode
+        })
+
+
 def message_count(request):
     messages_cnt = MessageFAQ.objects.filter(is_read=False).count()
     return messages_cnt
+
 
 def messages_page(request):
     if request.user.username == 'yurden':
@@ -225,6 +320,7 @@ def messages_page(request):
         return render(request, 'message_catalog.html', context)
     else:
         return redirect('home-page')
+
 
 def read_message(request, message_id):
     message = get_object_or_404(MessageFAQ, pk=message_id)
@@ -246,6 +342,7 @@ def read_message(request, message_id):
 
     # return render(request, 'partials/message_read_block.html', {'message': message})
 
+
 def close_tutorial(request):
     if request.method == 'POST':
         user = request.user
@@ -254,6 +351,7 @@ def close_tutorial(request):
         user.profile.save()
 
         return HttpResponse('<div id="tutorial_block"></div>')
+
 
 def single_close_tutorial(request):
     if request.method == 'POST':
@@ -264,6 +362,7 @@ def single_close_tutorial(request):
 
         return HttpResponse('<div id="tutorial_block"></div>')
 
+
 def double_close_tutorial(request):
     if request.method == 'POST':
         user = request.user
@@ -273,8 +372,10 @@ def double_close_tutorial(request):
 
         return HttpResponse('<div id="tutorial_block"></div>')
 
+
 def top_panel_test(request):
     return render(request, 'new/new_top_panel.html', {})
+
 
 def reset_reader(request):
     profile = Profile.objects.get(user=request.user)
@@ -282,3 +383,10 @@ def reset_reader(request):
     profile.viewed_double = False
     profile.save()
     return HttpResponse('<button class="reset_success" disabled><p>Сброшено!</p></button>')
+
+def reset_reader_mobile(request):
+    profile = Profile.objects.get(user=request.user)
+    profile.viewed_single = False
+    profile.viewed_double = False
+    profile.save()
+    return HttpResponse('<button class="reset_success" disabled><h2>Сброшено!</h2></button>')

@@ -24,12 +24,25 @@ class Profile(models.Model):
         ('light', 'Светлая'),
         ('dark', 'Тёмная'),
     ]
+    READER_MODE_CHOICES = [
+        ('left_to_right', 'Слева направо'),
+        ('right_to_left', 'Справа налево')
+    ]
+    # NOTE: Если надумаю менять местами блоки глав и обложек.
+    # MANGA_CATALOG_MODE = [
+    #     ('classic', 'Том — главы'),
+    #     ('shuffle', 'Чередование')
+    # ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     theme = models.CharField(
         max_length=10,
         choices=THEME_CHOICES,
         default='auto'
+    )
+    reader_mode = models.CharField(
+        choices=READER_MODE_CHOICES,
+        default='left_to_right',
     )
     updated_at = models.DateTimeField(auto_now=True)
     # viewed_tutorial = models.BooleanField(default=False)
@@ -54,6 +67,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
 
 class ChapterView(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

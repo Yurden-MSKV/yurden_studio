@@ -1,0 +1,123 @@
+{% extends 'new/new_top_panel.html' %}
+
+{% load static %}
+
+{% block title %}
+    <title>Студия Юрия Московцева</title>
+{% endblock %}
+
+{% block content %}
+    <div class="feed_container">
+        {% include 'new/feed_items.html' %}
+        {% include 'new/feed_comments.html' %}
+    </div>
+
+    <div id="loading-indicator" style="display: none">Загрузка...</div>
+
+    <div id="end-message" class="end-message" style="display: none;">
+        Конец ленты
+    </div>
+
+    <script>
+        let currentPage = 1;
+        let isLoading = false;
+        let hasMore = true;
+
+        function checkNextPage() {
+            const paginationData = document.getElementById('pagination-data');
+            if (paginationData) {
+                const nextPage = paginationData.dataset.next;
+                console.log(nextPage)
+                hasMore = nextPage && nextPage !== '0';
+            } else {
+                hasMore = false;
+            }
+            return hasMore;
+        }
+
+        function showEndMessage() {
+            const endMessage = document.getElementById('end-message');
+            if (endMessage) {
+                endMessage.style.display = 'block';
+            }
+        }
+
+        checkNextPage();
+
+        window.addEventListener('scroll', function() {
+            if (!hasMore || isLoading) {
+                if (!hasMore) {
+                    showEndMessage();
+                }
+                return;
+            }
+
+            const scrollY = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const feedCont = document.getElementById('home-container')
+            const documentHeight = feedCont.scrollHeight;
+
+            if (scrollY + windowHeight > documentHeight * 0.9) {
+                isLoading = true;
+
+                const nextPageNum = currentPage + 1;
+                console.log(`Загрузка страницы ${nextPageNum}...`);
+
+                const indicator = document.getElementById('loading-indicator');
+                if (indicator) indicator.style.display = 'block';
+
+                fetch(`?page=${nextPageNum}`, {
+                    headers: {'HX-Request': 'true'}
+                })
+                .then(response => response.text())
+                .then(html => {
+                    const temp = document.createElement('div');
+                    temp.innerHTML = html;
+
+                    const postElements = temp.querySelectorAll('h1, p, .post-item');
+
+                    if (postElements.length > 0) {
+                        const mainCont = document.getElementById('main-cont');
+
+                        postElements.forEach(el => {
+                            mainCont.appendChild(el.cloneNode(true));
+                        });
+
+                        currentPage = nextPageNum;
+
+                        const newPaginationData = temp.querySelector('#pagination-data');
+                        if (newPaginationData) {
+                            const oldPaginationData = document.getElementById('pagination-data');
+                            if (oldPaginationData) {
+                                oldPaginationData.dataset.next = newPaginationData.dataset.next;
+                            }
+
+                            const nextPage = newPaginationData.dataset.next;
+                            hasMore = nextPage && nextPage !== '0';
+
+                            if (!hasMore) {
+                                showEndMessage();
+                            }
+                        } else {
+                            hasMore = false;
+                            showEndMessage();
+                        }
+
+                    } else {
+                        hasMore = false;
+                        showEndMessage();
+                    }
+
+                    isLoading = false;
+                    if (indicator) indicator.style.display = 'none';
+                })
+                .catch(error => {
+                    console.error('❌ Ошибка загрузки:', error);
+                    isLoading = false;
+                    if (indicator) indicator.style.display = 'none';
+                });
+            }
+        });
+    </script>
+
+{% endblock %}

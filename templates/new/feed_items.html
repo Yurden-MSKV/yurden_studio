@@ -1,0 +1,28 @@
+<!-- NOTE: Landscape версия -->
+<div class="home_container landscape" id="home-container">
+    {% for item in feed %}
+        {% if item.manga %}
+            <div class="feed manga">
+                {{ item.chapters }}
+            </div>
+        {% elif item.post %}
+            <div class="feed post">
+                {{ item.post.get_short_content_safe }}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+
+{#<!-- NOTE: Portrait версия -->#}
+{#<div class="home_container portrait">#}
+{#    {% for item in feed %}#}
+{#        <h1>{{ item.title }}</h1>#}
+{#        <p>{{ item.content }}</p>#}
+{#    {% endfor %}#}
+{#</div>#}
+
+<div id="pagination-data"
+     data-next="{% if feed.has_next %}{{ feed.next_page_number }}{% else %}0{% endif %}"
+     style="display: none;">
+</div>

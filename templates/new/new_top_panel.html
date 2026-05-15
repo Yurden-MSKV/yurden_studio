@@ -6,7 +6,9 @@
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'main_section/css/new_top_panel.css' %}">
+    <link rel="stylesheet" href="{% static 'main_section/css/new_home_page.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
     <script>
         (function() {
             function getInitialTheme() {
@@ -63,80 +65,189 @@
     {% block top_panel %}
         
         <!-- NOTE: Landscape версия -->
-        <div class="top_panel_container landscape">
-            <a class="site_name" href="#"><h1>Студия Юрия Московцева</h1></a>
-            <div class="buttons_container">
-                <a class="top_panel_button" href="{% url 'catalog-page' %}">
-                    <div class="button_block">
+        <main class="page_container">
+            <div class="top_panel_container landscape">
+                <a class="site_name" href="{% url 'home-page' %}"><h1>Студия Юрия Московцева</h1></a>
+                <div class="top_buttons">
+                    <a class="top_panel_button" href="{% url 'catalog-page' %}">
                         <p>Каталог</p>
-                    </div>
-                </a>
-                <a class="top_panel_button" href="{% url 'post-catalog' %}">
-                    <div class="button_block">
+                    </a>
+                    <a class="top_panel_button" href="{% url 'post-catalog' %}">
                         <p>Посты</p>
-                    </div>
-                </a>
-                <a class="top_panel_button" href="{% url 'info' %}">
-                    <div class="button_block">
+                    </a>
+                    <a class="top_panel_button" href="{% url 'info' %}">
                         <p>ЧаВо</p>
-                    </div>
-                </a>
-{#                {% if user.username == 'yurden' %}#}
-{#                    <a class="top_panel_button" href="{% url 'messages' %}">#}
-{#                        <div class="button_block">#}
-{#                            <p id="unread-counter">{{ messages_cnt }}</p>#}
-{#                        </div>#}
-{#                    </a>#}
-{#                {% endif %}#}
-            </div>
-            <div class="profile_container">
+                    </a>
+    {#                {% if user.username == 'yurden' %}#}
+    {#                    <a class="top_panel_button" href="{% url 'messages' %}">#}
+    {#                        <div class="button_block">#}
+    {#                            <p id="unread-counter">{{ messages_cnt }}</p>#}
+    {#                        </div>#}
+    {#                    </a>#}
+    {#                {% endif %}#}
+                </div>
                 <button class="profile_menu_btn" onclick="toggleMenu()">
-                    <img class="icon" src="{% static "icons/user-regular-full.svg" %}">
+                    <img class="icon" src="{% static "icons/new_user_icon.svg" %}">
                     <p>{{ user.username }}</p>
                 </button>
-            </div>
-            <div class="profile_menu" id="userMenu">
-                {% if user.username == 'yurden' %}
+                <div class="profile_menu" id="userMenu">
+                    {% if user.username == 'yurden' %}
+                        <div class="menu_item">
+                            <a href="/admin/"><img class='icon' src="{% static 'icons/admin.svg' %}"><p>Админка</p></a>
+                        </div>
+                    {% endif %}
                     <div class="menu_item">
-                        <a href="/admin/"><img src="{% static 'main_section/icons/admin.svg' %}"><p>Админка</p></a>
+                        <button id="themeToggle" class="theme-toggle" aria-label="Переключить тему">
+                            <span class="theme-icon light-icon"><img class='icon' src="{% static 'icons/sun-regular-full.svg' %}"><p>Светлая</p></span>
+                            <span class="theme-icon dark-icon"><img class='icon' src="{% static 'icons/moon-regular-full.svg' %}"><p>Тёмная</p></span>
+                            <span class="theme-icon auto-icon show"><img class='icon' src="{% static 'icons/time_mode.svg' %}"><p>Авто</p></span>
+                        </button>
                     </div>
-                {% endif %}
-                <div class="menu_item">
-                    <button id="themeToggle" class="theme-toggle" aria-label="Переключить тему">
-                        <span class="theme-icon light-icon"><img src="{% static 'icons/sun-regular-full.svg' %}"><p>Светлая</p></span>
-                        <span class="theme-icon dark-icon"><img src="{% static 'icons/moon-regular-full.svg' %}"><p>Тёмная</p></span>
-                        <span class="theme-icon auto-icon show"><img src="{% static 'icons/time_mode.svg' %}"><p>Авто</p></span>
-                    </button>
+                    <div class="menu_item">
+                        <button id="readerToggle" class="reader-toggle" aria-label="Режим чтения">
+                            <span class="reader-icon left_to_right_icon"><img class="icon" src="{% static 'icons/left_to_right.svg' %}"><p>Слева<br>направо</p></span>
+                            <span class="reader-icon right_to_left_icon"><img class="icon" src="{% static 'icons/right_to_left.svg' %}"><p>Справа<br>налево</p></span>
+                        </button>
+                    </div>
+                    <div class="menu_item">
+                        <button id="resetReaderDesktop"
+                                class="reset_reader"
+                                hx-post="{% url 'reset_reader' %}"
+                                hx-target="#resetReaderDesktop"
+                                hx-swap="outerHTML"
+                                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+                            <img class='icon' src="{% static 'icons/reset.svg' %}">
+                            <p>Сброс<br>обучалки</p>
+                        </button>
+                    </div>
+                    <div class="menu_item">
+                        <a href="{% url 'logout' %}"><img class="icon" src="{% static 'icons/arrow-right-from-bracket-solid-full.svg' %}"><p>Выйти</p></a>
+                    </div>
                 </div>
-                <div class="menu_item">
-                    <a href="{% url 'logout' %}"><img src="{% static 'icons/arrow-right-from-bracket-solid-full.svg' %}"><p>Выйти</p></a>
+
+                <script>
+                    function toggleMenu() {
+                        const menu = document.getElementById('userMenu');
+                        menu.classList.toggle('show');
+                    }
+
+                    document.addEventListener('click', function(event) {
+                        const menu = document.getElementById('userMenu');
+                        const button = document.querySelector('.profile_menu_btn');
+
+                        if (!menu.contains(event.target) && !button.contains(event.target)) {
+                            menu.classList.remove('show');
+                        }
+                    });
+                </script>
+
+            </div>
+
+
+            <!-- NOTE: Portrait версия -->
+            <div class="top_panel_container portrait">
+                <a class="site_name" href="{% url 'home-page' %}"><h1>Студия Юрия Московцева</h1></a>
+                <button class="profile_menu_btn_mobile" onclick="toggleMenuMobile()">
+                    <img id="menuUsual" class="menu-icon-mobile icon show" src="{% static 'icons/bars-solid-full.svg' %}">
+                    <img id="menuActive" class="menu-icon-mobile icon" src="{% static 'icons/bars-staggered-solid-full.svg' %}">
+                </button>
+                <div class="profile_menu_mobile" id="userMenuMobile">
+                    <div class="profile_block">
+                        <div class="profile_element">
+                            <img class="icon profile_icon" src="{% static 'icons/user-solid-full.svg' %}">
+                            <h2>{{ request.user.username }}</h2>
+                        </div>
+                        <div>
+                            <a class="exit_mobile" href="{% url 'logout' %}">
+                                <img class="icon logout_icon" src="{% static 'icons/arrow-right-from-bracket-solid-full.svg' %}">
+                                <h3>Выйти</h3>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="settings_block">
+                        <div class="theme_block">
+                            <h2>Тема:</h2>
+                            <button id="themeToggleMobile" class="theme-toggle" aria-label="Переключить тему">
+                                <span class="theme-icon light-icon"><img class='icon' src="{% static 'icons/sun-regular-full.svg' %}"><h2>Светлая</h2></span>
+                                <span class="theme-icon dark-icon"><img class='icon' src="{% static 'icons/moon-regular-full.svg' %}"><h2>Тёмная</h2></span>
+                                <span class="theme-icon auto-icon show"><img class='icon' src="{% static 'icons/clock-solid-full.svg' %}"><h2>Авто</h2></span>
+                            </button>
+                        </div>
+                        <div class="reader_block">
+                            <h2>Чтение:</h2>
+                            <div class="reader_button_block">
+                                <button id="readerToggleMobile" class="reader-toggle" aria-label="Режим чтения">
+                                    <span class="reader-icon left_to_right_icon"><img class="icon" src="{% static 'icons/left_to_right-new.svg' %}"><h2>Слева<br>направо</h2></span>
+                                    <span class="reader-icon right_to_left_icon"><img class="icon" src="{% static 'icons/right_to_left-new.svg' %}"><h2>Справа<br>налево</h2></span>
+                                </button>
+                                <button id="resetReaderMobile"
+                                        class="reset_reader_mobile"
+                                        hx-post="{% url 'reset_reader_mobile' %}"
+                                        hx-target="#resetText"
+                                        hx-swap="outerHTML"
+                                        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+                                    <img class='reset-icon icon' src="{% static 'icons/reset.svg' %}">
+                                    <h2 id="resetText">Сброс<br>обучалки</h2>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="links_block">
+                        <a class="link" href="https://pay.cloudtips.ru/p/8e0b5d08"><h3>Поддержать</h3></a>
+                        <a class="link" href="{% url 'info' %}"><h3>ЧаВо</h3></a>
+                    </div>
+{#                    <a class="top_panel_button" href="{% url 'catalog-page' %}">#}
+{#                        <div class="button_block">#}
+{#                            <p>Каталог</p>#}
+{#                        </div>#}
+{#                    </a>#}
+{#                    <a class="top_panel_button" href="{% url 'post-catalog' %}">#}
+{#                        <div class="button_block">#}
+{#                            <p>Посты</p>#}
+{#                        </div>#}
+{#                    </a>#}
+{#                    <a class="top_panel_button" href="{% url 'info' %}">#}
+{#                        <div class="button_block">#}
+{#                            <p>ЧаВо</p>#}
+{#                        </div>#}
+{#                    </a>#}
                 </div>
+
+                <script>
+                    const menuUsual = document.getElementById('menuUsual');
+                    const menuActive = document.getElementById('menuActive');
+
+                    function toggleMenuMobile() {
+                        const menu = document.getElementById('userMenuMobile');
+                        // Одновременно переключаем обе иконки и меню
+                        menuUsual.classList.toggle('show');
+                        menuActive.classList.toggle('show');
+                        menu.classList.toggle('show');
+                    }
+
+                    document.addEventListener('click', function(event) {
+                        const menu = document.getElementById('userMenuMobile');
+                        const button = document.querySelector('.profile_menu_btn_mobile');
+
+                        if (!menu.contains(event.target) && !button.contains(event.target)) {
+                            // Закрываем меню, показываем обычную иконку, скрываем активную
+                            menuActive.classList.remove('show');
+                            menuUsual.classList.add('show');   // именно add, не toggle
+                            menu.classList.remove('show');
+                        }
+                    });
+                </script>
             </div>
-        </div>
-        
-        
-        <!-- NOTE: Portrait версия -->
-        <div class="top_panel_container portrait">
-            <a href="#"><h1>Студия Юрия Московцева</h1></a>
-            <div class="top_menu_block">
-                <a class="top_panel_button" href="{% url 'catalog-page' %}">
-                    <div class="button_block">
-                        <p>Каталог</p>
-                    </div>
-                </a>
-                <a class="top_panel_button" href="{% url 'post-catalog' %}">
-                    <div class="button_block">
-                        <p>Посты</p>
-                    </div>
-                </a>
-                <a class="top_panel_button" href="{% url 'info' %}">
-                    <div class="button_block">
-                        <p>ЧаВо</p>
-                    </div>
-                </a>
-            </div>
-        </div>
-        
-    {% endblock %}
+
+        {% endblock %}
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+    <script src="{% static 'js/theme.js' %}"></script>
+    <script src="{% static 'js/reader_mode.js' %}"></script>
+
 </body>
 </html>

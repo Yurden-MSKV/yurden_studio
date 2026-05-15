@@ -1,0 +1,28 @@
+.feed_container {
+    display: none;
+    gap: 10px;
+    width: 80%;
+    height: 100%;
+    margin: 0 auto 10px auto;
+    color: var(--text-color)
+}
+
+.home_container {
+    display: none;
+    flex-direction: column;
+    gap: 100px;
+    padding: 20px;
+    width: 66%;
+    /*border: 1px solid red;*/
+    background: var(--block-color);
+    border-radius: 5px;
+    overflow: visible !important;
+}
+
+.feed_comments_container {
+    height: 100%;
+    width: 34%;
+    /*border: 1px solid red;*/
+    background: var(--block-color);
+    border-radius: 5px;
+}

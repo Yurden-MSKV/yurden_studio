@@ -51,8 +51,10 @@ class Post(models.Model):
         from django.utils.safestring import mark_safe
         return mark_safe(self.get_short_content(max_length))
 
+
 class MessageFAQ(models.Model):
-    author = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    author = models.ForeignKey(User,
+                               on_delete=models.DO_NOTHING)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
@@ -60,9 +62,43 @@ class MessageFAQ(models.Model):
     def __str__(self):
         return f"Предложение от {self.author.username}"
 
-    def messages_count(self):
-        return MessageFAQ.objects.filter(is_read=False).count()
-
     class Meta:
         verbose_name = 'Предложения'
-        verbose_name_plural  = 'Предложения'
+        verbose_name_plural = 'Предложения'
+
+
+class Thread(models.Model):
+    post = models.ForeignKey(Post,
+                             on_delete=models.CASCADE,
+                             related_name='threads',
+                             verbose_name='Пост')
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      verbose_name='Дата создания')
+    updated_at = models.DateTimeField(auto_now=True,
+                                      verbose_name='Последнее обновление')
+
+    class Meta:
+        verbose_name = 'Ветки'
+        verbose_name_plural = 'Ветки'
+
+
+class PostComment(models.Model):
+    author = models.ForeignKey(User,
+                               on_delete=models.DO_NOTHING,
+                               related_name='post_comments',
+                               verbose_name='Автор')
+    thread = models.ForeignKey(Thread,
+                               on_delete=models.CASCADE,
+                               related_name='comments',
+                               verbose_name='Ветка')
+    parent_comment = models.CharField(max_length=30,
+                                      null=True,
+                                      blank=True,
+                                      verbose_name='Родитель')
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      verbose_name='Дата создания')
+
+    class Meta:
+        verbose_name = 'Комментарии'
+        verbose_name_plural = 'Комментарии'

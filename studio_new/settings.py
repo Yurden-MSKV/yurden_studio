@@ -34,6 +34,7 @@ CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', cast=lambda v: [s.strip() 
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_DOMAIN = None
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
 
@@ -49,7 +50,6 @@ INSTALLED_APPS = [
     'main_section',
     'manga_section',
     'post_section',
-    'poll_section',
     'django_htmx',
     'widget_tweaks',
     'ckeditor',

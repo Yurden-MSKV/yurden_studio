@@ -11,8 +11,8 @@ let currentThemeState = THEME_STATES.AUTO;
 // Функция проверки аутентификации пользователя
 function isUserAuthenticated() {
     return document.body.querySelector('.profile_button_block') !== null ||
-           document.body.querySelector('.profile_container') !== null ||
-           document.getElementById('userMenu') !== null;
+        document.body.querySelector('.profile_container') !== null ||
+        document.getElementById('userMenu') !== null;
 }
 
 // Функция определения темы по времени
@@ -38,10 +38,10 @@ function switchIconVisibility(nextState) {
         icon.classList.remove('show');
     });
 
-    const nextIcon = document.querySelector(`.${nextState}-icon`);
-    if (nextIcon) {
-        nextIcon.classList.add('show');
-    }
+    const nextIcons = document.querySelectorAll(`.${nextState}-icon`);
+    nextIcons.forEach(icon => {
+        icon.classList.add('show');
+    });
 }
 
 // Функция получения CSRF токена
@@ -84,7 +84,7 @@ async function saveThemeToServer(theme) {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': getCsrfToken()
             },
-            body: JSON.stringify({ theme: theme })
+            body: JSON.stringify({theme: theme})
         });
 
         if (response.ok) {
@@ -182,12 +182,27 @@ function startMinuteCheck() {
 }
 
 // Инициализация после полной загрузки страницы
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     setupThemeAfterLoad();
 
+    function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
     const themeButton = document.getElementById('themeToggle');
-    if (themeButton) {
-        themeButton.addEventListener('click', switchTheme);
+    const themeButtonMobile = document.getElementById('themeToggleMobile');
+    const debouncedSwitchTheme = debounce(switchTheme, 150);
+    if (themeButton || themeButtonMobile) {
+        themeButton.addEventListener('click', debouncedSwitchTheme);
+        themeButtonMobile.addEventListener('click', debouncedSwitchTheme);
     }
 
     startAutoThemeUpdate();
