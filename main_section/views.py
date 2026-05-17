@@ -130,7 +130,7 @@ def main_page(request):
 
 def new_home_page(request):
     all_items = get_all_items()
-    paginator = Paginator(all_items, 5)
+    paginator = Paginator(all_items, 6)
     page = request.GET.get('page', 1)
     page_obj = paginator.get_page(page)
 
@@ -155,7 +155,7 @@ def get_all_items():
         reverse=True
     )
 
-    print(len(all_items))
+    # print(len(all_items))
 
     grouped_items = []
     i = 0
@@ -180,6 +180,9 @@ def get_all_items():
                 else:
                     break
 
+            print(group['chapters'])
+            last_chapter = group['chapters'][0]
+            group['cover'] = get_volume_cover(last_chapter)
             grouped_items.append(group)
             i += j
         else:
@@ -192,6 +195,10 @@ def get_all_items():
 def get_latest_cover(manga):
     latest_volume = manga.volumes.order_by('-vol_number').first()
     return latest_volume.vol_cover if latest_volume else None
+
+def get_volume_cover(last_chapter):
+    current_volume = last_chapter.volume
+    return current_volume.vol_cover
 
 
 # @login_required(login_url='/login/')

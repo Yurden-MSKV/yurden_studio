@@ -1,26 +1,38 @@
 <!-- NOTE: Landscape версия -->
-<div class="home_container landscape" id="home-container">
+<div class="home_container portrait" id="home-container">
     {% for item in feed %}
         {% if item.manga %}
             <div class="feed manga">
-                {{ item.chapters }}
+                <div class="feed_top">
+                    <a href="{% url 'manga-page' slug=item.manga.manga_slug %}">
+                        <h3>[ Перевод ] {{ item.manga.manga_name }}</h3>
+                    </a>
+                </div>
+            <div class="feed_content">
+                <img class="feed_manga_cover" src="{{ item.cover.url }}">
+                <div class="chapters_list">
+                    {% for ch in item.chapters %}
+                        <a class="chapter" href="{% url 'chapter-page' manga_slug=item.manga.manga_slug ch_number=ch.get_chapter_display %}">
+                            <p>Глава {{ ch.get_chapter_display }} — {{ ch.ch_name }}</p>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
             </div>
         {% elif item.post %}
             <div class="feed post">
-                {{ item.post.get_short_content_safe }}
+                <div class="feed_top">
+                    <a href="{% url 'post-page' post_slug=item.post.post_slug %}">
+                        <h3>[ Пост ] {{ item.post.post_name }}</h3>
+                    </a>
+                </div>
+                <div class="feed_content">
+                    <p>{{ item.post.get_short_content_safe }}</p>
+                </div>
             </div>
         {% endif %}
     {% endfor %}
 </div>
-
-
-{#<!-- NOTE: Portrait версия -->#}
-{#<div class="home_container portrait">#}
-{#    {% for item in feed %}#}
-{#        <h1>{{ item.title }}</h1>#}
-{#        <p>{{ item.content }}</p>#}
-{#    {% endfor %}#}
-{#</div>#}
 
 <div id="pagination-data"
      data-next="{% if feed.has_next %}{{ feed.next_page_number }}{% else %}0{% endif %}"

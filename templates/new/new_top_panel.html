@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'main_section/css/new_top_panel.css' %}">
     <link rel="stylesheet" href="{% static 'main_section/css/new_home_page.css' %}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
     <script>
         (function() {
@@ -196,23 +196,8 @@
                         <a class="link" href="https://pay.cloudtips.ru/p/8e0b5d08"><h3>Поддержать</h3></a>
                         <a class="link" href="{% url 'info' %}"><h3>ЧаВо</h3></a>
                     </div>
-{#                    <a class="top_panel_button" href="{% url 'catalog-page' %}">#}
-{#                        <div class="button_block">#}
-{#                            <p>Каталог</p>#}
-{#                        </div>#}
-{#                    </a>#}
-{#                    <a class="top_panel_button" href="{% url 'post-catalog' %}">#}
-{#                        <div class="button_block">#}
-{#                            <p>Посты</p>#}
-{#                        </div>#}
-{#                    </a>#}
-{#                    <a class="top_panel_button" href="{% url 'info' %}">#}
-{#                        <div class="button_block">#}
-{#                            <p>ЧаВо</p>#}
-{#                        </div>#}
-{#                    </a>#}
                 </div>
-
+{##}
                 <script>
                     const menuUsual = document.getElementById('menuUsual');
                     const menuActive = document.getElementById('menuActive');

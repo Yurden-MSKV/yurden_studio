@@ -9,7 +9,6 @@
 {% block content %}
     <div class="feed_container">
         {% include 'new/feed_items.html' %}
-        {% include 'new/feed_comments.html' %}
     </div>
 
     <div id="loading-indicator" style="display: none">Загрузка...</div>
@@ -27,7 +26,7 @@
             const paginationData = document.getElementById('pagination-data');
             if (paginationData) {
                 const nextPage = paginationData.dataset.next;
-                console.log(nextPage)
+                console.log('Следующая страница:', nextPage)
                 hasMore = nextPage && nextPage !== '0';
             } else {
                 hasMore = false;
@@ -57,7 +56,7 @@
             const feedCont = document.getElementById('home-container')
             const documentHeight = feedCont.scrollHeight;
 
-            if (scrollY + windowHeight > documentHeight * 0.9) {
+            if (scrollY + windowHeight > documentHeight * 0.6) {
                 isLoading = true;
 
                 const nextPageNum = currentPage + 1;
@@ -77,7 +76,7 @@
                     const postElements = temp.querySelectorAll('h1, p, .post-item');
 
                     if (postElements.length > 0) {
-                        const mainCont = document.getElementById('main-cont');
+                        const mainCont = document.getElementById('home-container');
 
                         postElements.forEach(el => {
                             mainCont.appendChild(el.cloneNode(true));
