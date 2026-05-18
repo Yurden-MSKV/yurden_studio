@@ -1,5 +1,3 @@
-<!-- NOTE: Landscape версия -->
-<div class="home_container portrait" id="home-container">
     {% for item in feed %}
         {% if item.manga %}
             <div class="feed manga">
@@ -32,9 +30,9 @@
             </div>
         {% endif %}
     {% endfor %}
-</div>
 
-<div id="pagination-data"
+
+<div id="pagination-data-{{ page }}"
      data-next="{% if feed.has_next %}{{ feed.next_page_number }}{% else %}0{% endif %}"
      style="display: none;">
 </div>

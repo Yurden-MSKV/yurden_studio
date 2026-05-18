@@ -130,12 +130,15 @@ def main_page(request):
 
 def new_home_page(request):
     all_items = get_all_items()
-    paginator = Paginator(all_items, 5)
+    paginator = Paginator(all_items, 2)
+    total_pages = paginator.num_pages
+    print(f'Всего страниц: {total_pages}')
     page = request.GET.get('page', 1)
     page_obj = paginator.get_page(page)
 
     context = {
-        'feed': page_obj
+        'feed': page_obj,
+        'page': page
     }
 
     if request.headers.get('HX-Request') == 'true':
@@ -147,7 +150,7 @@ def new_home_page(request):
 
 def get_all_items():
     chapters = Chapter.objects.all().select_related('volume__manga')
-    posts = Post.objects.all()
+    posts = Post.objects.filter(visibility=True)
 
     all_items = sorted(
         chain(chapters, posts),
