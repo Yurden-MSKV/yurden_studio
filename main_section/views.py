@@ -130,7 +130,7 @@ def main_page(request):
 
 def new_home_page(request):
     all_items = get_all_items()
-    paginator = Paginator(all_items, 6)
+    paginator = Paginator(all_items, 5)
     page = request.GET.get('page', 1)
     page_obj = paginator.get_page(page)
 

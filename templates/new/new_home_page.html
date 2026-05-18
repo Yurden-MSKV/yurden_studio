@@ -26,7 +26,7 @@
             const paginationData = document.getElementById('pagination-data');
             if (paginationData) {
                 const nextPage = paginationData.dataset.next;
-                console.log('Следующая страница:', nextPage)
+                {#console.log('Следующая страница:', nextPage)#}
                 hasMore = nextPage && nextPage !== '0';
             } else {
                 hasMore = false;
@@ -51,12 +51,17 @@
                 return;
             }
 
-            const scrollY = window.scrollY;
-            const windowHeight = window.innerHeight;
-            const feedCont = document.getElementById('home-container')
-            const documentHeight = feedCont.scrollHeight;
+            {#const scrollY = window.scrollY;#}
+            {#const windowHeight = window.innerHeight;#}
+            {#const feedCont = document.getElementById('home-container')#}
+            {#const documentHeight = feedCont.scrollHeight;#}
 
-            if (scrollY + windowHeight > documentHeight * 0.6) {
+            const container = document.getElementById('home-container');
+            const scrollTop = container.scrollTop;
+            const clientHeight = container.clientHeight;
+            const scrollHeight = container.scrollHeight;
+
+            if (scrollTop + clientHeight > scrollHeight * 0.9) {
                 isLoading = true;
 
                 const nextPageNum = currentPage + 1;
