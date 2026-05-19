@@ -19,19 +19,19 @@
         Конец ленты
     </div>
 
-{#    <script>#}
-{#        const container = document.getElementById('home-container');#}
-{#        if (container) {#}
-{#            console.log('Есть такой блок!')#}
-{#        }#}
-{##}
-{#        container.addEventListener('scroll', function() {#}
-{#            if (container.scrollTop + container.clientHeight > container.scrollHeight * 0.9 ) {#}
-{#                console.log('Трекаю скролл!')#}
-{#            }#}
-            {#console.log(container.scrollTop)#}
-{#        })#}
-{#    </script>#}
+    {#    <script>#}
+    {#        const container = document.getElementById('home-container');#}
+    {#        if (container) {#}
+    {#            console.log('Есть такой блок!')#}
+    {#        }#}
+    {##}
+    {#        container.addEventListener('scroll', function() {#}
+    {#            if (container.scrollTop + container.clientHeight > container.scrollHeight * 0.9 ) {#}
+    {#                console.log('Трекаю скролл!')#}
+    {#            }#}
+    {#console.log(container.scrollTop)#}
+    {#        })#}
+    {#    </script>#}
 
     <script>
 
@@ -42,143 +42,196 @@
             console.log('Есть home')
         }
 
+
         function checkNextPage() {
             let paginationData = document.getElementById(`pagination-data-${nextPageNum}`);
             if (paginationData) {
                 let nextPage = paginationData.dataset.next;
-                console.log(nextPage);
+                {#console.log('Следующая страница:', nextPage);#}
                 hasMore = nextPage !== '0';
+                if (hasMore === true) {
+                    nextPageNum = nextPage;
+                    {#console.info('Сервер получит номер следующей страницы:', nextPageNum)#}
                 }
+                console.log(hasMore)
+            }
+            {# NOTE: Если вызвать функцию, она вернёт эту переменную #}
+            return hasMore;
         }
 
+        {#checkNextPage();#}
 
+        console.info(container.scrollTop, '||', container.clientHeight, '||', container.scrollHeight)
+
+        function loadFeed() {
+            {#console.info('HTMX-функция получила номер страницы:', nextPageNum)#}
+            htmx.ajax(`GET`, `/new-home/?page=${nextPageNum}`, {
+                target: `#home-container`,
+                swap: `beforeend`,
+                headers: {'HX-Request': 'true'}
+            })
+        }
+
+        function showEndMessage() {
+            const endMessage = document.getElementById('end-message');
+            if (endMessage) {
+                endMessage.style.display = 'block';
+            }
+        }
+
+        if (checkNextPage()) {
+            console.log('Запуск стартовой проверки');
+            loadFeed();
+        } else {
+            showEndMessage()
+        }
+
+        {#if (container.clientHeight === container.scrollHeight) {#}
+        {#    if (checkNextPage()) {#}
+        {#        loadFeed();#}
+        {#    }#}
+        {# }#}
+
+
+        container.addEventListener('scroll', function() {
+            if (container.scrollTop + container.clientHeight > container.scrollHeight * 0.9) {
+                if (checkNextPage()) {
+                    loadFeed();
+                } else {
+                    showEndMessage()
+                }
+            }
+        })
+
+
+        {#loadFeed();#}
 
     </script>
 
-{#     <script>#}
-        {# Переменная для страницы #}
-{#        let nextPageNum = 1;#}
-{##}
-        {# Переменная для поиска следующих записей #}
-{#        let hasMore = true;#}
-{##}
-        {# Контейнер, где прокручиваются элементы #}
-{#        const container = document.getElementById('home-container');#}
-{##}
-        {# Проверка наличия следующей главы #}
-{#        function checkNextPage() {#}
-{#            const paginationData = document.getElementById('pagination-data');#}
-{#            if (paginationData) {#}
-{#                const nextPage = paginationData.dataset.next;#}
-{#                paginationData.remove();#}
-{#                console.log('Следующая страница:', nextPage);#}
-{#                hasMore = nextPage && nextPage !== '0';#}
-{#                console.log(hasMore)#}
-{#            } else {#}
-{#                hasMore = false;#}
-{#            }#}
-{#            return hasMore;#}
-{#        }#}
-{##}
-{#        function showEndMessage() {#}
-{#            const endMessage = document.getElementById('end-message');#}
-{#            if (endMessage) {#}
-{#                endMessage.style.display = 'block';#}
-{#            }#}
-{#        }#}
-{##}
-{#        checkNextPage();#}
-{#        function loadContent() {#}
-{#            if (container.scrollTop + container.clientHeight >= container.scrollHeight * 0.5) {#}
-{#                console.log('Есть трек!')#}
-{#                console.log(container.scrollTop + container.clientHeight, '>', container.scrollHeight * 0.5)#}
-{##}
-{#                nextPageNum += 1;#}
-{#                console.log(`Загрузка страницы ${nextPageNum}...`);#}
-{##}
-{#                htmx.ajax('GET', `/new-home/?page=${nextPageNum}`, {#}
-{#                        target: `#home-container`,#}
-{#                        swap: `beforeend`,#}
-{#                        headers: {'HX-Request': 'true'},#}
-{#                    }#}
-{#                )#}
-{##}
-                {#fetch(`?page=${nextPageNum}`, {#}
-                {#    headers: {'HX-Request': 'true'}#}
-                {# }) #}
-                {#.then(response => response.text())#}
-                {#.then(html => {#}
-                {#    const temp = document.createElement('div');#}
-                {#    temp.innerHTML = html;#}
-                {##}
-                {#    const postElements = temp.querySelectorAll('h1, p, .post-item');#}
-                {##}
-                {#    if (postElements.length > 0) {#}
-                {#        const mainCont = document.getElementById('home-container');#}
-                {##}
-                {#        postElements.forEach(el => {#}
-                {#            mainCont.appendChild(el.cloneNode(true));#}
-                {#        });#}
-                {##}
-                {#        currentPage = nextPageNum;#}
-                {##}
-                {#        const newPaginationData = temp.querySelector('#pagination-data');#}
-                {#        if (newPaginationData) {#}
-                {#            const oldPaginationData = document.getElementById('pagination-data');#}
-                {#            if (oldPaginationData) {#}
-                {#                oldPaginationData.dataset.next = newPaginationData.dataset.next;#}
-                {#            }#}
-                {##}
-                {#            const nextPage = newPaginationData.dataset.next;#}
-                {#            hasMore = nextPage && nextPage !== '0';#}
-                {##}
-                {#            if (!hasMore) {#}
-                {#                showEndMessage();#}
-                {#            }#}
-                {#        } else {#}
-                {#            hasMore = false;#}
-                {#            showEndMessage();#}
-                {#        }#}
-                {##}
-                {#    } else {#}
-                {#        hasMore = false;#}
-                {#        showEndMessage();#}
-                {#    }#}
-                {##}
-                {#    isLoading = false;#}
-                {#    if (indicator) indicator.style.display = 'none';#}
-                {# })#}
-                {#.catch(error => {#}
-                {#    console.error('❌ Ошибка загрузки:', error);#}
-                {#    isLoading = false;#}
-                {#    if (indicator) indicator.style.display = 'none';#}
-                {# });#}
-                {# } #}
-{#            }#}
-{##}
-{#            checkNextPage();#}
-{#        }#}
-{##}
-{#        console.log(container.scrollTop)#}
-{#        console.log(container.clientHeight)#}
-{#        console.log(container.scrollHeight * 0.9)#}
-{##}
-        {#while (container.scrollTop + container.clientHeight >= container.scrollHeight) {#}
-{#            loadContent();#}
-{#            loadContent();#}
-        {# }#}
-{##}
-{#        container.addEventListener('scroll', function() {#}
-{#            console.log('Есть реакция!')#}
-{#            console.log(container.scrollTop + container.clientHeight, '>', container.scrollHeight * 0.5)#}
-{#            if (!hasMore) {#}
-{#                console.log('Больше ничего нет')#}
-{#                showEndMessage();#}
-{#            } else {#}
-{#                console.log('Должно что-то грузиться')#}
-{#                loadContent();#}
-{#            }#}
-{#        });#}
-{#    </script>#}
+    {#     <script>#}
+    {# Переменная для страницы #}
+    {#        let nextPageNum = 1;#}
+    {##}
+    {# Переменная для поиска следующих записей #}
+    {#        let hasMore = true;#}
+    {##}
+    {# Контейнер, где прокручиваются элементы #}
+    {#        const container = document.getElementById('home-container');#}
+    {##}
+    {# Проверка наличия следующей главы #}
+    {#        function checkNextPage() {#}
+    {#            const paginationData = document.getElementById('pagination-data');#}
+    {#            if (paginationData) {#}
+    {#                const nextPage = paginationData.dataset.next;#}
+    {#                paginationData.remove();#}
+    {#                console.log('Следующая страница:', nextPage);#}
+    {#                hasMore = nextPage && nextPage !== '0';#}
+    {#                console.log(hasMore)#}
+    {#            } else {#}
+    {#                hasMore = false;#}
+    {#            }#}
+    {#            return hasMore;#}
+    {#        }#}
+    {##}
+    {#        function showEndMessage() {#}
+    {#            const endMessage = document.getElementById('end-message');#}
+    {#            if (endMessage) {#}
+    {#                endMessage.style.display = 'block';#}
+    {#            }#}
+    {#        }#}
+    {##}
+    {#        checkNextPage();#}
+    {#        function loadContent() {#}
+    {#            if (container.scrollTop + container.clientHeight >= container.scrollHeight * 0.5) {#}
+    {#                console.log('Есть трек!')#}
+    {#                console.log(container.scrollTop + container.clientHeight, '>', container.scrollHeight * 0.5)#}
+    {##}
+    {#                nextPageNum += 1;#}
+    {#                console.log(`Загрузка страницы ${nextPageNum}...`);#}
+    {##}
+    {#                htmx.ajax('GET', `/new-home/?page=${nextPageNum}`, {#}
+    {#                        target: `#home-container`,#}
+    {#                        swap: `beforeend`,#}
+    {#                        headers: {'HX-Request': 'true'},#}
+    {#                    }#}
+    {#                )#}
+    {##}
+    {#fetch(`?page=${nextPageNum}`, {#}
+    {#    headers: {'HX-Request': 'true'}#}
+    {# }) #}
+    {#.then(response => response.text())#}
+    {#.then(html => {#}
+    {#    const temp = document.createElement('div');#}
+    {#    temp.innerHTML = html;#}
+    {##}
+    {#    const postElements = temp.querySelectorAll('h1, p, .post-item');#}
+    {##}
+    {#    if (postElements.length > 0) {#}
+    {#        const mainCont = document.getElementById('home-container');#}
+    {##}
+    {#        postElements.forEach(el => {#}
+    {#            mainCont.appendChild(el.cloneNode(true));#}
+    {#        });#}
+    {##}
+    {#        currentPage = nextPageNum;#}
+    {##}
+    {#        const newPaginationData = temp.querySelector('#pagination-data');#}
+    {#        if (newPaginationData) {#}
+    {#            const oldPaginationData = document.getElementById('pagination-data');#}
+    {#            if (oldPaginationData) {#}
+    {#                oldPaginationData.dataset.next = newPaginationData.dataset.next;#}
+    {#            }#}
+    {##}
+    {#            const nextPage = newPaginationData.dataset.next;#}
+    {#            hasMore = nextPage && nextPage !== '0';#}
+    {##}
+    {#            if (!hasMore) {#}
+    {#                showEndMessage();#}
+    {#            }#}
+    {#        } else {#}
+    {#            hasMore = false;#}
+    {#            showEndMessage();#}
+    {#        }#}
+    {##}
+    {#    } else {#}
+    {#        hasMore = false;#}
+    {#        showEndMessage();#}
+    {#    }#}
+    {##}
+    {#    isLoading = false;#}
+    {#    if (indicator) indicator.style.display = 'none';#}
+    {# })#}
+    {#.catch(error => {#}
+    {#    console.error('❌ Ошибка загрузки:', error);#}
+    {#    isLoading = false;#}
+    {#    if (indicator) indicator.style.display = 'none';#}
+    {# });#}
+    {# } #}
+    {#            }#}
+    {##}
+    {#            checkNextPage();#}
+    {#        }#}
+    {##}
+    {#        console.log(container.scrollTop)#}
+    {#        console.log(container.clientHeight)#}
+    {#        console.log(container.scrollHeight * 0.9)#}
+    {##}
+    {#while (container.scrollTop + container.clientHeight >= container.scrollHeight) {#}
+    {#            loadContent();#}
+    {#            loadContent();#}
+    {# }#}
+    {##}
+    {#        container.addEventListener('scroll', function() {#}
+    {#            console.log('Есть реакция!')#}
+    {#            console.log(container.scrollTop + container.clientHeight, '>', container.scrollHeight * 0.5)#}
+    {#            if (!hasMore) {#}
+    {#                console.log('Больше ничего нет')#}
+    {#                showEndMessage();#}
+    {#            } else {#}
+    {#                console.log('Должно что-то грузиться')#}
+    {#                loadContent();#}
+    {#            }#}
+    {#        });#}
+    {#    </script>#}
 
 {% endblock %}
