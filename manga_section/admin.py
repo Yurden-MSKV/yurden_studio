@@ -91,8 +91,8 @@ class VolumeInline(admin.TabularInline):
 
 @admin.register(Manga)
 class MangaAdmin(admin.ModelAdmin):
-    list_display = ['manga_name', 'get_genres', 'get_authors']
-    filter_horizontal = ['genres', 'authors']
+    list_display = ['manga_name', 'get_genres', 'get_authors', 'get_artists']
+    filter_horizontal = ['genres', 'authors', 'artists']
     search_fields = ['manga_name']
 
     def get_genres(self, obj):
@@ -108,6 +108,13 @@ class MangaAdmin(admin.ModelAdmin):
         return "Автор не указан"
 
     get_authors.short_description = 'Авторы'
+
+    def get_artists(self, obj):
+        if obj.artists.exists():
+            return ", ".join([artist.author_name for artist in obj.artists.all()])
+        return "Художник не указан"
+
+    get_artists.short_description = 'Художники'
 
     inlines = [VolumeInline]
 

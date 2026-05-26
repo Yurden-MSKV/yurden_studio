@@ -1,0 +1,84 @@
+{% extends 'new/new_top_panel.html' %}
+
+{% load static %}
+{% load nbsp_filters %}
+
+{% block title %}
+    <title>{{ manga.manga_page }}</title>
+{% endblock %}
+
+{% block content %}
+    <div class="main_container">
+        <div class="manga_container">
+            <div class="info_block">
+                <div class="name">
+                    <h2>{{ manga.manga_name }}</h2>
+                </div>
+                <div class="description">
+                    <p>{{ manga.description|add_nbsp }}</p>
+                </div>
+                <div class="genres">
+                    <h4 class="block_title">Жанры:</h4>
+                    <div class="genres_block">
+                        {% for genre in genres %}
+                            <p class="list_element">{{ genre.genre_name }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="authors">
+                    <h4 class="block_title">Автор:</h4>
+                    {% for author in authors %}
+                        <p class="list_element">{{ author.author_name }}</p>
+                    {% endfor %}
+                </div>
+                <div class="artists">
+                    <h4 class="block_title">Художник:</h4>
+                    {% for artist in artists %}
+                        <p class="list_element">{{ artist.author_name }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="volumes_container">
+                {% for volume in volumes %}
+                    <div class="volume_block">
+                        <div class="volume_cover">
+                            <img src="{{ volume.vol_cover.url }}">
+                        </div>
+                        <div class="volume_content">
+                            <div class="volume_number">
+                                <h3>Том {{ volume.vol_number }}</h3>
+                            </div>
+                            <div class="chapters_container">
+                                {% for chapter in volume.chapters.all %}
+                                    <div class="chapter_block">
+                                        {% with last_readen=viewed_chapters_dates|last %}
+                                        <div class="chapter_link {% if chapter.id in viewed_chapters and chapter.id == last_readen %} last {% elif chapter.id in viewed_chapters and chapter.id != last_readen %} viewed {% endif %}">
+                                            <a href="{% url 'chapter-page' manga_slug=manga.manga_slug ch_number=chapter.get_chapter_display %}">
+                                                <div class="ch_number">
+                                                    <h4>Глава {{ chapter.get_chapter_display }}</h4>
+                                                </div>
+                                                <div class="ch_name">
+                                                    <p>{{ chapter.ch_name|add_nbsp|safe }}</p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        {% endwith %}
+                                        <div class="chapter_rating">
+                                            {% if chapter.id in user_rates %}
+                                                <img class="rate_icon icon" src="{% static 'manga_section/icons/star-solid-full.svg' %}">
+                                            {% else %}
+                                                <img class="rate_icon icon" src="{% static 'manga_section/icons/star-regular-full.svg' %}">
+                                            {% endif %}
+                                            <p>{{ chapter.rate_percentage }}%</p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

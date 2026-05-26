@@ -1,0 +1,118 @@
+@media (min-width: 300px) {
+    .main_container {
+        position: absolute;
+        top: 8%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 95%;
+        height: 90%;
+        color: var(--text-color);
+        overflow: hidden;
+    }
+    .main_block {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+        overflow: auto !important;
+        scrollbar-width: none;
+        max-height: 100%;
+    }
+    .post_container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+        padding: 6px 10px;
+        background: var(--block-color);
+        border-radius: 5px
+    }
+    .post_info_block {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+    }
+    .name_n_date {
+        display: flex;
+        flex-direction: column;
+        gap: 0.1em;
+    }
+    .date {
+        display: flex;
+        /*margin-left: auto;*/
+        font-size: 0.7rem;
+        font-weight: 100;
+    }
+    .tags_block {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5em;
+    }
+    .comments_container {
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+    }
+    .message_block {
+        background: none;
+        border: 2px dashed var(--text-color);
+        padding: 6px;
+        min-width: 100%;
+        max-width: 100%;
+        min-height: 50px;
+        border-radius: 5px;
+        box-sizing: border-box;
+        color: var(--text-color);
+        outline: none;
+    }
+    .comment_form {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+    }
+    .send_block {
+        display: flex;
+        margin-left: auto;
+        width: fit-content;
+    }
+    .send_btn {
+        background: none;
+        color: var(--text-color);
+        border-radius: 5px;
+        border: 1px solid var(--text-color);
+        padding: 2px 6px;
+        /* font-weight: 500; */
+        font: 500 1rem 'Ubuntu';
+    }
+    .comments_block {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+    }
+    .comment {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+        background: #121212;
+        border-radius: 5px;
+        padding: 6px;
+    }
+    .user_date {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .user {
+        display: flex;
+        flex-direction: row;
+        gap: 0.1em;
+    }
+    .post_profile_icon {
+        width: 1.2rem !important
+    }
+    .comment_text {
+        padding: 0 4px;
+    }
+    .date p {
+        display: flex;
+        align-items: center;
+    }
+}

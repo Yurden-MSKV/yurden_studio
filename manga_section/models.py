@@ -39,7 +39,11 @@ class Manga(models.Model):
     genres = models.ManyToManyField(Genre,
                                     verbose_name='Жанр')
     authors = models.ManyToManyField(Author,
+                                     related_name='manga_as_author',
                                      verbose_name='Автор')
+    artists = models.ManyToManyField(Author,
+                                     related_name='manga_as_artist',
+                                     verbose_name='Художник')
     description = models.TextField(verbose_name='Описание')
 
     def get_latest_volume_cover(self):

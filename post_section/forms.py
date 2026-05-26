@@ -1,6 +1,6 @@
 from django import forms
 
-from post_section.models import MessageFAQ
+from post_section.models import MessageFAQ, PostComment
 
 
 class FAQform(forms.ModelForm):
@@ -11,4 +11,13 @@ class FAQform(forms.ModelForm):
         fields = ['message']
         widgets = {
             'text': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
+        }
+
+
+class PostCommentForm(forms.ModelForm):
+    class Meta:
+        model = PostComment
+        fields = ['text']
+        widgets = {
+            'text': forms.Textarea(attrs={'rows': 4}),
         }

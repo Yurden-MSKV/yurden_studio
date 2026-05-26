@@ -41,7 +41,7 @@ def manga_page(request, slug):
     ), manga_slug=slug)
 
     # Получаем тома, отсортированные по номеру
-    volumes = manga.volumes.all().order_by('vol_number')
+    volumes = manga.volumes.all().order_by('vol_number').prefetch_related('chapters')
 
     user_rates_list = list(
         ChapterLike.objects.filter(user=request.user, manga=manga).values_list('chapter_id', flat=True))
@@ -53,10 +53,13 @@ def manga_page(request, slug):
         is_view=True
     ).order_by('view_date').values_list('chapter_id', flat=True))
 
+    last_viewed_chapter = ChapterView.objects.filter(user=request.user, manga=manga, is_view=True,).order_by('-view_date').prefetch_related('chapter').first()
+
     viewed_chapters = set(viewed_chapters_dates)
 
     genres = manga.genres.all()
     authors = manga.authors.all()
+    artists = manga.artists.all()
 
     if request.user.username == 'yurden':
         message_cnt = message_count(request)
@@ -65,15 +68,16 @@ def manga_page(request, slug):
 
     context = {
         'manga': manga,
-        'volumes': volumes,  # Добавляем тома в контекст
+        'volumes': volumes,
         'genres': genres,
         'authors': authors,
+        'artists': artists,
         'viewed_chapters_dates': viewed_chapters_dates,
         'viewed_chapters': viewed_chapters,
         'user_rates': user_rates,
         'messages_cnt': message_cnt,
     }
-    return render(request, 'manga_page.html', context)
+    return render(request, 'new/new_manga_page.html', context)
 
 
 @ensure_csrf_cookie
@@ -203,16 +207,17 @@ def new_reader(request, manga_slug, ch_number):
     chapter_number_decimal = Decimal(ch_number)
     chapter = get_object_or_404(Chapter.objects.filter(volume__manga=manga), ch_number=chapter_number_decimal)
 
-    if not request.user.is_superuser:
-        chapter_view, created = ChapterView.objects.update_or_create(
-            user=request.user,
-            chapter=chapter,
-            manga=manga,
-            defaults={
-                'is_view': True,
-                'view_date': timezone.now()  # Всегда обновляем дату
-            }
-        )
+    # TODO: вернуть это условие!!!
+    # if not request.user.is_superuser:
+    chapter_view, created = ChapterView.objects.update_or_create(
+        user=request.user,
+        chapter=chapter,
+        manga=manga,
+        defaults={
+            'is_view': True,
+            'view_date': timezone.now()  # Всегда обновляем дату
+        }
+    )
 
     prev_chapter = Chapter.objects.filter(
         volume__manga=manga,

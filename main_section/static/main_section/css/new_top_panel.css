@@ -76,12 +76,29 @@ button {
     .menu-icon-mobile.show {
         display: flex;
     }
+    .shadow {
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1;
+        position: absolute;
+        top: 6vh;
+        left: 0;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s
+    }
+    .shadow.show {
+        opacity: 1;
+        pointer-events: auto;
+        transition: opacity 0.3s
+    }
     .profile_menu_mobile {
         display: flex;
         flex-direction: column;
         gap: 1.2rem;
         position: fixed;
-        top: 3em;
+        top: 3.2em;
         right: 0;
         width: 80%;
         height: fit-content;
@@ -93,6 +110,7 @@ button {
         transform: scale(0.7); /* Уменьшенный */
         transform-origin: top right;
         pointer-events: none;
+        z-index: 2;
     }
     .profile_menu_mobile.show {
         opacity: 1;

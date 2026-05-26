@@ -6,4 +6,5 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.post_catalog, name='post-catalog'),
     path('<slug:post_slug>/', views.post_page, name='post-page'),
+    path('<int:id>/comments/', views.find_post_comments, name='find_post_comments'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -7,6 +7,8 @@
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'main_section/css/new_top_panel.css' %}">
     <link rel="stylesheet" href="{% static 'main_section/css/new_home_page.css' %}">
+    <link rel="stylesheet" href="{% static 'manga_section/css/new_manga_page.css' %}">
+    <link rel="stylesheet" href="{% static 'post_section/css/new_post_page.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
     <script>
@@ -197,6 +199,7 @@
                         <a class="link" href="{% url 'info' %}"><h3>ЧаВо</h3></a>
                     </div>
                 </div>
+                <div class="shadow" id="shadow"></div>
 {##}
                 <script>
                     const menuUsual = document.getElementById('menuUsual');
@@ -204,14 +207,17 @@
 
                     function toggleMenuMobile() {
                         const menu = document.getElementById('userMenuMobile');
+                        const shadow = document.getElementById('shadow');
                         // Одновременно переключаем обе иконки и меню
                         menuUsual.classList.toggle('show');
                         menuActive.classList.toggle('show');
                         menu.classList.toggle('show');
+                        shadow.classList.toggle('show');
                     }
 
                     document.addEventListener('click', function(event) {
                         const menu = document.getElementById('userMenuMobile');
+                        const shadow = document.getElementById('shadow');
                         const button = document.querySelector('.profile_menu_btn_mobile');
 
                         if (!menu.contains(event.target) && !button.contains(event.target)) {
@@ -219,6 +225,7 @@
                             menuActive.classList.remove('show');
                             menuUsual.classList.add('show');   // именно add, не toggle
                             menu.classList.remove('show');
+                            shadow.classList.remove('show');
                         }
                     });
                 </script>

@@ -1,0 +1,114 @@
+@media (min-width: 300px) {
+    .main_container {
+        position: absolute;
+        top: 8%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 95%;
+        height: 90%;
+        color: var(--text-color);
+        overflow: hidden;
+    }
+
+    .manga_container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4em;
+        overflow: auto !important;
+        scrollbar-width: none;
+        max-height: 100%;
+    }
+
+    .info_block, .volumes_container {
+        display: flex;
+        flex-direction: column;
+        background: var(--block-color);
+        border-radius: 5px;
+        padding: 6px 10px;
+        gap: 0.5em;
+    }
+
+    .volumes_container {
+        background: none !important;
+        padding: 0 !important;
+    }
+
+    .genres, .genres_block, .authors, .artists {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5em;
+        align-items: center;
+    }
+
+    .list_element {
+        background: var(--element-color);
+        border-radius: 5px;
+        padding: 2px 5px;
+        font-weight: 100;
+        font-size: 0.8rem
+    }
+
+    .volume_block {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5em;
+        padding: 6px 10px;
+        background: var(--block-color);
+        border-radius: 5px;
+    }
+
+    .volume_cover {
+        height: fit-content;
+        width: fit-content;
+    }
+
+    .volume_cover img {
+        width: 6rem;
+        height: fit-content;
+        border-radius: 5px;
+    }
+
+    .volume_content, .chapters_container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6em;
+        width: 100%;
+    }
+
+    .chapters_container {
+        gap: 1em !important;
+    }
+
+    .chapter_block {
+        margin-left: 2px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .chapter_link {
+        border-left: 2px dashed var(--text-color);
+        padding-left: 5px
+    }
+
+    .viewed {
+        border-left: 2px solid var(--text-color);
+        padding-left: 5px
+    }
+
+    .last {
+        border-left: 2px solid #FFCC00;
+        padding-left: 5px
+    }
+
+    .rate_icon {
+        width: 1rem
+    }
+
+    .chapter_rating {
+        display: flex;
+        flex-direction: row;
+        gap: 0.1em;
+        align-items: center;
+    }
+}

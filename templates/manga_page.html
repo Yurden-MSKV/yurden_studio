@@ -79,8 +79,7 @@
     {#                                                        <img class="is_read" src=#}
     {#                                                                "{% static 'manga_section/icons/is_view.svg' %}">#}
                                                         {% elif chapter.id in viewed_chapters and chapter.id == last_readen %}
-                                                            <img class="last_read svg-icon" src=
-                                                                    "{% static 'manga_section/icons/last_read.svg' %}">
+                                                            <img class="last_read svg-icon" src="{% static 'manga_section/icons/last_read.svg' %}">
                                                         {% endif %}
                                                     {% endwith %}
                                                 </div>
