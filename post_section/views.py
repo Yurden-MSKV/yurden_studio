@@ -72,7 +72,7 @@ def find_post_comments(request, id):
             'comments': comments
         }
 
-        return render(request, 'new/partials/comments_block.html', context)
+        return render(request, 'new/partials/post_comments_block.html', context)
 
     else:
         form = PostCommentForm()
@@ -84,7 +84,7 @@ def find_post_comments(request, id):
             'comments': comments
         }
 
-        return render(request, 'new/partials/comments_block.html', context)
+        return render(request, 'new/partials/post_comments_block.html', context)
 
 def comment_reply(request, post_id, comment_id):
     post = get_object_or_404(Post, id=post_id)
@@ -109,7 +109,7 @@ def comment_reply(request, post_id, comment_id):
                 'comments': comments,
             }
 
-            return render(request, 'new/partials/comments_block.html', context)
+            return render(request, 'new/partials/post_comments_block.html', context)
 
         else:
             print(f"Form errors: {form.errors}")

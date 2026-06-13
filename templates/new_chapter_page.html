@@ -897,5 +897,13 @@
         const debouncedGoToPreviousDouble = debounce(goToPreviousDouble, 150);
     </script>
 
+    <script>
+        function pageScrollDown() {
+            setTimeout(() => {
+                document.getElementById(`comments_list`).scrollIntoView({behavior: 'smooth', block: 'end'});
+            }, 150)
+        }
+    </script>
+
 </body>
 </html>
