@@ -1,5 +1,5 @@
-@import url('../../../../static/css/themes.css');
-@import url('../../../../static/css/text.css');
+@import url('../../../../static/css/new_themes.css');
+@import url('../../../../static/css/new_text.css');
 
 /*@import url('../../../../static/css/text-mobile.css');*/
 
@@ -73,37 +73,41 @@ body, html {
     }
     .author {
         font-weight: bold;
-        font-size: 3.5vw !important;
+        /*font-size: 3.5vw !important;*/
     }
     .comment_date {
-        font-size: 2.5vw !important;
-        padding-top: 5px
+        /*font-size: 2.5vw !important;*/
+        /*padding-top: 5px*/
+        font: 100 0.55rem 'Ubuntu';
+    }
+    .comment_content {
+        width: 99%;
+        margin: 0 auto;
     }
     .comment_text {
-        font-size: 3.5vw !important;
+        font-size: 0.8rem !important;
     }
     .no_comments p {
         font-size: 3.5vw !important;
         font-style: italic;
     }
     .page_number.mobile p {
-        font-size: 3.5vw !important;
+        font-size: 0.8rem !important;
     }
     .comment_area {
-        font-size: 30px !important;
+        /*font-size: 30px !important;*/
     }
     .send_comment_block {
         width: fit-content;
         margin: 10px 10px 10px auto;
     }
     .send_comment {
-        background: none;
+        background: var(--comment-element);
         color: var(--text-color);
-        font: bold 3.5vw "Nunito" !important;
-        border: none;
-        box-shadow: 0 0 4px var(--hover-color);
+        font: 700 0.8rem "Ubuntu" !important;
+        border: 1px solid var(--text-color);
         border-radius: 5px;
-        padding: 5px 10px;
+        padding: 2px 7px;
     }
     .comment_info img {
         filter: var(--icon-color);
@@ -139,14 +143,18 @@ body, html {
     .comment_buttons {
         display: flex;
         flex-direction: row;
-        align-items: center;
+        /*align-items: center;*/
+        gap: 5px;
+        padding-top: 3px;
+        margin-left: auto;
     }
-    .comment_buttons button {
-        width: 7vw !important;
-        height: 7vw !important;
+    .comment_buttons button, .reply_button {
+        width: fit-content;
+        height: fit-content;
         background: none;
         border: none;
-        filter: var(--icon-color)
+        /*filter: var(--icon-color);*/
+        padding: 0;
     }
 
 }
@@ -292,7 +300,7 @@ body, html {
         height: 28px;
         background: none;
         border: none;
-        filter: var(--icon-color)
+        /*filter: var(--icon-color)*/
     }
 }
 
@@ -453,10 +461,10 @@ body, html {
     top: 5%;
     right: 5%;
     width: 90%;
-    height: 80%;
+    height: 82%;
     position: absolute;
-    background: rgba(75, 75, 75, 0.95);
-    border-radius: 10px;
+    background: var(--comment-window);
+    border-radius: 5px;
     justify-content: center;
     flex-direction: column;
     gap: 10px
@@ -501,13 +509,13 @@ body, html {
 .comments_list {
     display: flex;
     flex-direction: column;
-    width: 93%;
+    width: 95%;
     height: 80%;
     /*border: 2px solid white;*/
     margin: 0 auto;
     gap: 1.5vh;
     overflow: auto;
-    box-shadow: 0 0 4px var(--hover-color);
+    /*box-shadow: 0 0 4px var(--hover-color);*/
     padding: 5px;
     scrollbar-width: none;
 
@@ -538,16 +546,29 @@ body, html {
 }
 
 .comment_area {
-    width: 93%;
+    width: 95%;
     padding: 5px;
     margin: 0 auto;
-    border: none;
-    box-shadow: 0 0 4px var(--hover-color);
-    background: none;
+    background: var(--comment-element);
     resize: none;
     color: var(--text-color);
-    font-family: "Nunito" !important;
-    font-size: 1.9vh !important;
+    font: 0.8rem 'Ubuntu' !important;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: 2px dashed var(--text-color);
+}
+
+.edit_form {
+    padding: 5px 0;
+}
+
+.edit_form .comment_area, .reply_form .message_block {
+    width: 100%
+}
+
+.edit_form .send_comment_block {
+    width: fit-content;
+    margin: 10px 0 1px auto;
 }
 
 .comment_area:focus-visible {
@@ -739,13 +760,42 @@ body, html {
 
 .comment_element {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
+    padding: 5px;
+    background: var(--comment-element);
+    border-radius: 5px;
+    gap: 5px;
+    font: 0.8rem 'Ubuntu'
 }
 
-.comment_edit:hover {
-    filter: invert(79%) sepia(42%) saturate(3057%) hue-rotate(0deg) brightness(107%) contrast(104%);
+.comment_top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
-.comment_remove:hover {
-    filter: invert(11%) sepia(77%) saturate(6437%) hue-rotate(2deg) brightness(91%) contrast(115%);
+.double_block, .double_first, .double_last {
+    display: flex;
+}
+
+.reverse {
+    flex-direction: row-reverse;
+}
+
+.icon {
+    width: 0.9rem;
+    filter: var(--icon-color);
+}
+
+.reply_button p {
+    color: var(--text-color);
+    font: 700 0.7rem 'Ubuntu';
+    line-height: 1.3;
+}
+
+.reply_button {
+    display: flex;
+    flex-direction: row;
+    gap: 3px
 }

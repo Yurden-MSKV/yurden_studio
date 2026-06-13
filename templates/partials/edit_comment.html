@@ -1,5 +1,5 @@
 <form id="comment-form-{{ comment.page.id }}"
-      class="comment_form"
+      class="comment_form edit_form"
       hx-post="{% url 'edit-comment' comment.id %}"
       hx-target="#comments-page-list-{{ comment.page.id }}"
       hx-swap="innerHTML"

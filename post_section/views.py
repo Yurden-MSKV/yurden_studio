@@ -1,8 +1,9 @@
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 
 from main_section.views import message_count
 from post_section.forms import PostCommentForm
-from post_section.models import Post
+from post_section.models import Post, PostComment
 
 
 def post_catalog(request):
@@ -49,7 +50,7 @@ def post_page(request, post_slug):
 
 def find_post_comments(request, id):
     post = get_object_or_404(Post, id=id)
-    comments = post.comments.all().order_by('-created_at')
+    comments = post.comments.all().order_by('created_at')
 
     if request.method == 'POST':
         form = PostCommentForm(request.POST)
@@ -60,7 +61,7 @@ def find_post_comments(request, id):
             comment.save()
             print(comment)
             form = PostCommentForm()
-            comments = post.comments.all().order_by('-created_at')
+            comments = post.comments.all().order_by('created_at')
         else:
             print(f"Form errors: {form.errors}")
 
@@ -84,3 +85,53 @@ def find_post_comments(request, id):
         }
 
         return render(request, 'new/partials/comments_block.html', context)
+
+def comment_reply(request, post_id, comment_id):
+    post = get_object_or_404(Post, id=post_id)
+    parent_comment = get_object_or_404(PostComment, id=comment_id)
+
+    if request.method == "POST":
+        form = PostCommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.parent_comment = parent_comment
+            comment.save()
+            print(comment)
+            form = PostCommentForm()
+            comments = post.comments.all().order_by('created_at')
+
+            context = {
+                'post': post,
+                'post_id': post.id,
+                'form': form,
+                'comments': comments,
+            }
+
+            return render(request, 'new/partials/comments_block.html', context)
+
+        else:
+            print(f"Form errors: {form.errors}")
+            return None
+
+    else:
+        form = PostCommentForm()
+        context = {
+            'post': post,
+            'form': form,
+            'post_id': post.id,
+            'comment_id': parent_comment.id
+        }
+        return render(request, 'new/partials/reply_block.html', context)
+
+
+def show_reply(request, post_id, comment_id):
+    post = get_object_or_404(Post, id=post_id)
+    parent_comment = get_object_or_404(PostComment, id=comment_id)
+
+    context = {
+        'comment': parent_comment
+    }
+
+    return render(request, 'new/partials/parent_comment.html', context)

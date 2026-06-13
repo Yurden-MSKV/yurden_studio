@@ -49,10 +49,10 @@
     .comments_container {
         display: flex;
         flex-direction: column;
-        gap: 1em;
+        /*gap: 1em;*/
     }
     .message_block {
-        background: none;
+        background: var(--background-color);
         border: 2px dashed var(--text-color);
         padding: 6px;
         min-width: 100%;
@@ -62,11 +62,22 @@
         box-sizing: border-box;
         color: var(--text-color);
         outline: none;
+        font: 0.9rem 'Ubuntu';
+    }
+    .form_block {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        width: 100%;
     }
     .comment_form {
         display: flex;
         flex-direction: column;
         gap: 0.5em;
+    }
+    .new_comment {
+        background: var(--background-color);
+        padding-bottom: 0.5em;
     }
     .send_block {
         display: flex;
@@ -74,7 +85,7 @@
         width: fit-content;
     }
     .send_btn {
-        background: none;
+        background: var(--background-color);
         color: var(--text-color);
         border-radius: 5px;
         border: 1px solid var(--text-color);
@@ -94,25 +105,73 @@
         background: #121212;
         border-radius: 5px;
         padding: 6px;
+        position: relative;
+    }
+    .parent_link {
+        border: 1px solid white;
+        position: absolute;
+        z-index: 1;
+        bottom: -0.2em;
+        left: 5em;
+        background: #292929;
+        transition: opacity 0.3s ease-out;
+    }
+    #parent-comment {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease
     }
     .user_date {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        gap: 1em
     }
     .user {
+        display: flex;
+        flex-direction: row;
+        gap: 1em
+    }
+    .user_element {
         display: flex;
         flex-direction: row;
         gap: 0.1em;
     }
     .post_profile_icon {
-        width: 1.2rem !important
+        width: 1.1rem !important
     }
-    .comment_text {
-        padding: 0 4px;
+    .parent_comment {
+        display: flex;
+        flex-direction: row;
+        gap: 0.1em;
+        align-items: center;
+    }
+    .parent_icon {
+        width: 1rem;
+        filter: invert(20%) sepia(0%) saturate(426%) hue-rotate(146deg) brightness(99%) contrast(84%);
+    }
+    .parent_comment p {
+        font-size: 0.75rem;
+        font-weight: 500;
+        height: fit-content;
+        color: #404040;
     }
     .date p {
         display: flex;
         align-items: center;
+    }
+    .comment_text {
+        padding: 0 4px;
+    }
+    .reply_button {
+        display: flex;
+        flex-direction: row;
+        gap: 0.2em;
+        width: fit-content;
+        align-items: center;
+    }
+    .reply_button p {
+        font-family: 'Ubuntu';
+        font-size: 0.9rem
     }
 }

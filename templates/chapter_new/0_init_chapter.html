@@ -1,0 +1,36 @@
+<script>
+    let params = new URLSearchParams(window.location.search);
+    let requestedPage;
+    if (Number(params.get('page')) > 0) {
+        requestedPage = Number(params.get('page'))
+    } else {
+        requestedPage = 1;
+        window.history.pushState({}, '', `${window.location.pathname}?${params}`);
+    }
+    // Принимает человекочитаемый номер
+    let currentSingle = pageRequested;
+    let currentDouble;
+    if (currentSingle % 2 === 0) {
+        currentDouble = (currentSingle + 2) / 2;
+    } else {
+        currentDouble = (currentSingle + 1) / 2;
+    }
+
+    const manga_slug = "{{ manga.manga_slug }}";
+    const next_chapter = {% if next_chapter %}"{{ next_chapter }}"{% else %}null{% endif %};
+    const prev_chapter = {% if prev_chapter %}"{{ prev_chapter }}"{% else %}null{% endif %};
+
+    // Обновление текущего номера страницы в ссылке
+    function updateLink(currentSingle) {
+        let params = new URLSearchParams(window.location.search);
+        params.set('page', currentSingle);
+        window.history.pushState({}, '', `${window.location.pathname}?${params}`);
+    }
+
+    function checkImageOrientation(imgElement) {
+        if (imgElement.complete) { // Изображение уже загружено
+            return imgElement.naturalWidth > imgElement.naturalHeight;
+        }
+        return null; // Ещё не загружено
+    }
+</script>

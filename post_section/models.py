@@ -76,21 +76,6 @@ class MessageFAQ(models.Model):
         verbose_name_plural = 'Предложения'
 
 
-class Thread(models.Model):
-    post = models.ForeignKey(Post,
-                             on_delete=models.CASCADE,
-                             related_name='threads',
-                             verbose_name='Пост')
-    created_at = models.DateTimeField(auto_now_add=True,
-                                      verbose_name='Дата создания')
-    updated_at = models.DateTimeField(auto_now=True,
-                                      verbose_name='Последнее обновление')
-
-    class Meta:
-        verbose_name = 'Ветки'
-        verbose_name_plural = 'Ветки'
-
-
 class PostComment(models.Model):
     post = models.ForeignKey(Post,
                              on_delete=models.CASCADE,
@@ -103,17 +88,12 @@ class PostComment(models.Model):
                                on_delete=models.DO_NOTHING,
                                related_name='post_comments',
                                verbose_name='Автор')
-    thread = models.ForeignKey(Thread,
-                               on_delete=models.CASCADE,
-                               default=None,
-                               blank=True,
-                               null=True,
-                               related_name='comments',
-                               verbose_name='Ветка')
-    parent_comment = models.ManyToManyField('post_section.PostComment',
+    parent_comment = models.ForeignKey('post_section.PostComment',
+                                            on_delete=models.DO_NOTHING,
                                             verbose_name='Родитель',
                                             default=None,
-                                            blank=True)
+                                            blank=True,
+                                            null=True)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True,
                                       verbose_name='Дата создания')

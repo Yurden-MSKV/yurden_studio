@@ -207,6 +207,8 @@ def new_reader(request, manga_slug, ch_number):
     chapter_number_decimal = Decimal(ch_number)
     chapter = get_object_or_404(Chapter.objects.filter(volume__manga=manga), ch_number=chapter_number_decimal)
 
+    # page_number = request.GET.get('page', '1')
+
     # TODO: вернуть это условие!!!
     # if not request.user.is_superuser:
     chapter_view, created = ChapterView.objects.update_or_create(
@@ -235,6 +237,10 @@ def new_reader(request, manga_slug, ch_number):
     while i < len(pages):
         single_page_mode.append(pages[i])
         i += 1
+
+    first_page = single_page_mode[0].page_number
+    last_page = single_page_mode[-1].page_number
+
 
     double_page_mode = []
     i = 0
@@ -283,6 +289,8 @@ def new_reader(request, manga_slug, ch_number):
         'user_rating': user_rating,
         'prev_chapter': prev_chapter.get_chapter_display if prev_chapter else None,
         'next_chapter': next_chapter.get_chapter_display if next_chapter else None,
+        'first_page': first_page,
+        'last_page': last_page,
     }
 
     return render(request, 'new_chapter_page.html', context)
@@ -382,7 +390,7 @@ def rate_chapter(request, manga_slug, ch_number):
 
 def find_comments(request, page_id):
     page = get_object_or_404(ChapterImage, pk=page_id)
-    comments = page.comments.all().order_by('-created_at')
+    comments = page.comments.all().order_by('created_at')
 
     if request.method == 'POST':
         form = CommentForm(request.POST)
@@ -395,7 +403,7 @@ def find_comments(request, page_id):
             comment.save()
             form = CommentForm()
 
-            comments = page.comments.all().order_by('-created_at')
+            comments = page.comments.all().order_by('created_at')
 
             return render(request, 'partials/comments_block.html', {
                 'page': page,
@@ -440,7 +448,7 @@ def edit_comment(request, comment_id):
                 comment.save()
                 page = comment.page
                 page_id = page.id
-                comments = page.comments.all().order_by('-created_at')
+                comments = page.comments.all().order_by('created_at')
                 form = CommentForm()
                 return render(request, 'partials/comments_block.html', {
                     'page': page,
@@ -450,6 +458,59 @@ def edit_comment(request, comment_id):
                 })
         else:
             form = CommentForm(instance=comment)
-            return render(request, 'partials/edit_comment.html',{'form': form, 'comment': comment})
+            return render(request, 'partials/edit_comment.html',{
+                'form': form,
+                'comment': comment
+            })
     else:
         return HttpResponse("<p style='color: red'>Это не твой комментарий.</p>")
+
+def comment_reply(request, comment_id):
+    parent = get_object_or_404(Comment, pk=comment_id)
+    page = parent.page
+
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.manga = page.chapter.volume.manga
+            comment.chapter = page.chapter
+            comment.page = page
+            comment.parent_comment = parent
+            comment.save()
+            print(comment.text)
+            form = CommentForm()
+            comments = page.comments.all().order_by('created_at')
+
+            context = {
+                'page': page,
+                'page_id': page.id,
+                'comments': comments,
+                'form': form,
+            }
+
+            return render(request, 'partials/comments_block.html', context)
+
+        else:
+            print(f"Form errors: {form.errors}")
+            return None
+
+    else:
+        form = CommentForm()
+        context = {
+            'page': page,
+            'comment': parent,
+            'form': form,
+        }
+        return render(request, 'new/partials/chapter_reply_block.html', context)
+
+# def show_reply(request, post_id, comment_id):
+#     post = get_object_or_404(Post, id=post_id)
+#     parent_comment = get_object_or_404(PostComment, id=comment_id)
+#
+#     context = {
+#         'comment': parent_comment
+#     }
+#
+#     return render(request, 'new/partials/parent_comment.html', context)

@@ -1,0 +1,38 @@
+<div class="form_block">
+    <form class="comment_form"
+          hx-post="{% url 'reply' post_id comment_id %}"
+          hx-target="#comments-container"
+          hx-swap="innerHTML"
+          hx-trigger="submit">
+        {% csrf_token %}
+        <textarea class="message_block" type="text" name="text" id="reply-on-{{ comment_id }}" placeholder="Твой ответ" required autofocus></textarea>
+        <div class="send_block">
+            <input onclick="scrollDown()" class="send_btn" type="submit" value="Отправить">
+        </div>
+    </form>
+</div>
+
+<script>
+    document.querySelector('.comment_form')?.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && e.target.tagName === 'TEXTAREA') {
+            if (!e.shiftKey) {
+                e.preventDefault();
+
+                // Для HTMX
+                if (typeof htmx !== 'undefined') {
+                    htmx.trigger(this, 'submit');
+                } else {
+                    this.submit();
+                }
+            }
+        }
+    });
+</script>
+
+<script>
+    function scrollDown() {
+        setTimeout(() => {
+            document.getElementById('comments_block').scrollIntoView({behavior: 'smooth', block: 'end'})
+        }, 150)
+    }
+</script>

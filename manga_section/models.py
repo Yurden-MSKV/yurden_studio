@@ -160,6 +160,12 @@ class Comment(models.Model):
                                on_delete=models.CASCADE,
                                verbose_name='Автор',
                                related_name='comments')
+    parent_comment = models.ForeignKey('manga_section.Comment',
+                                            on_delete=models.DO_NOTHING,
+                                            verbose_name='Родитель',
+                                            default=None,
+                                            blank=True,
+                                            null=True)
     manga = models.ForeignKey(Manga,
                               on_delete=models.CASCADE,
                               verbose_name='Манга',

@@ -7,4 +7,6 @@ urlpatterns = [
     path('', views.post_catalog, name='post-catalog'),
     path('<slug:post_slug>/', views.post_page, name='post-page'),
     path('<int:id>/comments/', views.find_post_comments, name='find_post_comments'),
+    path('<int:post_id>/comments/<int:comment_id>/reply/', views.comment_reply, name='reply'),
+    path('<int:post_id>/comments/<int:comment_id>/', views.show_reply, name='show_reply')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

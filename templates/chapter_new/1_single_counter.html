@@ -1,0 +1,88 @@
+<script>
+    const firstPage = {{ first_page }};
+    const lastPage = {{ last_page }};
+    const totalSingle = {{ single_page_mode|length }};
+    const singlePageNumbers = document.querySelectorAll('.single_page_numbers');
+    const pageSingle = document.querySelectorAll('.single');
+
+
+    function updateSinglePage() {
+        const commentWindow = document.querySelector('.single_comments_container');
+        if (commentWindow.classList.contains('active')) {
+            commentWindow.classList.remove('active');
+            commentWindow.classList.add('hidden');
+        }
+        pageSingle.forEach(page => {
+            page.classList.add('hidden');
+            page.classList.remove('active');
+        });
+        singlePageNumbers.forEach(page => {
+            page.classList.add('hidden');
+            page.classList.remove('active');
+        });
+        pageSingle[currentSingle].classList.remove('hidden');
+        pageSingle[currentSingle].classList.add('active');
+        singlePageNumbers[currentSingle].classList.remove('hidden');
+        singlePageNumbers[currentSingle].classList.add('active');
+        {#console.log(getCurrentPageNumber())#}
+    }
+
+    function goToNextSingle() {
+        if (currentSingle < lastPage) {
+
+            let singleImage = pageSingle.querySelector(`.page[data-page-number="${currentSingle}"]`);
+            let orientation;
+            // Проверка на разворот
+            // NOTE: зачем проверять ориентацию, если у страницы есть поле is_double_page?
+            if (singleImage) {
+                orientation = checkImageOrientation(singleImage);
+            }
+            // Если следующая страница из следующей пары ИЛИ если текущая страница — разворот
+            if (((currentSingle + 1) % 2 === 0) || (orientation)) {
+                currentDouble++;
+            }
+            // Если следующего номера нет, но номер через один — существует и он не последний в списке
+            if (!pageSingle.querySelector(`.page[data-page-number="${currentSingle + 1}"]`) && (currentSingle + 2 < lastPage)) {
+                currentSingle += 2;
+            } else {
+                currentSingle++;
+            }
+            updateLink(currentSingle);
+            updateSinglePage();
+            updateDoublePage();
+
+        } else if (currentSingle === totalSingle && next_chapter) {
+            window.location.href = `/manga/${manga_slug}/chapter/${next_chapter}/`;
+        } else if (currentSingle === totalSingle && !next_chapter) {
+            window.location.href = `/manga/${manga_slug}/`;
+        }
+    }
+
+    function goToPreviousSingle() {
+        if (currentSingle > firstPage) {
+            let currentImage = pageSingle.querySelector(`.page[data-page-number="${currentSingle}"]`);
+            let orientation;
+            if (currentImage) {
+                orientation = checkImageOrientation(currentImage);
+            }
+            if ((currentSingle % 2 === 0) || (orientation)) {
+                currentDouble--;
+            }
+            if (!pageSingle.querySelector(`.page[data-page-number="${currentSingle - 1}"]`) && (currentSingle - 2 > firstPage)) {
+                currentSingle -= 2;
+            } else {
+                currentSingle--;
+            }
+            updateLink(currentSingle);
+            updateSinglePage();
+            updateDoublePage();
+
+        } else if (currentSingle === 1 && prev_chapter) {
+            window.location.href = `/manga/${manga_slug}/chapter/${prev_chapter}/`;
+        } else if (currentSingle === 1 && !prev_chapter) {
+            window.location.href = `/manga/${manga_slug}/`;
+        }
+    }
+
+    updateSinglePage();
+</script>

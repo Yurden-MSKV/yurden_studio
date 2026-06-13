@@ -20,38 +20,45 @@
             <p>Разворот {{ page.page_number }} — {{ page.page_number|add:-1 }}</p>
         {% endif %}
     </div>
-    <div class="comments_list">
+    <div class="comments_list" id="comments_list">
         {% if comments %}
         {% for comment in comments %}
-            <div class="comment_element" id="comment-{{ comment.id }}">
-                <div class="comment_content">
+            <div class="comment_element" id="comment-{{ comment.id }}" data-comment_id="{{ comment.id }}">
+
+                <div class="comment_top">
                     <div class="comment_info">
-                        <img src="{% static 'main_section/icons/profile_icon.svg' %}">
+                        <img class="icon post_profile_icon" src="{% static 'icons/user-solid-full.svg' %}">
                         <p class="author">{{ comment.author }}</p>
                         <p class="comment_date">{{ comment.created_at|date:"d.m.Y H:i" }}</p>
                     </div>
+                    {% if request.user == comment.author or request.user.username == 'yurden' %}
+                        <div class="comment_buttons">
+                            {% if request.user == comment.author %}
+                            <button class="comment_edit"
+                                    hx-get="{% url 'edit-comment' comment.id %}"
+                                    hx-target="#comment-{{ comment.id }}"
+                                    hx-swap="innerHTML">
+                                <img class="icon" src="{% static 'manga_section/icons/comment_edit.svg' %}">
+                            </button>
+                            {% endif %}
+                            {% if request.user == comment.author or request.user.username == 'yurden' %}
+                            <button class="comment_remove"
+                                    hx-post="{% url 'remove-comment' comment.id %}"
+                                    hx-target="#comment-{{ comment.id }}"
+                                    hx-swap="outerHTML">
+                                <img class="icon" src="{% static 'manga_section/icons/comment_remove.svg' %}">
+                            </button>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="comment_content">
                     <p class="comment_text">{{ comment.text }}</p>
                 </div>
-                {% if request.user == comment.author or request.user.username == 'yurden' %}
-                <div class="comment_buttons">
-                    {% if request.user == comment.author %}
-                    <button class="comment_edit"
-                            hx-get="{% url 'edit-comment' comment.id %}"
-                            hx-target="#comment-{{ comment.id }}"
-                            hx-swap="innerHTML">
-                        <img src="{% static 'manga_section/icons/comment_edit.svg' %}">
-                    </button>
-                    {% endif %}
-                    {% if request.user == comment.author or request.user.username == 'yurden' %}
-                    <button class="comment_remove"
-                            hx-post="{% url 'remove-comment' comment.id %}"
-                            hx-target="#comment-{{ comment.id }}"
-                            hx-swap="outerHTML">
-                        <img src="{% static 'manga_section/icons/comment_remove.svg' %}">
-                    </button>
-                    {% endif %}
-                </div>
-                {% endif %}
+                <button id="reply-on" class="reply_button" onclick="openChapterReplyWindow(this)">
+                    <img class="icon post_profile_icon" src="{% static 'icons/reply-solid-full.svg' %}">
+                    <p>Ответить</p>
+                </button>
             </div>
         {% endfor %}
         {% else %}
@@ -70,8 +77,50 @@
         {% csrf_token %}
         {{ form.text }}
         <div class="send_comment_block">
-        <input type="submit" class="send_comment" value="Отправить">
+        <input onclick="pageScrollDown()" type="submit" class="send_comment" value="Отправить">
         </div>
     </form>
+
+    <script>
+        function openChapterReplyWindow(button) {
+            const parentId = button.parentElement.dataset.comment_id;
+
+            let findReplyWindow = button.querySelector('.form_block')
+
+            if (!findReplyWindow) {
+                button.style.width = '100%';
+                htmx.ajax(`GET`, `/manga/comment/${parentId}/reply/`, {
+                    target: button,
+                    swap: `innerHTML`
+                });
+            }
+        }
+    </script>
+    <script>
+        document.querySelector('.comment_form')?.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.tagName === 'TEXTAREA') {
+                if (!e.shiftKey) {
+                    e.preventDefault();
+
+                    // Для HTMX
+                    if (typeof htmx !== 'undefined') {
+                        htmx.trigger(this, 'submit');
+                        pageScrollDown()
+                    } else {
+                        this.submit();
+                        pageScrollDown()
+                    }
+                }
+            }
+        });
+    </script>
+
+        <script>
+        function pageScrollDown() {
+            setTimeout(() => {
+                document.querySelector(`.comments_list`).scrollIntoView({behavior: 'smooth', block: 'end'});
+            }, 150)
+        }
+    </script>
 
 {% endblock %}

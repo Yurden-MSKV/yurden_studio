@@ -12,4 +12,5 @@ urlpatterns = [
     path('page/<int:page_id>/comments/', views.find_comments, name='find-comments'),
     path('comment/<int:comment_id>/edit/', views.edit_comment, name='edit-comment'),
     path('comment/<int:comment_id>/delete/', views.remove_comment, name='remove-comment'),
+    path('comment/<int:comment_id>/reply/', views.comment_reply, name='chapter_reply'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

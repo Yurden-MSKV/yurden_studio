@@ -84,10 +84,19 @@ class ChapterImageInline(admin.TabularInline):
 class VolumeInline(admin.TabularInline):
     model = Volume
     extra = 1
-    fields = ['vol_number', 'vol_cover']
+    fields = ['vol_number', 'vol_cover', 'edit_volume_link']
+    readonly_fields = ['edit_volume_link']
 
     def has_header(self, request, obj=None):
         return False
+
+    def edit_volume_link(self, obj):
+        if obj and obj.pk:
+            url = reverse('admin:manga_section_volume_change', args=[obj.pk])
+            return format_html('<a href="{}">⚙️ Редактировать том</a>', url)
+        return "Сначала сохраните главу"
+
+    edit_volume_link.short_description = 'Действия'
 
 @admin.register(Manga)
 class MangaAdmin(admin.ModelAdmin):
