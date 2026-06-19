@@ -41,7 +41,7 @@ def post_page(request, post_slug):
             response.set_cookie(viewed_key, 'true', max_age=300)
             return response
 
-    return render(request, 'new/new_post_page.html', {
+    return render(request, 'post/new_post_page.html', {
         'post': post,
         'tags': tags,
         'messages_cnt': message_cnt,
@@ -72,7 +72,7 @@ def find_post_comments(request, id):
             'comments': comments
         }
 
-        return render(request, 'new/partials/post_comments_block.html', context)
+        return render(request, 'post/comments/post_comments_block.html', context)
 
     else:
         form = PostCommentForm()
@@ -84,7 +84,7 @@ def find_post_comments(request, id):
             'comments': comments
         }
 
-        return render(request, 'new/partials/post_comments_block.html', context)
+        return render(request, 'post/comments/post_comments_block.html', context)
 
 def comment_reply(request, post_id, comment_id):
     post = get_object_or_404(Post, id=post_id)
@@ -109,7 +109,7 @@ def comment_reply(request, post_id, comment_id):
                 'comments': comments,
             }
 
-            return render(request, 'new/partials/post_comments_block.html', context)
+            return render(request, 'post/comments/post_comments_block.html', context)
 
         else:
             print(f"Form errors: {form.errors}")
@@ -123,7 +123,7 @@ def comment_reply(request, post_id, comment_id):
             'post_id': post.id,
             'comment_id': parent_comment.id
         }
-        return render(request, 'new/partials/reply_block.html', context)
+        return render(request, 'post/comments/reply_block.html', context)
 
 
 def show_reply(request, post_id, comment_id):
@@ -134,4 +134,4 @@ def show_reply(request, post_id, comment_id):
         'comment': parent_comment
     }
 
-    return render(request, 'new/partials/parent_comment.html', context)
+    return render(request, 'post/comments/parent_comment.html', context)

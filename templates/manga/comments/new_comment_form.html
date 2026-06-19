@@ -1,0 +1,13 @@
+{% load static %}
+
+<form class="comment_form"
+      hx-post="{% url 'load-new-form' page.id %}"
+      hx-target="#single_comments_list"
+      hx-swap="beforeend"
+      hx-trigger="submit">
+    {% csrf_token %}
+    <textarea class="comment_area" type="text" name="text" id="reply-on-{{ comment_id }}" rows="4" placeholder="Твой комментарий" required autofocus></textarea>
+    <div class="send_comment_block">
+    <input onclick="pageScrollDown(); reloadForm()" type="submit" class="send_comment" value="Отправить">
+    </div>
+</form>

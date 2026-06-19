@@ -143,9 +143,9 @@ def new_home_page(request):
 
     if request.headers.get('HX-Request') == 'true':
         print(f'Отдаю страницу {page}')
-        return render(request, 'new/feed_items.html', context)
+        return render(request, 'main/feed_items.html', context)
     else:
-        return render(request, 'new/new_home_page.html', context)
+        return render(request, 'main/new_home_page.html', context)
 
 
 def get_all_items():
@@ -342,7 +342,7 @@ def read_message(request, message_id):
 
     csrf_token = get_token(request)
 
-    button_html = render_to_string('partials/message_read_block.html', {'message': message, 'csrf_token': csrf_token})
+    button_html = render_to_string('main/message_read_block.html', {'message': message, 'csrf_token': csrf_token})
 
     response = HttpResponse()
     response.write(f'<div id="unread-counter" hx-swap-oob="true"><p>{unread_count}</p></div>')
@@ -384,7 +384,7 @@ def double_close_tutorial(request):
 
 
 def top_panel_test(request):
-    return render(request, 'new/new_top_panel.html', {})
+    return render(request, 'main/new_top_panel.html', {})
 
 
 def reset_reader(request):

@@ -53,7 +53,8 @@ def manga_page(request, slug):
         is_view=True
     ).order_by('view_date').values_list('chapter_id', flat=True))
 
-    last_viewed_chapter = ChapterView.objects.filter(user=request.user, manga=manga, is_view=True,).order_by('-view_date').prefetch_related('chapter').first()
+    last_viewed_chapter = ChapterView.objects.filter(user=request.user, manga=manga, is_view=True, ).order_by(
+        '-view_date').prefetch_related('chapter').first()
 
     viewed_chapters = set(viewed_chapters_dates)
 
@@ -77,7 +78,7 @@ def manga_page(request, slug):
         'user_rates': user_rates,
         'messages_cnt': message_cnt,
     }
-    return render(request, 'new/new_manga_page.html', context)
+    return render(request, 'manga/new_manga_page.html', context)
 
 
 @ensure_csrf_cookie
@@ -200,9 +201,9 @@ def chapter_page(request, manga_slug, ch_number):
     }
     return render(request, 'chapter_page.html', context)
 
+
 @login_required
 def new_reader(request, manga_slug, ch_number):
-
     manga = get_object_or_404(Manga, manga_slug=manga_slug)
     chapter_number_decimal = Decimal(ch_number)
     chapter = get_object_or_404(Chapter.objects.filter(volume__manga=manga), ch_number=chapter_number_decimal)
@@ -240,7 +241,6 @@ def new_reader(request, manga_slug, ch_number):
 
     first_page = single_page_mode[0].page_number
     last_page = single_page_mode[-1].page_number
-
 
     double_page_mode = []
     i = 0
@@ -293,7 +293,7 @@ def new_reader(request, manga_slug, ch_number):
         'last_page': last_page,
     }
 
-    return render(request, 'new_chapter_page.html', context)
+    return render(request, 'manga/new_chapter_page.html', context)
 
 
 @login_required
@@ -365,8 +365,8 @@ def rate_chapter(request, manga_slug, ch_number):
 
     if request.htmx:
         # Рендерим оба блока
-        single_html = render_to_string('partials/single_rating_block.html', context)
-        double_html = render_to_string('partials/double_rating_block.html', context)
+        single_html = render_to_string('manga/rating/single_rating_block.html', context)
+        double_html = render_to_string('manga/rating/double_rating_block.html', context)
 
         # Возвращаем оба блока с использованием hx-swap-oob
         response_html = f"""
@@ -388,6 +388,42 @@ def rate_chapter(request, manga_slug, ch_number):
         'user_rating': user_rating
     })
 
+
+def load_chapter_comments(request, page_id):
+    page = get_object_or_404(ChapterImage, pk=page_id)
+    comments = page.comments.all().order_by('created_at')
+
+    return render(request, 'manga/comments/chapter_comments_list.html', {'comments': comments})
+
+
+def load_new_comment_form(request, page_id):
+    page = get_object_or_404(ChapterImage, pk=page_id)
+    if request.method == 'POST':
+
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.manga = page.chapter.volume.manga
+            comment.chapter = page.chapter
+            comment.page = page
+            comment.save()
+
+            comments = [comment]
+
+        return render(request, 'manga/comments/chapter_comments_list.html', {'comments': comments})
+
+    else:
+        form = CommentForm()
+
+        context = {
+            'page': page,
+            'form': form,
+        }
+
+        return render(request, 'manga/comments/new_comment_form.html', context)
+
+
 def find_comments(request, page_id):
     page = get_object_or_404(ChapterImage, pk=page_id)
     comments = page.comments.all().order_by('created_at')
@@ -403,11 +439,10 @@ def find_comments(request, page_id):
             comment.save()
             form = CommentForm()
 
-            comments = page.comments.all().order_by('created_at')
+            comments = [comment]
 
-            return render(request, 'partials/comments_block.html', {
+            return render(request, 'manga/comments/manga_comments_block.html', {
                 'page': page,
-                'page_id': page_id,
                 'comments': comments,
                 'form': form,
             })
@@ -417,12 +452,12 @@ def find_comments(request, page_id):
 
     context = {
         'page': page,
-        'page_id': page_id,
         'comments': comments,
         'form': form,
     }
 
-    return render(request, 'partials/comments_block.html', context)
+    return render(request, 'manga/comments/manga_comments_block.html', context)
+
 
 @login_required
 def remove_comment(request, comment_id):
@@ -433,9 +468,11 @@ def remove_comment(request, comment_id):
         if page.comments.count() > 0:
             return HttpResponse("<div style='display: none'></div>")
         else:
-            return HttpResponse("<div class='no_comments'><p>У этой страницы нет комментариев. Напишешь первый?</p></div>")
+            return HttpResponse(
+                "<div class='no_comments'><p>У этой страницы нет комментариев. Напишешь первый?</p></div>")
     else:
         return HttpResponse("<p style='color: red'>Это не твой комментарий.</p>")
+
 
 @login_required
 def edit_comment(request, comment_id):
@@ -450,7 +487,7 @@ def edit_comment(request, comment_id):
                 page_id = page.id
                 comments = page.comments.all().order_by('created_at')
                 form = CommentForm()
-                return render(request, 'partials/comments_block.html', {
+                return render(request, 'manga/comments/manga_comments_block.html', {
                     'page': page,
                     'page_id': page_id,
                     'comments': comments,
@@ -458,12 +495,13 @@ def edit_comment(request, comment_id):
                 })
         else:
             form = CommentForm(instance=comment)
-            return render(request, 'partials/edit_comment.html',{
+            return render(request, 'manga/comments/edit_comment.html', {
                 'form': form,
                 'comment': comment
             })
     else:
         return HttpResponse("<p style='color: red'>Это не твой комментарий.</p>")
+
 
 def comment_reply(request, comment_id):
     parent = get_object_or_404(Comment, pk=comment_id)
@@ -479,38 +517,24 @@ def comment_reply(request, comment_id):
             comment.page = page
             comment.parent_comment = parent
             comment.save()
-            print(comment.text)
-            form = CommentForm()
-            comments = page.comments.all().order_by('created_at')
 
-            context = {
-                'page': page,
-                'page_id': page.id,
-                'comments': comments,
-                'form': form,
-            }
+            comments = [comment]
 
-            return render(request, 'partials/comments_block.html', context)
-
-        else:
-            print(f"Form errors: {form.errors}")
-            return None
+            return render(request, 'manga/comments/chapter_comments_list.html', {'comments': comments})
 
     else:
         form = CommentForm()
         context = {
-            'page': page,
             'comment': parent,
             'form': form,
         }
-        return render(request, 'new/partials/chapter_reply_block.html', context)
+        return render(request, 'manga/comments/chapter_reply_block.html', context)
 
-# def show_reply(request, post_id, comment_id):
-#     post = get_object_or_404(Post, id=post_id)
-#     parent_comment = get_object_or_404(PostComment, id=comment_id)
-#
-#     context = {
-#         'comment': parent_comment
-#     }
-#
-#     return render(request, 'new/partials/parent_comment.html', context)
+def show_reply(request, comment_id):
+    parent_comment = get_object_or_404(Comment, pk=comment_id)
+
+    context = {
+        'comment': parent_comment
+    }
+
+    return render(request, 'new/partials/parent_comment.html', context)

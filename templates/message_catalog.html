@@ -23,7 +23,7 @@
                     <p>{{ message.author.username }}, {{ message.created_at }}</p>
                     <p>{{ message.message }}</p>
                 </div>
-                {% include 'partials/message_read_block.html' with message=message %}
+                {% include 'partials/main/message_read_block.html' with message=message %}
             </div>
         {% endfor %}
     </div>

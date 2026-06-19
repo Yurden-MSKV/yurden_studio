@@ -44,7 +44,7 @@
             <p>На страницу манги</p>
         </a>
         </div>
-        {% include 'partials/double_rating_block.html' with manga=manga chapter=chapter like_percentage=like_percentage user_rating=user_rating %}
+        {% include 'partials/manga/rating/double_rating_block.html' with manga=manga chapter=chapter like_percentage=like_percentage user_rating=user_rating %}
         
     
 {#        TODO: Оформление, JS-скрипт, вёрстка #}
@@ -173,7 +173,7 @@
                         </div>
                         <div class="rate"><p>Оценка&nbsp;главы</p></div>
                         <div class="thanks_button">
-                            {% include 'partials/tutorial_button_block.html' %}
+                            {% include 'partials/manga/tutorial/tutorial_button_block.html' %}
                         </div>
                     </div>
                 {% endif %}
@@ -400,7 +400,7 @@
                         </div>
                         <div class="rate"><p>Оценка&nbsp;главы</p></div>
                         <div class="thanks_button">
-                            {% include 'partials/tutorial_button_block.html' %}
+                            {% include 'partials/manga/tutorial/tutorial_button_block.html' %}
                         </div>
                     </div>
                 {% endif %}
@@ -567,7 +567,7 @@
                 {% endif %}
     
                 <!-- Включаем partial напрямую -->
-                {% include 'partials/double_rating_block.html' with manga=manga chapter=chapter like_percentage=like_percentage user_rating=user_rating %}
+                {% include 'partials/manga/rating/double_rating_block.html' with manga=manga chapter=chapter like_percentage=like_percentage user_rating=user_rating %}
     
             </div>
     </div>

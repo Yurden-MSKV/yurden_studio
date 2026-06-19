@@ -1,0 +1,58 @@
+<script>
+    // Инициализация элементов для работы комментариев и формы
+    const windowComment = document.querySelector('.single_comments_container');
+    const commentList = windowComment.querySelector('.single_comments_list');
+    const formBlock = windowComment.querySelector('.single_form_block')
+
+    let form;
+
+    function findSinglePageID() {
+        let page = document.querySelector('.single.active').firstElementChild;
+        return page.getAttribute('data-page-id');
+    }
+
+    function loadSinglePageContent() {
+
+        if (windowComment.classList.contains('hidden')) {
+            // NOTE: Поиск активной страницы
+            let pageId = findSinglePageID();
+            if (!pageId) {
+                console.error('pageId не найден');
+                return;
+            }
+            // NOTE: Сначала запрос комментариев к странице, затем запрос пустой формы
+            htmx.ajax('GET', `/manga/page/${pageId}/comments/`, {
+                target: commentList,
+                swap: `innerHTML`,
+            })
+            .then(() => {
+                    htmx.ajax(`GET`, `/manga/page/${pageId}/new-comment/`, {
+                        target: formBlock,
+                        swap: `innerHTML`
+                    })
+                form = windowComment.querySelector('.comment_form')
+            })
+            .then(() => {
+                windowComment.classList.remove('hidden');
+                windowComment.classList.add('active');
+            })
+        } else {
+            // NOTE: Скрытие элемента
+            windowComment.classList.remove('active');
+            windowComment.classList.add('hidden');
+        }
+    }
+
+    form.addEventListener('htmx:afterRequest', function() {
+        let pageId = findSinglePageID();
+        if (!pageId) {
+            console.error('pageId не найден');
+            return;
+        }
+        htmx.ajax(`GET`, `/manga/page/${pageId}/new-comment/`, {
+            target: formBlock,
+            swap: `innerHTML`
+        })
+    })
+
+</script>

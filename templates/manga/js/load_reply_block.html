@@ -1,0 +1,11 @@
+<script>
+
+    function loadReplyBlock(button) {
+        let commentID = button.dataset.commentId;
+        htmx.ajax(`GET`, `/manga/comment/${commentID}/reply/`, {
+            target: button,
+            swap: `outerHTML`
+        })
+    }
+
+</script>

@@ -45,78 +45,78 @@
         {% endfor %}
     </div>
 
-<script>
-    document.body.addEventListener('keydown', function(event) {
-        if (event.key === 'Enter' && event.target.tagName === 'TEXTAREA') {
-            if (!event.shiftKey) {
-                event.preventDefault();
+    <script>
+        document.body.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && event.target.tagName === 'TEXTAREA') {
+                if (!event.shiftKey) {
+                    event.preventDefault();
 
-                const form = event.target.closest('form');
+                    const form = event.target.closest('form');
 
-                if (form) {
-                    if (typeof htmx !== 'undefined') {
-                        htmx.trigger(form, 'submit');
-                        scrollDown()
-                    } else {
-                        form.submit();
-                        scrollDown()
+                    if (form) {
+                        if (typeof htmx !== 'undefined') {
+                            htmx.trigger(form, 'submit');
+                            scrollDown()
+                        } else {
+                            form.submit();
+                            scrollDown()
+                        }
                     }
                 }
             }
+        });
+    </script>
+
+    <script>
+        function openReplyWindow(button) {
+            let postID = document.getElementById('comments-container').dataset.post_id;
+            let parentID = button.parentElement.dataset.comment_id;
+
+            let findReplyWindow = button.querySelector('.form_block')
+
+            if (!findReplyWindow) {
+                button.style.width = '100%';
+                htmx.ajax(`GET`, `/post/${postID}/comments/${parentID}/reply/`, {
+                    target: button,
+                    swap: `innerHTML`
+                });
+            }
         }
-    });
-</script>
 
-<script>
-    function openReplyWindow(button) {
-        let postID = document.getElementById('comments-container').dataset.post_id;
-        let parentID = button.parentElement.dataset.comment_id;
+        function loadParent(block) {
+            let postID = document.getElementById('comments-container').dataset.post_id;
+            let comment = block.parentElement.parentElement.parentElement;
+            let parentID = block.dataset.parent_is;
 
-        let findReplyWindow = button.querySelector('.form_block')
-
-        if (!findReplyWindow) {
-            button.style.width = '100%';
-            htmx.ajax(`GET`, `/post/${postID}/comments/${parentID}/reply/`, {
-                target: button,
-                swap: `innerHTML`
-            });
-        }
-    }
-
-    function loadParent(block) {
-        let postID = document.getElementById('comments-container').dataset.post_id;
-        let comment = block.parentElement.parentElement.parentElement;
-        let parentID = block.dataset.parent_is;
-
-        let findParent = comment.querySelector('#parent-comment')
-        if (findParent) {
-            findParent.style.opacity = '1';
-            findParent.style.pointerEvents = 'auto';
-        } else {
-            htmx.ajax(`GET`, `/post/${postID}/comments/${parentID}/`, {
-                target: comment,
-                swap: `beforeend`,
-            });
-            setTimeout(() => {
-                let findParent = comment.querySelector('#parent-comment');
+            let findParent = comment.querySelector('#parent-comment')
+            if (findParent) {
                 findParent.style.opacity = '1';
                 findParent.style.pointerEvents = 'auto';
-            }, 100)
+            } else {
+                htmx.ajax(`GET`, `/post/${postID}/comments/${parentID}/`, {
+                    target: comment,
+                    swap: `beforeend`,
+                });
+                setTimeout(() => {
+                    let findParent = comment.querySelector('#parent-comment');
+                    findParent.style.opacity = '1';
+                    findParent.style.pointerEvents = 'auto';
+                }, 100)
+            }
         }
-    }
 
-    document.addEventListener('click', function(event) {
-        const isClickInside = event.target.closest('.parent_comment, .parent_link');
+        document.addEventListener('click', function(event) {
+            const isClickInside = event.target.closest('.parent_comment, .parent_link');
 
-        if (!isClickInside) {
-            document.querySelectorAll('.parent_link').forEach(block => {
-                block.style.opacity = '0';
-                block.style.pointerEvents = 'none';
-            });
-        }
-    });
+            if (!isClickInside) {
+                document.querySelectorAll('.parent_link').forEach(block => {
+                    block.style.opacity = '0';
+                    block.style.pointerEvents = 'none';
+                });
+            }
+        });
 
-</script>
+    </script>
 
     <script>
         function scrollDown() {

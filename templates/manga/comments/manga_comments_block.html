@@ -2,29 +2,28 @@
 {% load custom_filters %}
 
 {% block commentblock %}
-    <div class="page_number desktop">
-        {% if not page.is_double_page %}
-            {% if page.page_number|mod:2 != 0 %}
-            <p>← Страница {{ page.page_number }}</p>
-            {% else %}
-            <p>Страница {{ page.page_number }} →</p>
-            {% endif %}
-        {% else %}
-            <p>Разворот {{ page.page_number }} — {{ page.page_number|add:-1 }}</p>
-        {% endif %}
-    </div>
-    <div class="page_number mobile">
-        {% if not page.is_double_page %}
-            <p>Страница {{ page.page_number }}</p>
-        {% else %}
-            <p>Разворот {{ page.page_number }} — {{ page.page_number|add:-1 }}</p>
-        {% endif %}
-    </div>
+{#    <div class="page_number desktop">#}
+{#        {% if not page.is_double_page %}#}
+{#            {% if page.page_number|mod:2 != 0 %}#}
+{#            <p>← Страница {{ page.page_number }}</p>#}
+{#            {% else %}#}
+{#            <p>Страница {{ page.page_number }} →</p>#}
+{#            {% endif %}#}
+{#        {% else %}#}
+{#            <p>Разворот {{ page.page_number }} — {{ page.page_number|add:-1 }}</p>#}
+{#        {% endif %}#}
+{#    </div>#}
+{#    <div class="page_number mobile">#}
+{#        {% if not page.is_double_page %}#}
+{#            <p>Страница {{ page.page_number }}</p>#}
+{#        {% else %}#}
+{#            <p>Разворот {{ page.page_number }} — {{ page.page_number|add:-1 }}</p>#}
+{#        {% endif %}#}
+{#    </div>#}
     <div class="comments_list" id="comments_list">
         {% if comments %}
         {% for comment in comments %}
-            <div class="comment_element" id="comment-{{ comment.id }}" data-comment_id="{{ comment.id }}">
-
+            <div class="comment_element" data-comment_id="{{ comment.id }}">
                 <div class="comment_top">
                     <div class="comment_info">
                         <img class="icon post_profile_icon" src="{% static 'icons/user-solid-full.svg' %}">
@@ -35,17 +34,17 @@
                         <div class="comment_buttons">
                             {% if request.user == comment.author %}
                             <button class="comment_edit"
-                                    hx-get="{% url 'edit-comment' comment.id %}"
-                                    hx-target="#comment-{{ comment.id }}"
-                                    hx-swap="innerHTML">
+                                hx-get="{% url 'edit-comment' comment.id %}"
+                                hx-target="#comment-{{ comment.id }}"
+                                hx-swap="innerHTML">
                                 <img class="icon" src="{% static 'manga_section/icons/comment_edit.svg' %}">
                             </button>
                             {% endif %}
                             {% if request.user == comment.author or request.user.username == 'yurden' %}
                             <button class="comment_remove"
-                                    hx-post="{% url 'remove-comment' comment.id %}"
-                                    hx-target="#comment-{{ comment.id }}"
-                                    hx-swap="outerHTML">
+                                hx-post="{% url 'remove-comment' comment.id %}"
+                                hx-target="#comment-{{ comment.id }}"
+                                hx-swap="outerHTML">
                                 <img class="icon" src="{% static 'manga_section/icons/comment_remove.svg' %}">
                             </button>
                             {% endif %}
@@ -68,12 +67,12 @@
         {% endif %}
     </div>
 
-    <form id="comment-form-{{ page_id }}"
-          class="comment_form"
-          hx-post="{% url 'find-comments' page.id %}"
-          hx-target="#comments-page-list-{{ page_id }}"
-          hx-swap="innerHTML"
-          hx-trigger="submit">
+    <form id="comment-form-{{ page.id }}"
+        class="comment_form"
+        hx-post="{% url 'find-comments' page.id %}"
+        hx-target="#comments-page-list-{{ page.id }}"
+        hx-swap="innerHTML"
+        hx-trigger="submit">
         {% csrf_token %}
         {{ form.text }}
         <div class="send_comment_block">
@@ -114,6 +113,5 @@
             }
         });
     </script>
-
 
 {% endblock %}

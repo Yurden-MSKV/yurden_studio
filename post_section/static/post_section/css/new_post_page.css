@@ -148,7 +148,7 @@
     }
     .parent_icon {
         width: 1rem;
-        filter: invert(20%) sepia(0%) saturate(426%) hue-rotate(146deg) brightness(99%) contrast(84%);
+        filter: invert(20%) sepia(0%) saturate(426%) hue-rotate(146deg) brightness(99%) contrast(84%) !important;
     }
     .parent_comment p {
         font-size: 0.75rem;

@@ -1,0 +1,52 @@
+{% load static %}
+
+{% if comments %}
+    {% for comment in comments %}
+        <div class="comment_element" data-comment-id="{{ comment.id }}">
+            <div class="comment_top">
+                <div class="comment_info">
+                    <img class="icon post_profile_icon" src="{% static 'icons/user-solid-full.svg' %}">
+                    <p class="author">{{ comment.author }}</p>
+                    <p class="comment_date">{{ comment.created_at|date:"d.m.Y H:i" }}</p>
+                    {% if comment.parent_comment %}
+                        <div class="parent_comment" onclick="loadParentComment(this)" data-parent-id="{{ comment.parent_comment.id }}">
+                            <img class="parent_icon" src="{% static 'icons/message-solid-full.svg' %}">
+                            <p>{{ comment.parent_comment.author.username }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+                {% if request.user == comment.author or request.user.username == 'yurden' %}
+                        <div class="comment_buttons">
+                            {% if request.user == comment.author %}
+                            <button class="comment_edit"
+                                hx-get="{% url 'edit-comment' comment.id %}"
+                                hx-target="#comment-{{ comment.id }}"
+                                hx-swap="innerHTML">
+                                <img class="icon" src="{% static 'manga_section/icons/comment_edit.svg' %}">
+                            </button>
+                            {% endif %}
+                            {% if request.user == comment.author or request.user.username == 'yurden' %}
+                            <button class="comment_remove"
+                                hx-post="{% url 'remove-comment' comment.id %}"
+                                hx-target="#comment-{{ comment.id }}"
+                                hx-swap="outerHTML">
+                                <img class="icon" src="{% static 'manga_section/icons/comment_remove.svg' %}">
+                            </button>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+            </div>
+            <div class="comment_content">
+                <p class="comment_text">{{ comment.text }}</p>
+            </div>
+            <button class="reply_button" data-comment-id="{{ comment.id }}" onclick="loadReplyBlock(this)">
+                <img class="icon post_profile_icon" src="{% static 'icons/reply-solid-full.svg' %}">
+                <p>Ответить</p>
+            </button>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="no_comments">
+        <p>У этой страницы нет комментариев. Напишешь первый?</p>
+    </div>
+{% endif %}
