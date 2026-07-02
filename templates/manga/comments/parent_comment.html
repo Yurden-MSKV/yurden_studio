@@ -1,0 +1,14 @@
+{% load static %}
+
+<div class="parent_element" id="comment-{{ comment.id }}" data-comment-id="{{ comment.id }}">
+    <div class="comment_top">
+        <div class="comment_info">
+            <img class="icon post_profile_icon" src="{% static 'icons/user-solid-full.svg' %}">
+            <p class="author">{{ comment.author }}</p>
+            <p class="comment_date">{{ comment.created_at|date:"d.m.Y H:i" }}</p>
+        </div>
+    </div>
+    <div class="comment_content">
+        <p class="comment_text">{{ comment.text }}</p>
+    </div>
+</div>

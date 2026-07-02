@@ -1,8 +1,8 @@
-<form id="comment-form-{{ comment.page.id }}"
+<form id="comment-form-{{ comment.id }}"
       class="comment_form edit_form"
       hx-post="{% url 'edit-comment' comment.id %}"
-      hx-target="#comments-page-list-{{ comment.page.id }}"
-      hx-swap="innerHTML"
+      hx-target="#comment-{{ comment.id }}"
+      hx-swap="outerHTML"
       hx-trigger="submit">
     {% csrf_token %}
     {{ form.text }}

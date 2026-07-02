@@ -40,7 +40,7 @@ class CustomLoginView(LoginView):
 
 def index(request):
     # return render(request, 'top_panel.html')
-    return redirect('home-page')
+    return redirect('new-home')
 
 
 def register_view(request):
@@ -132,7 +132,7 @@ def new_home_page(request):
     all_items = get_all_items()
     paginator = Paginator(all_items, 5)
     total_pages = paginator.num_pages
-    print(f'Всего страниц: {total_pages}')
+    # print(f'Всего страниц: {total_pages}')
     page = request.GET.get('page', 1)
     page_obj = paginator.get_page(page)
 
@@ -142,7 +142,7 @@ def new_home_page(request):
     }
 
     if request.headers.get('HX-Request') == 'true':
-        print(f'Отдаю страницу {page}')
+        # print(f'Отдаю страницу {page}')
         return render(request, 'main/feed_items.html', context)
     else:
         return render(request, 'main/new_home_page.html', context)
@@ -164,7 +164,7 @@ def get_all_items():
     i = 0
     while i < len(all_items):
         item = all_items[i]
-        print(item.add_date.strftime("%d.%m.%Y %H:%M"))
+        # print(item.add_date.strftime("%d.%m.%Y %H:%M"))
 
         if item.__class__ == Chapter:
             manga = item.volume.manga
@@ -183,7 +183,7 @@ def get_all_items():
                 else:
                     break
 
-            print(group['chapters'])
+            # print(group['chapters'])
             last_chapter = group['chapters'][0]
             group['cover'] = get_volume_cover(last_chapter)
             grouped_items.append(group)
@@ -207,29 +207,14 @@ def get_volume_cover(last_chapter):
 # @login_required(login_url='/login/')
 def info_page(request):
     post = get_object_or_404(Post, post_slug='info')
-
-    if request.method == 'POST':
-        form = FAQform(request.POST)
-        if form.is_valid():
-            message = form.save(commit=False)
-            message.author = request.user
-            message.save()
-            return HttpResponseRedirect('/info/')
-    else:
-        form = FAQform()
-
-    if request.user.username == 'yurden':
-        message_cnt = message_count(request)
-    else:
-        message_cnt = 0
+    tags_flag = False
 
     context = {
         'post': post,
-        'form': form,
-        'messages_cnt': message_cnt
+        'tags_flag': tags_flag
     }
 
-    return render(request, 'post_page.html', context)
+    return render(request, 'post/new_post_page.html', context)
 
 
 @login_required
@@ -299,6 +284,8 @@ def save_reader_mode(request):
         mode = data.get('mode')
         # print(f"Режим после замены: {mode}")
         request.user.profile.reader_mode = mode
+        request.user.profile.viewed_single = False
+        request.user.profile.viewed_double = False
         request.user.profile.save()
 
         return JsonResponse({

@@ -10,41 +10,122 @@
 
 {% block content %}
 
+    <link rel="stylesheet" href="{% static 'post_section/css/new_post_page.css' %}">
     <div class="main_container">
-        <div class="main_block">
+        <div class="main_block" id="main">
             <div class="post_container">
                 <div class="post_info_block">
                     <div class="name_n_date">
-                        <p class="date">{{ post.add_date }}</p>
                         <h2>{{ post.post_name }}</h2>
+                        <p class="date">{{ post.add_date }}</p>
                     </div>
-                    <div class="tags_block">
-                        <h4 class="block_title">Теги:</h4>
-                        {% for tag in tags %}
-                            <p class="list_element">{{ tag.tag_name }}</p>
-                        {% endfor %}
-                    </div>
+                    {% if tags_flag == True %}
+                        <div class="tags_block">
+                            <h4 class="block_title">Теги:</h4>
+                            {% for tag in tags %}
+                                <p class="list_element">{{ tag.tag_name }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
-                <div class="post_content">
+                <div class="post_content" data-tags="{{ tags_flag }}">
                     <p>{{ post.content|add_nbsp|safe }}</p>
                 </div>
             </div>
+            <div class="form_block" id="form_block"></div>
             <div class="comments_container" id="comments-container" data-post_id="{{ post.id }}">
-                {% block post_comments_block %}
-                {% endblock %}
             </div>
         </div>
     </div>
 
     <script>
+        const mainBlock = document.getElementById('main');
+        const commentContainer = document.getElementById('comments-container');
+        const formBlock = document.getElementById('form_block');
+        {#const commentBlock = document.getElementById('comments_list');#}
+        const postId = commentContainer.dataset.post_id;
 
-        const commentCont = document.getElementById('comments-container');
-        const postId = commentCont.dataset.post_id;
-
-        htmx.ajax(`GET`, `/post/${postId}/comments/`, {
-                target: `#comments-container`,
-                swap: `beforeend`,
+        htmx.ajax(`GET`, `/post/${postId}/new-comment/`, {
+            target: formBlock,
+            swap: `innerHTML`
+        })
+        .then(() => {
+            htmx.ajax(`GET`, `/post/${postId}/comments/`, {
+                target: commentContainer,
+                swap: `innerHTML`,
             })
+        })
+
+
+        function scrollDown() {
+            setTimeout(() => {
+                mainBlock.scrollTo({
+                    top: mainBlock.scrollHeight,
+                    behavior: 'smooth'
+                })
+            }, 150)
+        }
+
+        function loadNewForm() {
+            let noComments = document.getElementById('no-comments');
+            htmx.ajax(`GET`, `/post/${postId}/new-comment/`, {
+                target: formBlock,
+                swap: `innerHTML`
+            })
+            if (noComments) {
+                noComments.remove();
+            }
+        }
+
+        function openReplyWindow(button) {
+            let parentId = button.parentElement.dataset.comment_id;
+            htmx.ajax(`GET`, `/post/${postId}/comments/${parentId}/reply/`, {
+                target: button,
+                swap: 'outerHTML',
+            })
+        }
+
+        function loadPostReplyButton(button) {
+            setTimeout(() => {
+                button.closest('.form_block').outerHTML = `<button id="reply-on" class="reply_button" onclick="openReplyWindow(this)">
+                <img class="icon post_profile_icon" src="{% static 'icons/reply-solid-full.svg' %}">
+                <p>Ответить</p>
+            </button>`
+            }, 200)
+        }
+
+        function loadParent(block) {
+            let comment = block.parentElement.parentElement.parentElement;
+            let parentID = block.dataset.parent_is;
+
+            let findParent = comment.querySelector('#parent-comment')
+            if (findParent) {
+                findParent.style.opacity = '1';
+                findParent.style.pointerEvents = 'auto';
+            } else {
+                htmx.ajax(`GET`, `/post/${postId}/comments/${parentID}/`, {
+                    target: comment,
+                    swap: `beforeend`,
+                });
+                setTimeout(() => {
+                    let findParent = comment.querySelector('#parent-comment');
+                    findParent.style.opacity = '1';
+                    findParent.style.pointerEvents = 'auto';
+                }, 100)
+            }
+        }
+
+        document.addEventListener('click', function(event) {
+            const isClickInside = event.target.closest('.parent_comment, .parent_link');
+
+            if (!isClickInside) {
+                document.querySelectorAll('.parent_link').forEach(block => {
+                    block.style.opacity = '0';
+                    block.style.pointerEvents = 'none';
+                });
+            }
+        });
+
 
     </script>
 

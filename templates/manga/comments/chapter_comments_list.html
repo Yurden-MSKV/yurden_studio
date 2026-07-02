@@ -2,14 +2,14 @@
 
 {% if comments %}
     {% for comment in comments %}
-        <div class="comment_element" data-comment-id="{{ comment.id }}">
+        <div class="comment_element" id="comment-{{ comment.id }}" data-comment-id="{{ comment.id }}">
             <div class="comment_top">
                 <div class="comment_info">
                     <img class="icon post_profile_icon" src="{% static 'icons/user-solid-full.svg' %}">
                     <p class="author">{{ comment.author }}</p>
                     <p class="comment_date">{{ comment.created_at|date:"d.m.Y H:i" }}</p>
                     {% if comment.parent_comment %}
-                        <div class="parent_comment" onclick="loadParentComment(this)" data-parent-id="{{ comment.parent_comment.id }}">
+                        <div class="parent_comment" onclick="loadParentComment(event, this)" data-parent-id="{{ comment.parent_comment.id }}">
                             <img class="parent_icon" src="{% static 'icons/message-solid-full.svg' %}">
                             <p>{{ comment.parent_comment.author.username }}</p>
                         </div>
@@ -25,14 +25,14 @@
                                 <img class="icon" src="{% static 'manga_section/icons/comment_edit.svg' %}">
                             </button>
                             {% endif %}
-                            {% if request.user == comment.author or request.user.username == 'yurden' %}
-                            <button class="comment_remove"
-                                hx-post="{% url 'remove-comment' comment.id %}"
-                                hx-target="#comment-{{ comment.id }}"
-                                hx-swap="outerHTML">
-                                <img class="icon" src="{% static 'manga_section/icons/comment_remove.svg' %}">
-                            </button>
-                            {% endif %}
+{#                            {% if request.user == comment.author or request.user.username == 'yurden' %}#}
+{#                            <button class="comment_remove"#}
+{#                                hx-post="{% url 'remove-comment' comment.id %}"#}
+{#                                hx-target="#comment-{{ comment.id }}"#}
+{#                                hx-swap="outerHTML">#}
+{#                                <img class="icon" src="{% static 'manga_section/icons/comment_remove.svg' %}">#}
+{#                            </button>#}
+{#                            {% endif %}#}
                         </div>
                     {% endif %}
             </div>
@@ -46,7 +46,7 @@
         </div>
     {% endfor %}
 {% else %}
-    <div class="no_comments">
-        <p>У этой страницы нет комментариев. Напишешь первый?</p>
+    <div class="no_comments" id="no-comments">
+        <p>У этой страницы нет комментариев.</p>
     </div>
 {% endif %}

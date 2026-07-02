@@ -6,9 +6,6 @@
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'main_section/css/new_top_panel.css' %}">
-    <link rel="stylesheet" href="{% static 'main_section/css/new_home_page.css' %}">
-    <link rel="stylesheet" href="{% static 'manga_section/css/new_manga_page.css' %}">
-    <link rel="stylesheet" href="{% static 'post_section/css/new_post_page.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
     <script>
@@ -69,16 +66,21 @@
         <!-- NOTE: Landscape версия -->
         <main class="page_container">
             <div class="top_panel_container landscape">
-                <a class="site_name" href="{% url 'home-page' %}"><h1>Студия Юрия Московцева</h1></a>
+                <a class="site_name" href="{% url 'new-home' %}"><h1>Студия Юрия Московцева</h1></a>
                 <div class="top_buttons">
-                    <a class="top_panel_button" href="{% url 'catalog-page' %}">
-                        <p>Каталог</p>
-                    </a>
-                    <a class="top_panel_button" href="{% url 'post-catalog' %}">
-                        <p>Посты</p>
+{#                    <a class="top_panel_button" href="{% url 'catalog-page' %}">#}
+{#                        <h2>Каталог</h2>#}
+{#                    </a>#}
+{#                    <a class="top_panel_button" href="{% url 'post-catalog' %}">#}
+{#                        <h2>Посты</h2>#}
+{#                    </a>#}
+                    <a class="top_panel_button" href="https://pay.cloudtips.ru/p/8e0b5d08">
+                        <img class="icon donate" src="{% static 'icons/ruble-sign-solid-full.svg' %}">
+                        <h2>Поддержать</h2>
                     </a>
                     <a class="top_panel_button" href="{% url 'info' %}">
-                        <p>ЧаВо</p>
+                        <img class="icon" src="{% static 'icons/circle-question-regular-full.svg' %}">
+                        <h2>Частые вопросы</h2>
                     </a>
     {#                {% if user.username == 'yurden' %}#}
     {#                    <a class="top_panel_button" href="{% url 'messages' %}">#}
@@ -90,7 +92,7 @@
                 </div>
                 <button class="profile_menu_btn" onclick="toggleMenu()">
                     <img class="icon" src="{% static "icons/new_user_icon.svg" %}">
-                    <p>{{ user.username }}</p>
+                    <h2>{{ user.username }}</h2>
                 </button>
                 <div class="profile_menu" id="userMenu">
                     {% if user.username == 'yurden' %}
@@ -126,19 +128,24 @@
                         <a href="{% url 'logout' %}"><img class="icon" src="{% static 'icons/arrow-right-from-bracket-solid-full.svg' %}"><p>Выйти</p></a>
                     </div>
                 </div>
+                <div class="desktop_shadow" id="desktop_shadow"></div>
 
                 <script>
                     function toggleMenu() {
                         const menu = document.getElementById('userMenu');
+                        const desktopShadow = document.getElementById('desktop_shadow');
                         menu.classList.toggle('show');
+                        desktopShadow.classList.toggle('show');
                     }
 
                     document.addEventListener('click', function(event) {
                         const menu = document.getElementById('userMenu');
                         const button = document.querySelector('.profile_menu_btn');
+                        const desktopShadow = document.getElementById('desktop_shadow');
 
                         if (!menu.contains(event.target) && !button.contains(event.target)) {
                             menu.classList.remove('show');
+                            desktopShadow.classList.remove('show');
                         }
                     });
                 </script>
@@ -148,7 +155,7 @@
 
             <!-- NOTE: Portrait версия -->
             <div class="top_panel_container portrait">
-                <a class="site_name" href="{% url 'home-page' %}"><h1>Студия Юрия Московцева</h1></a>
+                <a class="site_name" href="{% url 'new-home' %}"><h1>Студия Юрия Московцева</h1></a>
                 <button class="profile_menu_btn_mobile" onclick="toggleMenuMobile()">
                     <img id="menuUsual" class="menu-icon-mobile icon show" src="{% static 'icons/bars-solid-full.svg' %}">
                     <img id="menuActive" class="menu-icon-mobile icon" src="{% static 'icons/bars-staggered-solid-full.svg' %}">
@@ -196,7 +203,7 @@
                     </div>
                     <div class="links_block">
                         <a class="link" href="https://pay.cloudtips.ru/p/8e0b5d08"><h3>Поддержать</h3></a>
-                        <a class="link" href="{% url 'info' %}"><h3>ЧаВо</h3></a>
+                        <a class="link" href="{% url 'info' %}"><h3>Частые вопросы</h3></a>
                     </div>
                 </div>
                 <div class="shadow" id="shadow"></div>

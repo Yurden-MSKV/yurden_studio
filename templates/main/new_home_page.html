@@ -7,8 +7,9 @@
 {% endblock %}
 
 {% block content %}
+    <link rel="stylesheet" href="{% static 'main_section/css/new_home_page.css' %}">
     <div class="feed_container">
-        <div class="home_container portrait" id="home-container">
+        <div class="home_container" id="home-container">
             {% include 'main/feed_items.html' %}
         </div>
     </div>
@@ -38,10 +39,8 @@
         let pageNum = 1;
         let hasMore = true;
         let isLoading = false;
-
         const container = document.getElementById('home-container');
         const endMessage = document.getElementById('end-message');
-
 
         function checkNextPage() {
             let paginationData = document.getElementById(`pagination-data-${pageNum}`);
@@ -65,16 +64,13 @@
         {#    }#}
         {# }#}
 
-
         function loadFeed() {
-
             if (isLoading || !hasMore) {
                 return;
             }
-
+            console.log('Функция работает')
             isLoading = true;
-
-            htmx.ajax(`GET`, `/new-home/?page=${pageNum}`, {
+            htmx.ajax(`GET`, `/home/?page=${pageNum}`, {
                 target: `#home-container`,
                 swap: `beforeend`,
                 headers: {'HX-Request': 'true'}
@@ -92,10 +88,8 @@
             if (!hasMore || isLoading) {
                 return;
             }
-
             const scrollPosition = container.scrollTop + container.clientHeight;
             const threshold = container.scrollHeight * 0.9;
-
             if (scrollPosition >= threshold) {
                 loadFeed();
             }
@@ -119,11 +113,9 @@
             } else {
                 hasMore = false;
             }
-
             if (hasMore && container.scrollHeight <= container.clientHeight + 50) {
                 loadFeed();
             }
-
             checkAndLoad();
         }, 100);
 

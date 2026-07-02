@@ -18,7 +18,8 @@ class Post(models.Model):
                                  verbose_name='SLUG-адрес')
     tags = models.ManyToManyField(Tag,
                                   related_name='posts',
-                                  verbose_name='Теги')
+                                  verbose_name='Теги',
+                                  blank=True)
     content = RichTextUploadingField(verbose_name='Содержание')
     add_date = models.DateTimeField(auto_now_add=True,
                                     verbose_name='Дата и время создания')

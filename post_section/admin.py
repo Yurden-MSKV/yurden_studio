@@ -17,6 +17,7 @@ class NewsAdminForm(forms.ModelForm):
 class PostAdmin(admin.ModelAdmin):
     form = NewsAdminForm
     list_display = ['post_name', 'post_slug', 'content', 'view_count']
+    filter_horizontal = ['tags']
 
 
 @admin.register(Tag)

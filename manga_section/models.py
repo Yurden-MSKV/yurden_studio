@@ -81,6 +81,8 @@ class Chapter(models.Model):
                                verbose_name='Название')
     add_date = models.DateTimeField(auto_now_add=True,
                                     verbose_name='Дата и время создания')
+    view_count = models.PositiveIntegerField(default=0,
+                                             verbose_name='Просмотры')
     interpreter = models.ManyToManyField(Staff,
                                          verbose_name='Переводчик',
                                          related_name='interpreters',

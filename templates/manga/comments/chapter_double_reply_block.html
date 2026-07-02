@@ -3,7 +3,7 @@
 <div class="form_block">
     <form class="comment_form reply_form"
           hx-post="{% url 'comment_reply' comment.id %}"
-          hx-target="#single_comments_list"
+          hx-target="#double_comments_list"
           hx-swap="beforeend"
           hx-trigger="submit">
         {% csrf_token %}

@@ -1,13 +1,14 @@
 <div class="form_block">
     <form class="comment_form"
-          hx-post="{% url 'reply' post_id comment_id %}"
+          hx-post="{% url 'reply' post.id comment_id %}"
           hx-target="#comments-container"
-          hx-swap="innerHTML"
+          hx-swap="beforeend"
           hx-trigger="submit">
         {% csrf_token %}
-        <textarea class="message_block" type="text" name="text" id="reply-on-{{ comment_id }}" placeholder="Твой ответ" required autofocus></textarea>
+        <textarea class="message_block" type="text" name="text" id="reply-on-{{ comment_id }}" placeholder="Твой ответ" required autofocus autocomplete="off"></textarea>
         <div class="send_block">
-            <input onclick="scrollDown()" class="send_btn" type="submit" value="Отправить">
+            <!-- Здесь должна вызываться функция прокрутки, но я её забраковал -->
+            <input onclick="loadPostReplyButton(this)" class="send_btn" type="submit" data-comment-id="{{ comment_id }}" value="Отправить">
         </div>
     </form>
 </div>

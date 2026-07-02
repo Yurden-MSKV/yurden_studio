@@ -1,0 +1,13 @@
+{% load static %}
+
+<form class="comment_form edit_comment"
+      hx-post="{% url 'edit-post-comment' post_id=post.id comment_id=comment.id %}"
+      hx-target="#comment-{{ comment.id }}"
+      hx-swap="outerHTML"
+      hx-trigger="submit">
+    {% csrf_token %}
+    {{ form.text }}
+    <div class="send_block">
+        <input class="send_btn" type="submit" value="Отправить">
+    </div>
+</form>

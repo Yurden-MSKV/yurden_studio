@@ -9,6 +9,11 @@
             <div class="feed_content">
                 <img class="feed_manga_cover" src="{{ item.cover.url }}">
                 <div class="chapters_list">
+                    <div class="description landscape">
+                        {% if item.chapters|length <= 3 %}
+                            <p>{{ item.manga.description }}</p>
+                        {% endif %}
+                    </div>
                     {% for ch in item.chapters %}
                         <a class="chapter" href="{% url 'chapter-page' manga_slug=item.manga.manga_slug ch_number=ch.get_chapter_display %}">
                             <p>Глава {{ ch.get_chapter_display }} — {{ ch.ch_name }}</p>

@@ -1,0 +1,14 @@
+{% load static %}
+
+<form class="comment_form new_comment"
+      hx-post="{% url 'post-load-new-form' post_id=post.id %}"
+      hx-target="#comments-container"
+      hx-swap="beforeend"
+      hx-trigger="submit">
+    {% csrf_token %}
+    <textarea class="message_block" type="text" name="text" id="comment" rows="3" placeholder="Твой комментарий" required autocomplete="off"></textarea>
+    <div class="send_block">
+        <!-- Здесь должна вызываться функция прокрутки, но я её забраковал -->
+        <input onclick="loadNewForm()" class="send_btn" type="submit" value="Отправить">
+    </div>
+</form>

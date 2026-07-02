@@ -1,4 +1,4 @@
-{% extends 'new/../main/new_top_panel.html' %}
+{% extends 'main/new_top_panel.html' %}
 
 {% load static %}
 {% load nbsp_filters %}
@@ -8,34 +8,41 @@
 {% endblock %}
 
 {% block content %}
-    <div class="main_container">
+    <link rel="stylesheet" href="{% static 'manga_section/css/new_manga_page.css' %}">
+    <div class="main_manga_container">
         <div class="manga_container">
             <div class="info_block">
                 <div class="name">
                     <h2>{{ manga.manga_name }}</h2>
                 </div>
-                <div class="description">
+                <div class="manga_description">
                     <p>{{ manga.description|add_nbsp }}</p>
                 </div>
-                <div class="genres">
-                    <h4 class="block_title">Жанры:</h4>
-                    <div class="genres_block">
-                        {% for genre in genres %}
-                            <p class="list_element">{{ genre.genre_name }}</p>
-                        {% endfor %}
+                <div class="manga_info">
+                    <div class="genres">
+                        <h3 class="block_title">Жанры:</h3>
+                        <div class="genres_block">
+                            {% for genre in genres %}
+                                <p class="list_element">{{ genre.genre_name }}</p>
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
-                <div class="authors">
-                    <h4 class="block_title">Автор:</h4>
-                    {% for author in authors %}
-                        <p class="list_element">{{ author.author_name }}</p>
-                    {% endfor %}
-                </div>
-                <div class="artists">
-                    <h4 class="block_title">Художник:</h4>
-                    {% for artist in artists %}
-                        <p class="list_element">{{ artist.author_name }}</p>
-                    {% endfor %}
+                    <div class="authors">
+                        <h3 class="block_title">Автор:</h3>
+                        <div class="authors_block">
+                            {% for author in authors %}
+                                <p class="list_element">{{ author.author_name }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="artists">
+                        <h3 class="block_title">Художник:</h3>
+                        <div class="artists_block">
+                            {% for artist in artists %}
+                                <p class="list_element">{{ artist.author_name }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="volumes_container">
@@ -63,13 +70,21 @@
                                             </a>
                                         </div>
                                         {% endwith %}
-                                        <div class="chapter_rating">
-                                            {% if chapter.id in user_rates %}
-                                                <img class="rate_icon icon" src="{% static 'manga_section/icons/star-solid-full.svg' %}">
-                                            {% else %}
-                                                <img class="rate_icon icon" src="{% static 'manga_section/icons/star-regular-full.svg' %}">
+                                        <div class="stats">
+                                            <div class="chapter_rating">
+                                                {% if chapter.id in user_rates %}
+                                                    <img class="icon" src="{% static 'manga_section/icons/star-solid-full.svg' %}">
+                                                {% else %}
+                                                    <img class="icon" src="{% static 'manga_section/icons/star-regular-full.svg' %}">
+                                                {% endif %}
+                                                <p>{{ chapter.rate_percentage }}%</p>
+                                            </div>
+                                            {% if request.user.is_superuser %}
+                                                <div class="view_count">
+                                                    <img class="icon" src="{% static 'icons/eye-regular-full.svg' %}">
+                                                    <p>{{ chapter.view_count }}</p>
+                                                </div>
                                             {% endif %}
-                                            <p>{{ chapter.rate_percentage }}%</p>
                                         </div>
                                     </div>
                                 {% endfor %}

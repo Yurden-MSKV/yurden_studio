@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 
@@ -26,32 +27,25 @@ def post_page(request, post_slug):
     post = get_object_or_404(Post.objects.prefetch_related('tags'), post_slug=post_slug)
     tags = post.tags.all()
 
-    if request.user.username == 'yurden':
-        message_cnt = message_count(request)
+    if tags:
+        print('1 вариант')
+        tags_flag = True
     else:
-        message_cnt = 0
+        print('2 вариант')
+        tags_flag = False
 
-    if not request.user.is_superuser:
-        viewed_key = f'viewed_post_{post.id}'
-        if not request.COOKIES.get(viewed_key):
-            post.view_count += 1
-            post.save()
 
-            response = render(request, 'post_page.html', {'post': post})
-            response.set_cookie(viewed_key, 'true', max_age=300)
-            return response
 
     return render(request, 'post/new_post_page.html', {
         'post': post,
         'tags': tags,
-        'messages_cnt': message_cnt,
+        'tags_flag': tags_flag
     })
 
 
-def find_post_comments(request, id):
-    post = get_object_or_404(Post, id=id)
-    comments = post.comments.all().order_by('created_at')
-
+@login_required
+def load_new_form(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
     if request.method == 'POST':
         form = PostCommentForm(request.POST)
         if form.is_valid():
@@ -60,31 +54,33 @@ def find_post_comments(request, id):
             comment.author = request.user
             comment.save()
             print(comment)
-            form = PostCommentForm()
-            comments = post.comments.all().order_by('created_at')
-        else:
-            print(f"Form errors: {form.errors}")
-
-        context = {
-            'post': post,
-            'post_id': post.id,
-            'form': form,
-            'comments': comments
-        }
-
-        return render(request, 'post/comments/post_comments_block.html', context)
+            comments = [comment]
+            context = {
+                'post': post,
+                'comments': comments
+            }
+            return render(request, 'post/comments/post_comments_list.html', context)
 
     else:
         form = PostCommentForm()
-
         context = {
             'post': post,
-            'post_id': post.id,
             'form': form,
-            'comments': comments
         }
+        return render(request, 'post/comments/new_comment_form.html', context)
 
-        return render(request, 'post/comments/post_comments_block.html', context)
+
+def find_post_comments(request, id):
+    post = get_object_or_404(Post, id=id)
+    comments = post.comments.all().order_by('created_at')
+
+    context = {
+        'post': post,
+        'comments': comments,
+    }
+
+    return render(request, 'post/comments/post_comments_list.html', context)
+
 
 def comment_reply(request, post_id, comment_id):
     post = get_object_or_404(Post, id=post_id)
@@ -98,29 +94,21 @@ def comment_reply(request, post_id, comment_id):
             comment.author = request.user
             comment.parent_comment = parent_comment
             comment.save()
-            print(comment)
-            form = PostCommentForm()
-            comments = post.comments.all().order_by('created_at')
+
+            comments = [comment]
 
             context = {
                 'post': post,
-                'post_id': post.id,
-                'form': form,
                 'comments': comments,
             }
 
-            return render(request, 'post/comments/post_comments_block.html', context)
-
-        else:
-            print(f"Form errors: {form.errors}")
-            return None
+            return render(request, 'post/comments/post_comments_list.html', context)
 
     else:
         form = PostCommentForm()
         context = {
             'post': post,
             'form': form,
-            'post_id': post.id,
             'comment_id': parent_comment.id
         }
         return render(request, 'post/comments/reply_block.html', context)
@@ -135,3 +123,24 @@ def show_reply(request, post_id, comment_id):
     }
 
     return render(request, 'post/comments/parent_comment.html', context)
+
+
+@login_required
+def edit_post_comment(request, post_id, comment_id):
+    post = get_object_or_404(Post, pk=post_id)
+    comment = get_object_or_404(PostComment, pk=comment_id)
+    if comment.author == request.user:
+        if request.method == 'POST':
+            form = PostCommentForm(request.POST, instance=comment)
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.save()
+                comments = [comment]
+                return render(request, 'post/comments/post_comments_list.html', {'comments': comments, 'post': post})
+        else:
+            form = PostCommentForm(instance=comment)
+            return render(request, 'post/comments/post_edit_comment.html', {'form': form, 'post': post, 'comment': comment})
+
+# @login_required
+# def delete_post_comment(request, post_id, comment_id):
+#     ...

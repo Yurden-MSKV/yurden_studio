@@ -1,14 +1,14 @@
 {% load static %}
 
 <form class="comment_form"
-      hx-post="{% url 'load-new-form' page.id %}"
-      hx-target="#single_comments_list"
+      hx-post="{% url 'load-new-double-form' page.id %}"
+      hx-target="#double_comments_list"
       hx-swap="beforeend"
       hx-trigger="submit">
     {% csrf_token %}
     <textarea class="comment_area" type="text" name="text" id="reply-on-{{ comment_id }}" rows="4" placeholder="Твой комментарий" required autofocus autocomplete="off"></textarea>
     <div class="send_comment_block">
         <!-- Здесь должна вызываться функция прокрутки, но я её забраковал -->
-    <input onclick="reloadForm()" type="submit" class="send_comment" value="Отправить">
+    <input onclick="reloadDoubleForm(this)" type="submit" class="send_comment" value="Отправить">
     </div>
 </form>

@@ -1,0 +1,18 @@
+<script>
+        document.querySelector('.comment_form')?.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.tagName === 'TEXTAREA') {
+                if (!e.shiftKey) {
+                    e.preventDefault();
+
+                    // Для HTMX
+                    if (typeof htmx !== 'undefined') {
+                        htmx.trigger(this, 'submit');
+                        pageScrollDown()
+                    } else {
+                        this.submit();
+                        pageScrollDown()
+                    }
+                }
+            }
+        });
+    </script>

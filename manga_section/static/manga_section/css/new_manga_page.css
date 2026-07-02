@@ -1,5 +1,5 @@
-@media (min-width: 300px) {
-    .main_container {
+@media (max-width: 700px) {
+    .main_manga_container {
         position: absolute;
         top: 8%;
         left: 50%;
@@ -33,6 +33,12 @@
         padding: 0 !important;
     }
 
+    .manga_info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
     .genres, .genres_block, .authors, .artists {
         display: flex;
         flex-direction: row;
@@ -40,19 +46,24 @@
         align-items: center;
     }
 
+    .block_title {
+        font-weight: 500;
+        font-size: 1rem
+    }
+
     .list_element {
         background: var(--element-color);
         border-radius: 5px;
         padding: 2px 5px;
         font-weight: 100;
-        font-size: 0.8rem
+        font-size: 0.9rem;
     }
 
     .volume_block {
         display: flex;
         flex-direction: row;
         gap: 0.5em;
-        padding: 6px 10px;
+        padding: 0.6rem;
         background: var(--block-color);
         border-radius: 5px;
     }
@@ -84,6 +95,7 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        width: 100%
     }
 
     .chapter_link {
@@ -105,10 +117,177 @@
         width: 1rem
     }
 
-    .chapter_rating {
+    .stats {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        margin-left: 20px;
+    }
+
+    .stats .icon {
+        width: 1rem
+    }
+
+    .stats p {
+        font-size: 0.8rem
+    }
+
+    .chapter_rating, .view_count {
         display: flex;
         flex-direction: row;
         gap: 0.1em;
         align-items: center;
+    }
+}
+
+@media (min-width: 700px) {
+
+    .main_manga_container {
+        margin: 0 auto;
+        width: 50%;
+        height: fit-content;
+        color: var(--text-color);
+        /*overflow: hidden;*/
+    }
+
+    .manga_container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        overflow: auto !important;
+        scrollbar-width: none;
+        margin-top: 8%;
+        height: fit-content;
+    }
+
+    .info_block, .volumes_container {
+        display: flex;
+        flex-direction: column;
+        background: var(--block-color);
+        border-radius: 5px;
+        padding: 0.8rem;
+        gap: 0.8rem;
+    }
+
+    .volumes_container {
+        background: none !important;
+        padding: 0 !important;
+    }
+
+    .manga_info {
+        display: flex;
+        flex-direction: row;
+        gap: 1.5rem
+    }
+
+    .block_title {
+        font-size: 1.3rem;
+        font-weight: 500
+    }
+
+    .genres, .genres_block, .authors, .artists {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5em;
+        align-items: center;
+    }
+
+    .genres_block, .authors_block, .artists_block {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+    }
+
+    .genres, .authors, .artists {
+        /*margin-top: 0.5rem;*/
+    }
+
+    .list_element {
+        background: var(--element-color);
+        border-radius: 5px;
+        padding: 2px 5px;
+        font-weight: 100;
+        /*font-size: 0.8rem*/
+    }
+
+    .volume_block {
+        display: flex;
+        flex-direction: row;
+        gap: 0.8rem;
+        padding: 0.8rem;
+        background: var(--block-color);
+        border-radius: 5px;
+    }
+
+    .volume_cover {
+        height: fit-content;
+        width: fit-content;
+    }
+
+    .volume_cover img {
+        width: 15rem;
+        height: fit-content;
+        border-radius: 5px;
+    }
+
+    .volume_content, .chapters_container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        width: 100%;
+    }
+
+    .chapters_container {
+        gap: 1em !important;
+    }
+
+    .chapter_block {
+        margin-left: 2px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .chapter_link {
+        border-left: 0.25rem dashed var(--text-color);
+        padding-left: 5px
+    }
+
+    .viewed {
+        border-left: 0.25rem solid var(--text-color);
+        padding-left: 5px
+    }
+
+    .last {
+        border-left: 0.25rem solid #FFCC00;
+        padding-left: 5px
+    }
+
+    .rate_icon {
+        width: 1rem;
+        margin-right: 1px;
+    }
+
+    .ch_number h4 {
+        font-weight: 500;
+        font-size: 1.3rem
+    }
+
+    .stats {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .chapter_rating, .view_count {
+        display: flex;
+        flex-direction: row;
+        gap: 0.1em;
+        align-items: center;
+    }
+
+    .stats .icon {
+        margin-right: 0.2rem;
     }
 }

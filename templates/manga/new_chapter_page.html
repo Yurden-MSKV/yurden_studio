@@ -1,7 +1,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, viewport-fit=auto">
@@ -45,7 +45,7 @@
     } else {
         currentDouble = (currentSingle + 1) / 2;
     }
-    console.log(`INIT | Single: ${currentSingle} | Double: ${currentDouble}`)
+    {#console.log(`INIT | Single: ${currentSingle} | Double: ${currentDouble}`)#}
 
     const manga_slug = "{{ manga.manga_slug }}";
     const next_chapter = {% if next_chapter %}"{{ next_chapter }}"{% else %}null{% endif %};
@@ -89,7 +89,8 @@
                 // ПОРТРЕТ
                 {#console.log('🔄 Повернули в ПОРТРЕТ');#}
                 let params = new URLSearchParams(window.location.search);
-                if ((!(Number(params.get('page')) % 2 === 0) && !(Number(params.get('page')) === 1)) && !(checkImageOrientation(document.querySelector(`.page[data-page-number="${Number(params.get('page'))}"]`)))) {
+                {#console.log(document.readyState);#}
+                if ((!(Number(params.get('page')) % 2 === 0) && !(Number(params.get('page')) === 1)) && !(checkImageOrientation(document.querySelector(`.page[data-page-number="${Number(params.get('page'))}"]`))) && !(document.readyState === 'interactive')) {
                     currentSingle--;
                     updateLink(currentSingle);
                 }
@@ -119,26 +120,23 @@
 
 
 <div class="global_container">
-
     <div class="chapter_container" data-reader_mode="{{ request.user.profile.reader_mode }}">
-
         <!--Одностраничный вывод-->
         <div class="single_page page_container">
-
             {% if user.profile.viewed_single == False %}
                 <div class="tutorial_block" id="single_tutorial_block">
-                    <div class="top_edge">
-                        <p>Навигация и оценка главы<br>(чтобы убрать панель,<br>нажми в пустой области ниже)</p>
+                    <div class="top_edge edge">
+                        <p>Навигация и оценка главы</p>
                     </div>
-                    <div class="left_edge">
+                    <div class="{% if user.profile.reader_mode == 'right_to_left' %}left_edge{% else %}right_edge{% endif %} edge">
                         <p>Следующая страница&nbsp;/&nbsp;глава</p>
                     </div>
-                    <div class="right_edge">
+                    <div class="{% if user.profile.reader_mode == 'right_to_left' %}right_edge{% else %}left_edge{% endif %} edge">
                         <p>Предыдущая страница&nbsp;/&nbsp;глава</p>
                     </div>
-                    {#                        <div class="rate"><p>Оценка&nbsp;главы</p></div>#}
-                    <div class="bottom_edge">
-                        <p>Комментарии<br>(чтобы убрать окно, нажми на эту же кнопку)</p>
+                    {#<div class="rate"><p>Оценка&nbsp;главы</p></div>#}
+                    <div class="bottom_edge edge">
+                        <p>Комментарии</p>
                     </div>
                     <div class="thanks_button">
                         {% include 'manga/tutorial/single_tutorial_button_block.html' %}
@@ -150,7 +148,7 @@
                 <div class="single page_block {% if forloop.first %}active{% else %}hidden{% endif %}">
                     <img src="{{ stranica.page_image.url }}"
                          class="page spread-page"
-                         data-page-id="{{ stranica.id }}" data-page-number="{{ stranica.page_number }}">
+                         data-page-id="{{ stranica.id }}" data-page-number="{{ stranica.page_number }}" data-double-page="{{ stranica.is_double_page }}">
                 </div>
             {% endfor %}
 
@@ -169,10 +167,13 @@
             </aside>
 
             <div class="single_comments_container hidden" id="single_comments_block">
-                <button class="close_button"
-                        onclick="closeCommentBlock()">
-                    <img class="icon" src="{% static 'manga_section/icons/xmark-solid-full.svg' %}">
-                </button>
+                <div class="comments_block_top">
+                    <div class="single_page_number" id="single_page_number"></div>
+                    <button class="close_button"
+                            onclick="closeCommentBlock()">
+                        <img class="icon" src="{% static 'manga_section/icons/xmark-solid-full.svg' %}">
+                    </button>
+                </div>
                 <div class="single_comments_list" id="single_comments_list"></div>
                 <div class="single_form_block" id="single_form_block"></div>
             </div>
@@ -307,6 +308,10 @@
             </script>
 
             <script>
+
+                const singleCommentsBlock = document.getElementById('single_comments_block');
+                const doubleCommentsBlock = document.getElementById('double_comments_block');
+
                 // Инициализация элементов для работы комментариев и формы
                 const windowComment = document.querySelector('.single_comments_container');
                 const commentList = windowComment.querySelector('.single_comments_list');
@@ -319,6 +324,16 @@
                     return page.getAttribute('data-page-id');
                 }
 
+                function findPageMode() {
+                    let page = document.querySelector('.single.active').firstElementChild;
+                    return page.getAttribute('data-double-page');
+                }
+
+                function findPageNumber() {
+                    let page = document.querySelector('.single.active').firstElementChild;
+                    return page.getAttribute('data-page-number')
+                }
+
                 function loadSinglePageContent() {
 
                     if (windowComment.classList.contains('hidden')) {
@@ -328,7 +343,21 @@
                             console.error('pageId не найден');
                             return;
                         }
-                        // NOTE: Сначала запрос комментариев к странице, затем запрос пустой формы
+                        let isDoublePage = findPageMode();
+                        let pageNumber = findPageNumber();
+
+                        let numberBlock = windowComment.querySelector('#single_page_number');
+                        console.log(isDoublePage);
+                        if (isDoublePage === 'False') {
+                            numberBlock.innerHTML = `<h3>[ Страница ${pageNumber} ]</h3>`;
+                        } else {
+                            if (readerMode === "left_to_right") {
+                            numberBlock.innerHTML = `<h3>[ Разворот ${pageNumber - 1}—${pageNumber} ]</h3>`;
+                            } else {
+                            numberBlock.innerHTML = `<h3>[ Разворот ${pageNumber}—${pageNumber - 1} ]</h3>`;
+                            }
+                        }
+                        // NOTE: Сначала запрос комментариев к странице, затем запрос пустой формы.
                         htmx.ajax('GET', `/manga/page/${pageId}/comments/`, {
                             target: commentList,
                             swap: `innerHTML`,
@@ -338,21 +367,27 @@
                                     target: formBlock,
                                     swap: `innerHTML`
                                 })
-                                form = windowComment.querySelector('.comment_form')
+                                // NOTE: Вроде эта строка уже не задействована. Если ошибок не будет, можно вырезать.
+                                // form = windowComment.querySelector('.comment_form')
                             })
                             .then(() => {
                                 windowComment.classList.remove('hidden');
-                                windowComment.classList.add('active');
+                                if (isDoublePage === 'True') {
+                                    windowComment.classList.add('active', 'double_page');
+                                } else {
+                                    windowComment.classList.add('active');
+                                }
                             })
                     } else {
                         // NOTE: Скрытие элемента
-                        windowComment.classList.remove('active');
+                        windowComment.classList.remove('active', 'double_page');
                         windowComment.classList.add('hidden');
                     }
                 }
 
                 function reloadForm() {
                     let pageId = findSinglePageID();
+                    let noComments = document.getElementById('no-comments');
                     if (!pageId) {
                         console.error('pageId не найден');
                         return;
@@ -361,6 +396,9 @@
                         target: formBlock,
                         swap: `innerHTML`
                     })
+                    if (noComments) {
+                        noComments.remove();
+                    }
                 }
 
                 function pageScrollDown() {
@@ -369,29 +407,37 @@
                             top: commentList.scrollHeight,
                             behavior: 'smooth'
                         })
-                    }, 200)
-
+                    }, 150)
                 }
 
                 function closeCommentBlock() {
                     if (windowComment.classList.contains('active')) {
-                        windowComment.classList.remove('active');
+                        windowComment.classList.remove('active', 'double_page');
                         windowComment.classList.add('hidden');
                     }
                 }
 
                 function loadReplyBlock(button) {
                     let commentID = button.dataset.commentId;
+                    let checkOrientation;
+                    if (singleCommentsBlock.classList.contains('active')) {
+                        checkOrientation = 'portrait'
+                    } else {
+                        checkOrientation = 'landscape'
+                    }
                     htmx.ajax(`GET`, `/manga/comment/${commentID}/reply/`, {
                         target: button,
-                        swap: `outerHTML`
+                        swap: `outerHTML`,
+                        values: {
+                            orientation: checkOrientation
+                        }
                     })
                 }
 
                 function loadReplyButton(block) {
                     setTimeout(() => {
                         let commentID = block.dataset.commentId;
-                    block.closest('.form_block').outerHTML = `<button class="reply_button" data-comment-id="${commentID}" onclick="loadReplyBlock(this)">
+                        block.closest('.form_block').outerHTML = `<button class="reply_button" data-comment-id="${commentID}" onclick="loadReplyBlock(this)">
                                             <img class="icon post_profile_icon" src="{% static 'icons/reply-solid-full.svg' %}">
                                             <p>Ответить</p>
                                         </button>`
@@ -399,14 +445,36 @@
 
                 }
 
-                function loadParentComment(button) {
+                function loadParentComment(event, button) {
+                    event.stopPropagation();
                     let commentID = button.dataset.parentId;
-                    let child = button.closest('.comment_element')
-                    htmx.ajax(`GET`, `/manga/comment/${commentID}/`, {
-                        target: child,
-                        swap: 'beforeend'
-                    })
+                    let child = button.closest('.comment_element');
+                    let findParent = child.querySelector('.parent_element');
+                    if (findParent) {
+                        findParent.style.opacity = '1';
+                        findParent.style.pointerEvents = 'auto';
+                    } else {
+                        htmx.ajax(`GET`, `/manga/comment/${commentID}/`, {
+                            target: child,
+                            swap: 'beforeend'
+                        });
+                        setTimeout(() => {
+                            let findParent = child.querySelector('.parent_element');
+                            findParent.style.opacity = '1';
+                            findParent.style.pointerEvents = 'auto';
+                        }, 100)
+                    }
                 }
+
+                document.addEventListener('click', function (event) {
+                    let isClickInside = event.target.closest('.parent_element');
+                    if (!isClickInside) {
+                        document.querySelectorAll('.parent_element').forEach(block => {
+                            block.style.opacity = '0';
+                            block.style.pointerEvents = 'none';
+                        });
+                    }
+                });
 
             </script>
 
@@ -464,7 +532,7 @@
                         currentSingle++;
                     }
                     updateLink(currentSingle);
-                    console.log(`SINGLE | Single: ${currentSingle} | Double: ${currentDouble}`)
+                    {#console.log(`SINGLE | Single: ${currentSingle} | Double: ${currentDouble}`)#}
 
                     updateSinglePage();
                     updateDoublePage();
@@ -492,7 +560,7 @@
                         currentSingle--;
                     }
                     updateLink(currentSingle);
-                    console.log(`SINGLE | Single: ${currentSingle} | Double: ${currentDouble}`)
+                    {#console.log(`SINGLE | Single: ${currentSingle} | Double: ${currentDouble}`)#}
 
                     updateSinglePage();
                     updateDoublePage();
@@ -512,21 +580,21 @@
 
             {% if user.profile.viewed_double == False %}
                 <div class="tutorial_block" id="double_tutorial_block">
-                    <div class="top_edge">
-                        <p>Навигация и оценка главы<br>(чтобы убрать панель, нажми в пустой области ниже)</p>
+                    <div class="top_edge edge">
+                        <p>Навигация и оценка главы</p>
                     </div>
-                    <div class="left_edge">
+                    <div class="{% if request.user.profile.reader_mode == 'right_to_left' %}left_edge{% else %}right_edge{% endif %} edge">
                         <p>Следующая страница&nbsp;/&nbsp;глава</p>
                     </div>
-                    <div class="right_edge">
+                    <div class="{% if request.user.profile.reader_mode == 'right_to_left' %}right_edge{% else %}left_edge{% endif %} edge">
                         <p>Предыдущая страница&nbsp;/&nbsp;глава</p>
                     </div>
                     {#                        <div class="rate"><p>Оценка&nbsp;главы</p></div>#}
-                    <div class='bottom_edge_left'>
-                        <p>Комментарии к странице слева<br>(чтобы убрать окно, нажми на эту же кнопку)</p>
+                    <div class='bottom_edge_left edge'>
+                        <p>Комментарии к странице слева</p>
                     </div>
-                    <div class="bottom_edge_right">
-                        <p>Комментарии к странице справа<br>(чтобы убрать окно, нажми на эту же кнопку)</p>
+                    <div class="bottom_edge_right edge">
+                        <p>Комментарии к странице справа</p>
                     </div>
                     <div class="thanks_button">
                         {% include 'manga/tutorial/double_tutorial_button_block.html' %}
@@ -542,7 +610,8 @@
                             <img src="{{ pair.0.page_image.url }}"
                                  class="page spread-page"
                                  data-page-id="{{ pair.0.id }}"
-                                 data-page-number="{{ pair.0.page_number }}">
+                                 data-page-number="{{ pair.0.page_number }}"
+                                 data-double-page="{{ pair.0.is_double_page }}">
                         </div>
                     {% elif pair|length == 2 %}
                         <!-- Две обычные страницы -->
@@ -550,18 +619,21 @@
                             <img src="{{ pair.1.page_image.url }}"
                                  class="page normal-page"
                                  data-page-id="{{ pair.1.id }}"
-                                 data-page-number="{{ pair.1.page_number }}">
+                                 data-page-number="{{ pair.1.page_number }}"
+                                 data-double-page="{{ pair.1.is_double_page }}">
                             <img src="{{ pair.0.page_image.url }}"
                                  class="page normal-page"
                                  data-page-id="{{ pair.0.id }}"
-                                 data-page-number="{{ pair.0.page_number }}">
+                                 data-page-number="{{ pair.0.page_number }}"
+                                 data-double-page="{{ pair.0.is_double_page }}">
                         </div>
                     {% elif forloop.first %}
                         <div class="double_first">
                             <img src="{{ pair.0.page_image.url }}"
                                  class="page normal-page"
                                  data-page-id="{{ pair.0.id }}"
-                                 data-page-number="{{ pair.0.page_number }}">
+                                 data-page-number="{{ pair.0.page_number }}"
+                                 data-double-page="{{ pair.0.is_double_page }}">
                             <div style="background: white; width: 66.7vh" class="page-container right-page"></div>
                         </div>
                     {% elif forloop.last %}
@@ -570,14 +642,13 @@
                             <img src="{{ pair.0.page_image.url }}"
                                  class="page normal-page"
                                  data-page-id="{{ pair.0.id }}"
-                                 data-page-number="{{ pair.0.page_number }}">
+                                 data-page-number="{{ pair.0.page_number }}"
+                                 data-double-page="{{ pair.0.is_double_page }}">
                         </div>
                     {% endif %}
                     {# TODO: если эксперимент удастся, заменить page_number на id в одностраничном блоке #}
                 </div>
             {% endfor %}
-
-
 
             <aside class="top_panel_chapter aside_button">
                 <button class='active' id='chapter-top-menu-button' onclick='openChapterMenu(this)'></button>
@@ -589,17 +660,22 @@
                 <button id="prev_page" onclick="debouncedGoToPreviousDouble()"></button>
             </aside>
             <aside class="comment_menu aside_button left_page_comment">
-                <button id="left_comment" onclick="loadDoublePageContent(this)"></button>
+                <button id="left_comment" data-reader-mode="{{ request.user.profile.reader_mode }}" onclick="loadDoublePageContent(this)"></button>
             </aside>
             <aside class="comment_menu aside_button right_page_comment">
-                <button id="right_comment" onclick="loadDoublePageContent(this)"></button>
+                <button id="right_comment" data-reader-mode="{{ request.user.profile.reader_mode }}" onclick="loadDoublePageContent(this)"></button>
             </aside>
 
-            <div class="comments_container hidden">
-                <div class="comment_show">
-                    {% block commentblock %}
-                    {% endblock %}
+            <div class="comments_container hidden" id="double_comments_block">
+                <div class="comments_block_top">
+                    <div class="double_page_number" id="double_page_number"></div>
+                    <button class="close_button"
+                            onclick="closeDoubleCommentBlock()">
+                        <img class="icon" src="{% static 'manga_section/icons/xmark-solid-full.svg' %}">
+                    </button>
                 </div>
+                <div class="double_comments_list" id="double_comments_list"></div>
+                <div class="double_form_block" id="double_form_block"></div>
             </div>
 
             <div class="chapter_top_menu hidden">
@@ -726,7 +802,8 @@
                 const pageNumbers = document.querySelectorAll('.page_numbers');
                 {#console.log(pageNumbers);#}
 
-                function findDoublePageID(buttonId) {
+                function findDoublePageID(buttonId, button) {
+                    let readerMode = button.dataset.readerMode;
                     let pairBlock = document.querySelector('.double.active');
                     let pair = pairBlock.querySelector('.double_block, .double_first, .double_last')
                     let page;
@@ -734,23 +811,65 @@
                         if (pair.classList.contains('double_last')) {
                             page = pair.lastElementChild;
                         } else {
-                            page = pair.firstElementChild;
+                            if (readerMode === 'right_to_left') {
+                                page = pair.firstElementChild;
+                            } else {
+                                page = pair.lastElementChild;
+                            }
                         }
                     } else if (buttonId === 'right_comment') {
                         if (pair.classList.contains('double_first')) {
                             page = pair.firstElementChild;
                         } else {
-                            page = pair.lastElementChild;
+                            if (readerMode === 'right_to_left') {
+                                page = pair.lastElementChild;
+                            } else {
+                                page = pair.firstElementChild;
+                            }
                         }
                     }
                     console.log(page)
                     return page.getAttribute('data-page-id');
                 }
 
+                function getDoublePageAttrs(buttonId) {
+                    let pairBlock = document.querySelector('.double.active');
+                    let pair = pairBlock.querySelector('.double_block, .double_first, .double_last')
+                    let page;
+                    if (buttonId === 'left_comment') {
+                        if (pair.classList.contains('double_last')) {
+                            page = pair.lastElementChild;
+                        } else {
+                            if (readerMode === 'right_to_left') {
+                                page = pair.firstElementChild;
+                            } else {
+                                page = pair.lastElementChild;
+                            }
+                        }
+                    } else if (buttonId === 'right_comment') {
+                        if (pair.classList.contains('double_first')) {
+                            page = pair.firstElementChild;
+                        } else {
+                            if (readerMode === 'right_to_left') {
+                                page = pair.lastElementChild;
+                            } else {
+                                page = pair.firstElementChild;
+                            }
+                        }
+                    }
+                    return {
+                        isDoublePage: page.getAttribute('data-double-page'),
+                        doublePageNumber: page.getAttribute('data-page-number')
+                    }
+                }
+
                 function loadDoublePageContent(button) {
+                    // В ID кнопки указано, к какой странице открываются комментарии
                     let buttonId = button.id;
+                    // Захватываем блок, в который будем подгружать данные
                     let windowComment = document.querySelector('.comments_container');
 
+                    // Делаем блок видимым в нужной стороне
                     if (windowComment.classList.contains('hidden')) {
                         windowComment.classList.remove('hidden');
                         if (buttonId === 'left_comment') {
@@ -760,34 +879,67 @@
                             windowComment.classList.remove('active', 'left_page');
                             windowComment.classList.add('active', 'right_page');
                         }
-                        let pageId = findDoublePageID(buttonId);
+                        let pageId = findDoublePageID(buttonId, button);
                         if (!pageId) {
                             console.error('pageId не найден');
                             return;
                         }
-                        const commentWindow = document.querySelector('.comment_show');
-                        commentWindow.id = 'comments-page-list-' + pageId;
-                        htmx.ajax('GET', `/manga/page/${pageId}/comments/`, {
-                                target: `#comments-page-list-${pageId}`,
+
+                        let {isDoublePage, doublePageNumber} = getDoublePageAttrs(buttonId);
+                        let doubleNumberBlock = windowComment.querySelector('#double_page_number');
+
+                        if (isDoublePage === 'False') {
+                            doubleNumberBlock.innerHTML = `<h3>[ Страница ${doublePageNumber} ]</h3>`;
+                        } else {
+                            if (readerMode === "left_to_right") {
+                            doubleNumberBlock.innerHTML = `<h3>[ Разворот ${doublePageNumber - 1}—${doublePageNumber} ]</h3>`;
+                            } else {
+                            doubleNumberBlock.innerHTML = `<h3>[ Разворот ${doublePageNumber}—${doublePageNumber - 1} ]</h3>`;
+                            }
+                        }
+
+                        // NOTE: Пока не понимаю, что делает эта строка. Наверное, можно отключить.
+                        {#commentWindow.id = 'comments-page-list-' + pageId;#}
+                        htmx.ajax(`GET`, `/manga/page/${pageId}/comments/`, {
+                                target: `#double_comments_list`,
                                 swap: `innerHTML`,
-                                {#onSuccess: function (data) {#}
-                                {#    console.log(`Успешный ответ:`, data);#}
-                                {#    console.log(`Длина HTML:`, data.length);},#}
-                                {#onError: function (error) {#}
-                                {#    console.error(`Ошибка:`, error);},#}
                             }
                         )
+                        htmx.ajax(`GET`, `/manga/page/${pageId}/new-double-comment/`, {
+                            target: `#double_form_block`,
+                            swap: `innerHTML`,
+                        })
                     } else {
                         windowComment.classList.remove('active', 'left_page', 'right_page');
                         windowComment.classList.add('hidden');
                     }
                 }
+
+                function closeDoubleCommentBlock() {
+                    let doubleCommentBlock = document.querySelector('.double_page .comments_container')
+                    if (doubleCommentBlock.classList.contains('active')) {
+                        doubleCommentBlock.classList.remove('active');
+                        doubleCommentBlock.classList.add('hidden');
+                    }
+                }
+
+                function reloadDoubleForm(button) {
+                    let formArea = button.parentElement.parentElement.querySelector('.comment_area');
+                    let doubleList = document.getElementById('double_comments_list');
+                    let noComments = doubleList.querySelector('#no-comments');
+                    if (noComments) {
+                        noComments.remove();
+                    }
+                    setTimeout(() => {
+                        if (formArea) {
+                            formArea.value = '';
+                        }
+                    }, 150)
+
+                }
+
             </script>
         </div>
-
-        {#<aside class="chapter_menu">#}
-        {#{% include 'chapter_htmx/chapter_top_panel.html' %}#}
-        {# </aside>#}
 
     </div>
 </div>
@@ -795,7 +947,7 @@
 <script>
     let readerMode = document.querySelector('.chapter_container').dataset.reader_mode;
     if (readerMode === "left_to_right") {
-        console.log('Режим: слева направо')
+        {#console.log('Режим: слева направо')#}
         document.querySelectorAll('.toggle_next.single_next').forEach(element => {
             element.innerHTML = '<button id="next_page" onclick="debouncedGoToPreviousSingle()"></button>';
         });
@@ -825,7 +977,7 @@
             }
         });
     } else {
-        console.log('Режим: справа налево');
+        {#console.log('Режим: справа налево');#}
         document.querySelectorAll('.toggle_next.single_next').forEach(element => {
             element.innerHTML = '<button id="next_page" onclick="debouncedGoToNextSingle()"></button>';
         });
@@ -903,7 +1055,7 @@
             }
             currentDouble++;
             updateLink(currentSingle);
-            console.log(`DOUBLE | Single: ${currentSingle} | Double: ${currentDouble}`)
+            {#console.log(`DOUBLE | Single: ${currentSingle} | Double: ${currentDouble}`)#}
 
             updateDoublePage();
             updateSinglePage();
@@ -924,7 +1076,7 @@
             }
             currentDouble--;
             updateLink(currentSingle);
-            console.log(`DOUBLE | Single: ${currentSingle} | Double: ${currentDouble}`)
+            {#console.log(`DOUBLE | Single: ${currentSingle} | Double: ${currentDouble}`)#}
 
             updateDoublePage();
             updateSinglePage();

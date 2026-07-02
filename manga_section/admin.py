@@ -42,7 +42,7 @@ class AuthorAdmin(admin.ModelAdmin):
 class ChapterInline(admin.TabularInline):
     model = Chapter
     extra = 1
-    fields = ['ch_number', 'ch_name', 'edit_link']
+    fields = ['ch_number', 'ch_name', 'view_count', 'edit_link']
     readonly_fields = ['edit_link']
 
     def edit_link(self, obj):
