@@ -72,6 +72,11 @@
         margin-bottom: 1rem
     }
 
+    .post_content p img {
+        height: auto !important;
+        max-width: 70%;
+    }
+
     .post_content a:link, .post_content a:visited {
         /*color: #1288ff;*/
         text-decoration: underline;
@@ -325,10 +330,14 @@
         margin-bottom: 1rem
     }
 
+    .post_content p img {
+        height: auto !important;
+        max-width: 50%;
+    }
+
     .post_content p:last-child {
         margin-bottom: 0;
     }
-
 
     .comments_container {
         display: flex;
