@@ -222,7 +222,7 @@ body, html {
     }
 
     .parent_element {
-        border: 1px solid var(--text-color);
+        border: 2px solid var(--text-color);
         max-width: 60%;
         border-radius: 5px;
         padding: 4px 6px;
@@ -309,7 +309,7 @@ body, html {
     }
 
     .parent_element {
-        border: 1px solid var(--text-color);
+        border: 2px solid var(--text-color);
         max-width: 60%;
         border-radius: 5px;
         padding: 4px 6px;
@@ -457,7 +457,7 @@ body, html {
         background: none;
         color: var(--text-color);
         font: 500 1.3rem "Ubuntu" !important;
-        border: 1px solid var(--text-color);
+        border: 2px solid var(--text-color);
         transition: box-shadow 0.2s;
         border-radius: 5px;
         padding: 5px 15px;
@@ -548,16 +548,26 @@ body, html {
 }
 
 @media(orientation: portrait) {
-    .back_icon, .rate_icon {
+    .back_icon {
+        width: 1rem !important;
+        filter: var(--icon-hover-color) !important;
+    }
+    .rate_icon, .arrow_icon {
         width: 1rem !important;
     }
 }
 
 @media(orientation: landscape) {
-    .back_icon, .rate_icon {
+    .back_icon{
+        width: 1.5rem !important;
+        filter: var(--icon-hover-color) !important;
+    }
+
+    .rate_icon, .arrow_icon {
         width: 1.5rem !important;
     }
 }
+
 
 
 .back_to_manga p, .rate_percentage p {

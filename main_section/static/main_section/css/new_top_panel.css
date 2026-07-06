@@ -90,7 +90,7 @@ button {
     .shadow {
         width: 100vw;
         height: 100vh;
-        background: rgba(0, 0, 0, 0.6);
+        background: var(--shadow);
         z-index: 1;
         position: absolute;
         top: 6vh;
@@ -398,7 +398,7 @@ button {
     .desktop_shadow {
         width: 100%;
         height: 100vh;
-        background: rgba(0, 0, 0, 0.6);
+        background: var(--shadow);
         z-index: 1;
         position: absolute;
         top: 6vh;

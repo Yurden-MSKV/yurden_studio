@@ -151,19 +151,19 @@
         display: flex;
         flex-direction: column;
         gap: 0.5em;
-        background: #121212;
+        background: var(--block-color);
         border-radius: 5px;
         padding: 6px;
         position: relative;
     }
 
     .parent_link {
-        border: 1px solid white;
+        border: 2px solid white;
         position: absolute;
         z-index: 1;
         bottom: -0.2em;
         left: 5em;
-        background: #292929;
+        background: var(--block-color);
         transition: opacity 0.3s ease-out;
     }
 
@@ -407,7 +407,7 @@
         display: flex;
         flex-direction: column;
         gap: 0.5em;
-        background: #121212;
+        background: var(--block-color);
         border-radius: 5px;
         padding: 0.8rem;
         position: relative;
@@ -418,12 +418,12 @@
     }
 
     .parent_link {
-        border: 1px solid white;
+        border: 2px solid white;
         position: absolute;
         z-index: 1;
         bottom: -0.2em;
         left: 5em;
-        background: #292929;
+        background: var(--block-color);
         transition: opacity 0.3s ease-out;
     }
 

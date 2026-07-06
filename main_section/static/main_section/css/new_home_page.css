@@ -55,7 +55,7 @@
     }
 
     .chapter.last_read {
-        border-left: 2px solid #FFCC00;
+        border-left: 2px solid #ffbf00;
     }
 
     .chapter {
@@ -144,7 +144,7 @@
     }
 
     .chapter.last_read {
-        border-left: 0.25rem solid #FFCC00;
+        border-left: 0.25rem solid #ffbf00;
     }
 
     .chapter {
