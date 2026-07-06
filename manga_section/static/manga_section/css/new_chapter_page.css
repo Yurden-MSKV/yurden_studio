@@ -984,7 +984,7 @@ body, html {
     left: 25%;
     width: 49%;
     transform: translateX(-50%);
-    height: 12%;
+    height: 11%;
     border: 3px dashed var(--hover-text-color);
     background: rgba(255, 60, 60, 0.6);
     align-items: center;
@@ -999,7 +999,7 @@ body, html {
     right: 25%;
     width: 49%;
     transform: translateX(50%);
-    height: 12%;
+    height: 11%;
     border: 3px dashed var(--hover-text-color);
     background: #3cd2ff;
     align-items: center;
