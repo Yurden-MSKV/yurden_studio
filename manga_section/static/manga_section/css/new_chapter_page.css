@@ -550,7 +550,7 @@ body, html {
 @media(orientation: portrait) {
     .back_icon {
         width: 1rem !important;
-        filter: var(--icon-hover-color) !important;
+        filter: var(--back-icon-color) !important;
     }
     .rate_icon, .arrow_icon {
         width: 1rem !important;
@@ -560,7 +560,7 @@ body, html {
 @media(orientation: landscape) {
     .back_icon{
         width: 1.5rem !important;
-        filter: var(--icon-hover-color) !important;
+        filter: var(--back-icon-color) !important;
     }
 
     .rate_icon, .arrow_icon {

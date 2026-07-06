@@ -9,6 +9,7 @@ body.light-theme {
     --element-color: #BFBFBF;
     --icon-color: invert(0%) sepia(96%) saturate(15%) hue-rotate(246deg) brightness(105%) contrast(105%);
     --icon-hover-color: invert(100%) sepia(2%) saturate(9%) hue-rotate(16deg) brightness(103%) contrast(100%);
+    --back-icon-color: invert(100%) sepia(2%) saturate(9%) hue-rotate(16deg) brightness(103%) contrast(100%);;
     --comment-window: rgb(220 220 220 / 0.9);
     --comment-element: rgb(195, 195, 195);
     --tran-back: background 0.5s ease;
@@ -27,6 +28,7 @@ body.dark-theme {
     --hover-text-color: #000000;
     --icon-color: invert(100%) sepia(2%) saturate(9%) hue-rotate(16deg) brightness(103%) contrast(100%);
     --icon-hover-color: invert(0%) sepia(0%) saturate(7500%) hue-rotate(251deg) brightness(93%) contrast(107%);
+    --back-icon-color: invert(100%) sepia(2%) saturate(9%) hue-rotate(16deg) brightness(103%) contrast(100%);;
     --comment-window: rgba(24, 24, 24, 0.9);
     --comment-element: rgb(24, 24, 24);
     --shadow: rgba(0, 0, 0, 0.6)
