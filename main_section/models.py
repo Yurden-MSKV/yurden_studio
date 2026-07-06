@@ -70,12 +70,19 @@ def save_user_profile(sender, instance, **kwargs):
 
 
 class ChapterView(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    manga = models.ForeignKey(Manga, on_delete=models.CASCADE)
-    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE,
+    user = models.ForeignKey(User,
+                             on_delete=models.CASCADE)
+    manga = models.ForeignKey(Manga,
+                              on_delete=models.CASCADE,
+                              related_name='manga_views')
+    chapter = models.ForeignKey(Chapter,
+                                on_delete=models.CASCADE,
                                 related_name='views')
-    is_view = models.BooleanField(blank=True, null=True)
-    view_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    is_view = models.BooleanField(blank=True,
+                                  null=True)
+    view_date = models.DateTimeField(auto_now_add=True,
+                                     blank=True,
+                                     null=True)
 
     class Meta:
         unique_together = ('user', 'chapter')

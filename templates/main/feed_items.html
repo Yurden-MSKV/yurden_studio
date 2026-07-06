@@ -11,11 +11,11 @@
                 <div class="chapters_list">
                     <div class="description landscape">
                         {% if item.chapters|length <= 3 %}
-                            <p>{{ item.manga.description }}</p>
+                            <p id="{{ item.manga.id }}">{{ item.manga.description }}</p>
                         {% endif %}
                     </div>
                     {% for ch in item.chapters %}
-                        <a class="chapter" href="{% url 'chapter-page' manga_slug=item.manga.manga_slug ch_number=ch.get_chapter_display %}">
+                        <a class="chapter {% if ch.is_last_read %}last_read{% elif ch.is_viewed %}viewed{% endif %}" href="{% url 'chapter-page' manga_slug=item.manga.manga_slug ch_number=ch.get_chapter_display %}">
                             <p>Глава {{ ch.get_chapter_display }} — {{ ch.ch_name }}</p>
                         </a>
                     {% endfor %}

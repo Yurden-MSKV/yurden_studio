@@ -23,7 +23,7 @@ from django.middleware.csrf import get_token
 
 from django.contrib.auth.views import LoginView
 from .forms import LoginFormWithCaptcha
-from .models import Profile
+from .models import Profile, ChapterView
 
 from django.core.paginator import Paginator
 
@@ -129,7 +129,7 @@ def main_page(request):
 
 
 def new_home_page(request):
-    all_items = get_all_items()
+    all_items, user_all_views, user_last_manga = get_all_items(request)
     paginator = Paginator(all_items, 5)
     total_pages = paginator.num_pages
     # print(f'Всего страниц: {total_pages}')
@@ -138,18 +138,40 @@ def new_home_page(request):
 
     context = {
         'feed': page_obj,
-        'page': page
+        'page': page,
+        'user_all_views': user_all_views,
+        'user_last_manga': user_last_manga
     }
 
     if request.headers.get('HX-Request') == 'true':
-        # print(f'Отдаю страницу {page}')
         return render(request, 'main/feed_items.html', context)
     else:
         return render(request, 'main/new_home_page.html', context)
 
 
-def get_all_items():
+def get_all_items(request):
     chapters = Chapter.objects.all().select_related('volume__manga')
+    user_views = ChapterView.objects.filter(user=request.user, chapter__in=chapters).order_by('-view_date').select_related('chapter__volume__manga')
+    user_last_manga = Manga.objects.filter(volumes__chapters__views__in=user_views).distinct()
+    last_read_dict = {}
+    viewed_dict = {}
+    for view in user_views:
+        current_manga = view.chapter.volume.manga
+        if current_manga not in last_read_dict:
+            last_read_dict[current_manga] = view.chapter
+        else:
+            if current_manga not in viewed_dict:
+                viewed_dict[current_manga] = []
+            viewed_dict[current_manga].append(view.chapter)
+
+
+    last_read_chapter_ids = {chapter.id for chapter in last_read_dict.values()}
+    viewed_chapter_ids = {chapter.id for chapter_list in viewed_dict.values() for chapter in chapter_list}
+
+    for chapter in chapters:
+        chapter.is_last_read = chapter.id in last_read_chapter_ids
+        chapter.is_viewed = chapter.id in viewed_chapter_ids
+
     posts = Post.objects.filter(visibility=True)
 
     all_items = sorted(
@@ -192,7 +214,7 @@ def get_all_items():
             grouped_items.append({'post': item})
             i += 1
 
-    return grouped_items
+    return grouped_items, user_views, user_last_manga
 
 
 def get_latest_cover(manga):

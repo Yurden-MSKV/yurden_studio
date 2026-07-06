@@ -163,8 +163,12 @@ button {
         width: 1.1rem;
     }
 
-    .profile_icon, .logout_icon {
+    .profile_icon, .logout_icon, .theme-icon .icon, .reader-icon .icon, .reset-icon, .q_a_icon {
         width: 1.5rem;
+    }
+
+    .donate {
+        width: 1.3rem
     }
 
     .reader_block {
@@ -189,10 +193,6 @@ button {
     .theme-icon.show, .reader-icon.show, .reset_reader_mobile {
         display: flex;
         gap: 3%;
-    }
-
-    .theme-icon .icon, .reader-icon .icon, .reset-icon {
-        width: 1.5rem
     }
 
     .exit_mobile h3, .theme_block h2, .theme-icon h2, .reader_block h2 {
@@ -227,8 +227,10 @@ button {
     }
 
     .link {
-        border-left: 5px solid var(--text-color);
-        padding-left: 10px;
+        /*border-left: 5px solid var(--text-color);*/
+        /*padding-left: 10px;*/
+        display: flex;
+        gap: 2%
     }
 
     .page_container {

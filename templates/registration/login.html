@@ -5,17 +5,13 @@
 <html>
 <head>
     <title>Вход</title>
-    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-    <meta name="viewport" content="maximum-scale=0.7">
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=0.8, user-scalable=no">
+    <link rel="stylesheet" href="{% static 'main_section/css/new_login.css' %}">
 </head>
 <body>
     <div class="main_container {% if request.is_mobile %}mobile{% else %}desktop{% endif %}">
-    
-        {% if request.is_mobile %}
-            <link rel="stylesheet" href="{% static 'main_section/css/login-mobile.css' %}">
-        {% else %}
-            <link rel="stylesheet" href="{% static 'main_section/css/login.css' %}">
-        {% endif %}
+
     
         <div class="login_box">
             <h1>Вход в аккаунт</h1>

@@ -179,19 +179,13 @@
             </div>
 
             <div class="single_chapter_top_menu hidden">
-                <a class="single_back_to_manga" href="{% url 'manga-page' slug=manga.manga_slug %}"><p>← К манге</p></a>
+                <a class="single_back_to_manga" href="{% url 'manga-page' slug=manga.manga_slug %}">
+                    <img class="icon back_icon" src={% static 'icons/left-long-solid-full.svg' %}>
+                    <p>К манге</p>
+                </a>
                 <div class="single_chapter_info">
-                    <p class="single_chapter_number">
-                        Глава {{ chapter.volume.vol_number }}-{{ chapter.get_chapter_display }}</p>
-                    {% for page in single_page_mode %}
-                        <p class="single_page_numbers {% if forloop.first %}active{% else %}hidden{% endif %}">
-                            {% if not page.is_double_page %}
-                                Страница {{ page.page_number }}
-                            {% else %}
-                                Разворот {{ page.page_number }} — {{ page.page_number|add:-1 }}
-                            {% endif %}
-                        </p>
-                    {% endfor %}
+                    <p class="single_chapter_number">Том {{ chapter.volume.vol_number }} Глава {{ chapter.get_chapter_display }}</p>
+                    <div class="page_number_single" id="page_number_single"></div>
                 </div>
                 {#                    <button class="hide_top"><p>Скрыть</p></button>#}
                 <div class="single_rate_block">
@@ -503,8 +497,8 @@
                     let currentImage = document.querySelector(`.single .page[data-page-number="${currentSingle}"]`);
                     currentImage.parentElement.classList.remove('hidden');
                     currentImage.parentElement.classList.add('active');
-                    {#singlePageNumbers[currentSingle - 1].classList.remove('hidden');#}
-                    {#singlePageNumbers[currentSingle - 1].classList.add('active');#}
+                    singlePageNumbers[currentSingle - 1].classList.remove('hidden');
+                    singlePageNumbers[currentSingle - 1].classList.add('active');
                     {#console.log(getCurrentPageNumber())#}
                 } catch (error) {
                     {#console.error('Ошибка:', error.message);#}
@@ -532,7 +526,7 @@
                         currentSingle++;
                     }
                     updateLink(currentSingle);
-                    {#console.log(`SINGLE | Single: ${currentSingle} | Double: ${currentDouble}`)#}
+                    updateTopNumber(currentSingle);
 
                     updateSinglePage();
                     updateDoublePage();
@@ -560,6 +554,7 @@
                         currentSingle--;
                     }
                     updateLink(currentSingle);
+                    updateTopNumber(currentSingle);
                     {#console.log(`SINGLE | Single: ${currentSingle} | Double: ${currentDouble}`)#}
 
                     updateSinglePage();
@@ -679,22 +674,15 @@
             </div>
 
             <div class="chapter_top_menu hidden">
-                <a class="back_to_manga" href="{% url 'manga-page' slug=manga.manga_slug %}"><p>← К манге</p></a>
+                <a class="back_to_manga" href="{% url 'manga-page' slug=manga.manga_slug %}">
+                    <img class="icon back_icon" src={% static 'icons/left-long-solid-full.svg' %}>
+                    <p>К манге</p>
+                </a>
                 <div class="chapter_info">
-                    <p class="chapter_number">
-                        Глава {{ chapter.volume.vol_number }}-{{ chapter.get_chapter_display }}</p>
+                    <p class="chapter_number">Том {{ chapter.volume.vol_number }} Глава {{ chapter.get_chapter_display }}</p>
                     <p>|</p>
-                    {% for pair in double_page_mode %}
-                        <p class="page_numbers {% if forloop.first %}active{% else %}hidden{% endif %}">
-                            {% if pair.1 %}
-                                Страницы {{ pair.1.page_number }} — {{ pair.0.page_number }}
-                            {% elif forloop.first or forloop.last %}
-                                Страница {{ pair.0.page_number }}
-                            {% else %}
-                                Разворот {{ pair.0.page_number }} — {{ pair.0.page_number|add:-1 }}
-                            {% endif %}
-                        </p>
-                    {% endfor %}
+                    <div class="page_number_double" id="page_number_double"></div>
+
                 </div>
                 {#                    <button class="hide_top"><p>Скрыть</p></button>#}
                 <div class="double_rate_block">
@@ -889,7 +877,11 @@
                         let doubleNumberBlock = windowComment.querySelector('#double_page_number');
 
                         if (isDoublePage === 'False') {
-                            doubleNumberBlock.innerHTML = `<h3>[ Страница ${doublePageNumber} ]</h3>`;
+                            if (buttonId === 'left_comment') {
+                                doubleNumberBlock.innerHTML = `<img class='back_icon icon' src='{% static 'icons/left-long-solid-full.svg' %}'><h3>[ Страница ${doublePageNumber} ]</h3>`;
+                            } else if (buttonId === 'right_comment') {
+                                doubleNumberBlock.innerHTML = `<h3>[ Страница ${doublePageNumber} ]</h3><img class='back_icon icon' src='{% static 'icons/right-long-solid-full.svg' %}'>`;
+                            }
                         } else {
                             if (readerMode === "left_to_right") {
                             doubleNumberBlock.innerHTML = `<h3>[ Разворот ${doublePageNumber - 1}—${doublePageNumber} ]</h3>`;
@@ -1007,6 +999,40 @@
             }
         });
     }
+
+    const topSingleNumber = document.getElementById('page_number_single');
+    console.log('topSingleNumber:', topSingleNumber)
+    const topDoubleNumber = document.getElementById('page_number_double');
+    console.log('topDoubleNumber:', topDoubleNumber)
+
+    function updateTopNumber(currentSingle) {
+        console.log('Функция работает')
+        let singlePage = document.querySelector(`.single .page[data-page-number="${currentSingle}"]`);
+        let singleNumber = singlePage.dataset.pageNumber;
+        let singleIsDouble = singlePage.dataset.doublePage;
+
+        if (singleIsDouble === 'True') {
+            console.log('Это разворот')
+            if (readerMode === 'right_to_left') {
+                topSingleNumber.innerHTML = `<p>Разворот ${singleNumber} – ${singleNumber - 1}</p>`
+                topDoubleNumber.innerHTML = `<p>Разворот ${singleNumber} – ${singleNumber - 1}</p>`
+            } else {
+                topSingleNumber.innerHTML = `<p>Разворот ${singleNumber - 1} – ${singleNumber}</p>`
+                topDoubleNumber.innerHTML = `<p>Разворот ${singleNumber - 1} – ${singleNumber}</p>`
+            }
+        } else {
+            console.log('Это не разворот')
+            topSingleNumber.innerHTML = `<p>Страница ${singleNumber}</p>`;
+            if ((Number(singleNumber) === Number(firstPage)) || (Number(singleNumber) === lastPage)) {
+                topDoubleNumber.innerHTML = `<p>Страница ${singleNumber}</p>`
+            } else if (readerMode === 'right_to_left') {
+                topDoubleNumber.innerHTML = `<p>Страницы ${singleNumber} – ${singleNumber - 1}</p>`
+            } else if (readerMode === 'left_to_right') {
+                topDoubleNumber.innerHTML = `<p>Страницы ${singleNumber - 1} – ${singleNumber}</p>`
+            }
+        }
+    }
+
 </script>
 
 <script>
@@ -1040,8 +1066,6 @@
         });
         pageDouble[currentDouble - 1].classList.remove('hidden');
         pageDouble[currentDouble - 1].classList.add('active');
-        pageNumbers[currentDouble - 1].classList.remove('hidden');
-        pageNumbers[currentDouble - 1].classList.add('active');
         {#console.log(getCurrentPageNumber())#}
     }
 
@@ -1055,6 +1079,7 @@
             }
             currentDouble++;
             updateLink(currentSingle);
+            updateTopNumber(currentSingle);
             {#console.log(`DOUBLE | Single: ${currentSingle} | Double: ${currentDouble}`)#}
 
             updateDoublePage();
@@ -1076,6 +1101,7 @@
             }
             currentDouble--;
             updateLink(currentSingle);
+            updateTopNumber(currentSingle);
             {#console.log(`DOUBLE | Single: ${currentSingle} | Double: ${currentDouble}`)#}
 
             updateDoublePage();
@@ -1091,13 +1117,23 @@
     // NOTE: Если переключение стрелками будет ломать подсчёт, скорее всего, нужно вписать вместо обычных функций замедленные
     document.addEventListener('keydown', function (event) {
         if (event.key === 'ArrowRight') {
-            goToPreviousDouble();
+            if (readerMode === "right_to_left") {
+                goToPreviousDouble();
+            } else {
+                goToNextDouble();
+            }
         } else if (event.key === 'ArrowLeft') {
-            goToNextDouble();
+            if (readerMode === "right_to_left") {
+                goToNextDouble();
+            } else {
+                goToPreviousDouble();
+            }
         }
     });
 
     updateDoublePage();
+
+    updateTopNumber(currentSingle);
 
 </script>
 

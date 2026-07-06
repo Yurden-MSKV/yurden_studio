@@ -38,15 +38,13 @@
 
     .name_n_date {
         display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        line-height: 1.3
+        flex-direction: column;
+        line-height: 1.3;
+        gap: 0.3rem;
     }
 
     .date {
         display: flex;
-        /*margin-left: auto;*/
         font-size: 0.8rem;
         font-weight: 100;
     }
@@ -57,6 +55,14 @@
         gap: 0.5em;
     }
 
+    .list_element {
+        background: var(--element-color);
+        border-radius: 5px;
+        padding: 2px 5px;
+        font-weight: 100;
+        font-size: 0.9rem;
+    }
+
     .post_content h1, .post_content h2, .post_content h3, .post_content h4 {
         font-weight: 500;
         margin-bottom: 0.2rem
@@ -64,6 +70,12 @@
 
     .post_content p:not(:first-child) {
         margin-bottom: 1rem
+    }
+
+    .post_content a:link, .post_content a:visited {
+        /*color: #1288ff;*/
+        text-decoration: underline;
+        text-decoration-style: dotted;
     }
 
     .comments_container {
@@ -285,7 +297,7 @@
 
     .date {
         display: flex;
-        /*margin-left: auto;*/
+        margin-left: 3rem;
         font-size: 1rem;
         font-weight: 100;
     }
@@ -295,6 +307,13 @@
         flex-direction: row;
         gap: 0.5em;
         align-items: center;
+    }
+
+    .list_element {
+        background: var(--element-color);
+        border-radius: 5px;
+        padding: 2px 5px;
+        font-weight: 100;
     }
 
     .post_content h1, .post_content h2, .post_content h3, .post_content h4 {

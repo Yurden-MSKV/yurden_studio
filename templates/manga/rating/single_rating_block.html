@@ -6,7 +6,7 @@
             hx-vals='{"is_like": "true"}'
             hx-target=".single_rating"
             hx-swap="outerHTML">
-        <img src="{% static 'manga_section/icons/arrow_up.svg' %}">
+        <img class="rate_icon" src="{% static 'icons/arrow-up.svg' %}">
     </button>
     
     <div class="rate_percentage">
@@ -18,6 +18,6 @@
             hx-vals='{"is_like": "false"}'
             hx-target=".single_rating"
             hx-swap="outerHTML">
-        <img src="{% static 'manga_section/icons/arrow_down.svg' %}">
+        <img class="rate_icon" src="{% static 'icons/arrow-down.svg' %}">
     </button>
 </div>

@@ -136,7 +136,9 @@ body, html {
     }
 
     .comment_info p:not(:last-child) {
-        margin-right: 3px
+        margin: 0 3px 0 2px;
+        height: fit-content;
+        line-height: 1.6;
     }
 
     .rate_percentage p {
@@ -522,7 +524,7 @@ body, html {
 
 .chapter_top_menu.active {
     display: flex;
-    background: rgba(75, 75, 75, 0.8);
+    background: var(--block-transparent);
     /*justify-content: space-between;*/
     width: 100%;
     height: 12%;
@@ -540,8 +542,23 @@ body, html {
 
 .back_to_manga {
     height: fit-content;
-    margin-left: 20px
+    margin-left: 20px;
+    display: flex;
+    gap: 3px;
 }
+
+@media(orientation: portrait) {
+    .back_icon, .rate_icon {
+        width: 1rem !important;
+    }
+}
+
+@media(orientation: landscape) {
+    .back_icon, .rate_icon {
+        width: 1.5rem !important;
+    }
+}
+
 
 .back_to_manga p, .rate_percentage p {
     font-size: 3vh !important;
@@ -566,15 +583,21 @@ body, html {
     right: 50%
 }
 
-.single_rate_block, .double_rate_block {
+.single_rate_block {
     display: flex;
-    margin: 0 2vw 0 auto;
+    margin-right: 0.6rem;
+}
+
+.double_rate_block {
+    display: flex;
+    margin: 0 20px 0 auto;
 }
 
 .rating_block {
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 2px;
 }
 
 .rating_block button {
@@ -816,14 +839,18 @@ body, html {
 
 .single_chapter_top_menu.active {
     display: flex;
-    background: rgba(75, 75, 75, 0.8);
-    /*justify-content: space-between;*/
-    width: 100%;
-    height: 12%;
-    position: absolute;
-    top: 0;
+    background: var(--block-transparent);
+    justify-content: space-between;
+    width: 97%;
+    height: 5rem;
+    position: fixed;
+    top: 12%;
     box-sizing: border-box;
     align-items: center;
+    z-index: 2;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 5px;
 }
 
 .single_chapter_top_menu p {
@@ -837,7 +864,9 @@ body, html {
 
 .single_back_to_manga {
     height: fit-content;
-    margin-left: 2vw
+    margin-left: 0.6rem;
+    display: flex;
+    gap: 3px;
 }
 
 .single_back_to_manga p {
@@ -892,9 +921,9 @@ body, html {
     flex-basis: 0;
     position: absolute;
     left: 0.5%;
-    top: 49.5%;
+    top: 50%;
     transform: translateY(-50%);
-    height: 74%;
+    height: 75%;
     width: 20%;
     background: rgba(34, 145, 255, 0.6);;
     z-index: 2;
@@ -913,9 +942,9 @@ body, html {
     flex-basis: 0;
     position: absolute;
     right: 0.5%;
-    top: 49.5%;
+    top: 50%;
     transform: translateY(-50%);
-    height: 74%;
+    height: 75%;
     width: 20%;
     background: rgba(17, 219, 13, 0.6);
     z-index: 2;
@@ -1039,7 +1068,7 @@ body, html {
         position: relative;
         background: var(--comment-element);
         border-radius: 5px;
-        gap: 5px;
+        gap: 0.3rem;
         font: 1rem 'Ubuntu'
     }
 
@@ -1088,6 +1117,20 @@ body, html {
         font: 1rem 'Ubuntu'
     }
 
+    .chapter_top_menu.active {
+        display: flex;
+        background: var(--block-transparent);
+        width: 98%;
+        height: 10%;
+        position: absolute;
+        top: 1%;
+        box-sizing: border-box;
+        align-items: center;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 5px;
+    }
+
     .comments_block_top {
         display: flex;
         flex-direction: row;
@@ -1099,6 +1142,11 @@ body, html {
         /* margin: 0 2.5%; */
         left: 50%;
         transform: translateX(-50%);
+    }
+
+    .double_page_number {
+        display: flex;
+        gap: 5px
     }
 
 }

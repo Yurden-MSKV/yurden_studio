@@ -22,6 +22,7 @@
     <orderEntry type="library" name="htmx.org" level="application" />
     <orderEntry type="library" name="hyperscript.org" level="application" />
     <orderEntry type="library" name="htmx.org" level="application" />
+    <orderEntry type="library" name="htmx.org" level="application" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />

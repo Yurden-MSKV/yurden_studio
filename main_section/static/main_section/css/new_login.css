@@ -1,0 +1,229 @@
+@import url('../../../../static/css/new_themes.css');
+@import url('../../../../static/css/new_text.css');
+
+body, html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Ubuntu';
+    background: var(--background-color);
+}
+
+input:focus-visible {
+	outline: none;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.main_container {
+	display: flex;
+	width: inherit;
+	height: inherit;
+}
+
+@media (max-width: 700px) {
+	.login_box {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		width: fit-content;
+		height: fit-content;
+		margin: auto;
+		padding: 1.5rem;
+		border-radius: 5px;
+		background-color: var(--block-color);
+		transition: var(--tran-back);
+	}
+
+	.login_box h1 {
+		text-align: center;
+	}
+
+	.login_form {
+		display: flex;
+		flex-direction: column;
+		gap: 1.2rem;
+		width: inherit;
+	}
+
+	.input_block {
+		gap: 0.5rem;
+		display: flex;
+		align-items: center;
+		width: fit-content;
+	}
+
+	.login_form label {
+		font: 100 1.2rem 'Ubuntu';
+		color: var(--text-color);
+	}
+
+	.login_form input {
+		padding: 0.3rem 0.5rem;
+		border: 2px dashed var(--text-color);
+		border-radius: 5px;
+		background-color: var(--comment-element);
+		color: var(--text-color);
+		font: 1.2rem 'Ubuntu';
+		box-sizing: border-box;
+		/*width: 18rem;*/
+	}
+
+	.captcha-block {
+		flex-direction: column;
+	}
+
+	.captcha-container {
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	.captcha-help {
+		font-size: 0.9rem !important;
+		font-style: italic !important;
+		margin-right: auto;
+	}
+
+	.btn_block {
+		display: flex;
+		width: fit-content;
+		margin: -0.5rem 2rem 0 auto;
+	}
+
+	.login_btn {
+		background: none;
+		border: 1px solid var(--text-color);
+		border-radius: 5px;
+		padding: 0.3rem 0.8rem;
+		color: var(--text-color);
+		font: 500 1.2rem 'Ubuntu';
+	}
+
+	.another_action {
+		display: flex;
+		align-items: center;
+		height: fit-content;
+	}
+
+	.another_action p {
+		margin: 0;
+		padding: 0;
+		font: 1.2rem 'Ubuntu';
+	}
+
+	.another_action a {
+		text-decoration: none;
+		font: 500 1.2rem 'Ubuntu';
+		color: var(--text-color);
+		padding: 0.3rem 0.8rem;
+		border: 1px solid var(--text-color);
+		border-radius: 5px;
+		margin-left: 7px;
+		box-sizing: border-box;
+	}
+}
+
+@media (min-width: 700px) {
+	.login_box {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		width: fit-content;
+		height: fit-content;
+		margin: auto;
+		padding: 1.5rem;
+		border-radius: 5px;
+		background-color: var(--block-color);
+		transition: var(--tran-back);
+	}
+
+	.login_box h1 {
+		text-align: center;
+	}
+
+	.login_form {
+		display: flex;
+		flex-direction: column;
+		gap: 1.2rem;
+		width: inherit;
+	}
+
+	.input_block {
+		gap: 0.5rem;
+		display: flex;
+		align-items: center;
+		width: fit-content;
+	}
+
+	.login_form label {
+		font: 100 1.2rem 'Ubuntu';
+		color: var(--text-color);
+	}
+
+	.login_form input {
+		padding: 0.3rem 0.5rem;
+		border: 2px dashed var(--text-color);
+		border-radius: 5px;
+		background-color: var(--comment-element);
+		color: var(--text-color);
+		font: 1.2rem 'Ubuntu';
+		box-sizing: border-box;
+		/*width: 18rem;*/
+	}
+
+	.captcha-block {
+		flex-direction: column;
+	}
+
+	.captcha-container {
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	.captcha-help {
+		font-size: 0.9rem !important;
+		font-style: italic !important;
+		margin-right: auto;
+	}
+
+	.btn_block {
+		display: flex;
+		width: fit-content;
+		margin: -0.5rem 2rem 0 auto;
+	}
+
+	.login_btn {
+		background: none;
+		border: 1px solid var(--text-color);
+		border-radius: 5px;
+		padding: 0.3rem 0.8rem;
+		color: var(--text-color);
+		font: 500 1.2rem 'Ubuntu';
+	}
+
+	.another_action {
+		display: flex;
+		align-items: center;
+		height: fit-content;
+	}
+
+	.another_action p {
+		margin: 0;
+		padding: 0;
+		font: 1.2rem 'Ubuntu';
+	}
+
+	.another_action a {
+		text-decoration: none;
+		font: 500 1.2rem 'Ubuntu';
+		color: var(--text-color);
+		padding: 0.3rem 0.8rem;
+		border: 1px solid var(--text-color);
+		border-radius: 5px;
+		margin-left: 7px;
+		box-sizing: border-box;
+	}
+}

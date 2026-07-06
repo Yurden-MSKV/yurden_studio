@@ -63,8 +63,9 @@
 <body>
     {% block top_panel %}
         
-        <!-- NOTE: Landscape версия -->
+
         <main class="page_container">
+            <!-- NOTE: Landscape версия -->
             <div class="top_panel_container landscape">
                 <a class="site_name" href="{% url 'new-home' %}"><h1>Студия Юрия Московцева</h1></a>
                 <div class="top_buttons">
@@ -202,8 +203,8 @@
                         </div>
                     </div>
                     <div class="links_block">
-                        <a class="link" href="https://pay.cloudtips.ru/p/8e0b5d08"><h3>Поддержать</h3></a>
-                        <a class="link" href="{% url 'info' %}"><h3>Частые вопросы</h3></a>
+                        <a class="link" href="https://pay.cloudtips.ru/p/8e0b5d08"><img class="donate icon" src="{% static 'icons/ruble-sign-solid-full.svg' %}"><h3>Поддержать</h3></a>
+                        <a class="link" href="{% url 'info' %}"><img class="q_a_icon icon" src="{% static 'icons/circle-question-regular-full.svg' %}"><h3>Частые вопросы</h3></a>
                     </div>
                 </div>
                 <div class="shadow" id="shadow"></div>

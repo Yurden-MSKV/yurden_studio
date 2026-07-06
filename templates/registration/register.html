@@ -4,14 +4,10 @@
 <html>
 <head>
     <title>Регистрация</title>
+    <link rel="stylesheet" href="{% static 'main_section/css/new_login.css' %}">
 </head>
 <body>
 
-    {% if request.is_mobile %}
-        <link rel="stylesheet" href="{% static 'main_section/css/login-mobile.css' %}">
-    {% else %}
-        <link rel="stylesheet" href="{% static 'main_section/css/login.css' %}">
-    {% endif %}
     
     <div class="main_container">
         <div class="login_box">
