@@ -335,6 +335,11 @@
         max-width: 100%;
     }
 
+    .post_content a:link, .post_content a:visited {
+        text-decoration: underline;
+        text-decoration-style: dotted;
+    }
+
     .post_content p:last-child {
         margin-bottom: 0;
     }
