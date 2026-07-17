@@ -88,6 +88,7 @@
         flex-direction: column;
         /*max-height: 100%;*/
         gap: 0.6rem;
+        min-height: 15rem;
     }
 
     .message_block, .edit_comment textarea {
@@ -272,9 +273,10 @@
         display: flex;
         flex-direction: column;
         gap: 0.8rem;
-        width: 100%;
-        margin-top: 8%;
+        width: inherit;
+        margin-top: 5.5rem;
         height: fit-content;
+        position: absolute;
     }
 
     .post_container {
@@ -349,6 +351,7 @@
         flex-direction: column;
         /*max-height: 100%;*/
         gap: 0.6rem;
+        min-height: 25rem;
     }
 
     .message_block, .edit_comment textarea {
@@ -380,7 +383,7 @@
 
     .new_comment {
         background: var(--background-color);
-        padding-bottom: 0.5em;
+        padding-bottom: 0.9rem;
     }
 
     .send_block {

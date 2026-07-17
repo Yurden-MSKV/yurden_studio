@@ -27,13 +27,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = config('DEBUG', cast=bool, default=False)
-DEBUG = config('DEBUG')
+DEBUG = config('DEBUG', cast=bool, default=False)
+# DEBUG = config('DEBUG')
 
 CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', cast=lambda v: [s.strip() for s in v.split(',')])
 
-CSRF_COOKIE_SECURE = False
-SESSION_COOKIE_SECURE = False
+USE_HTTPS = os.environ.get('USE_HTTPS') == 'True'
+
+CSRF_COOKIE_SECURE = USE_HTTPS
+SESSION_COOKIE_SECURE = USE_HTTPS
 CSRF_COOKIE_DOMAIN = None
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
@@ -47,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'admin_auto_filters',
     'main_section',
     'manga_section',
     'post_section',

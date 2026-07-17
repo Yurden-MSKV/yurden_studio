@@ -10,6 +10,7 @@ class ChapterLike(models.Model):
     chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE,
                                 related_name='likes')
     is_like = models.BooleanField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     class Meta:
         unique_together = ('user', 'chapter')

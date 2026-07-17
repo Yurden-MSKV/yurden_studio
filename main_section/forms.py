@@ -21,19 +21,19 @@ class RegisterForm(UserCreationForm):
         })
     )
     password1 = forms.CharField(
-        validators=[MinLengthValidator(11, message='Пароль не короче 11 символов'),
-                    MaxLengthValidator(20, message='Пароль не длиннее 20 символов'),
+        validators=[MinLengthValidator(6, message='Пароль короче 6 символов'),
+                    MaxLengthValidator(20, message='Пароль длиннее 20 символов'),
             ProhibitNullCharactersValidator(
             message='Нулевые символы использовать нельзя'
         )],
-        widget=forms.PasswordInput(attrs={
+        widget=forms.PasswordInput(render_value=True, attrs={
             'class': 'form-control',
             'placeholder': 'Пароль'
         }),
         # help_text="Пароль должен содержать не менее 8 символов"
     )
     password2 = forms.CharField(
-        widget=forms.PasswordInput(attrs={
+        widget=forms.PasswordInput(render_value=True, attrs={
             'class': 'form-control',
             'placeholder': 'Подтверждение пароля'
         })
@@ -66,9 +66,9 @@ class RegisterForm(UserCreationForm):
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
         password2 = self.cleaned_data.get('password2')
-        if password2 != password1:
-            raise ValidationError("Пароли не совпадают")
-
+        if password1 and password2:
+            if password1 != password2:
+                raise ValidationError("Пароли не совпадают")
 
 
 
@@ -96,7 +96,6 @@ class LoginFormWithCaptcha(AuthenticationForm):
             )
         )
 
-        # Настраиваем виджеты полей
         self.fields['username'].widget.attrs.update({
             'class': 'form-control',
             # 'placeholder': 'Имя пользователя'
@@ -105,6 +104,7 @@ class LoginFormWithCaptcha(AuthenticationForm):
             'class': 'form-control',
             # 'placeholder': 'Пароль'
         })
+        self.fields['password'].widget.render_value = True
         self.fields['captcha'].widget.attrs.update({
             'class': 'form-control',
             # 'placeholder': 'Введите код с картинки'

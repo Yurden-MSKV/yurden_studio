@@ -32,3 +32,5 @@ class MessageFAQAdmin(admin.ModelAdmin):
 @admin.register(PostComment)
 class PostCommentAdmin(admin.ModelAdmin):
     list_display = ['post', 'author', 'text', 'created_at']
+    list_per_page = 50
+    readonly_fields = ['created_at']

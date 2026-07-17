@@ -33,12 +33,12 @@
                 
                 <div class="input_block">
                     <label for="id_username">Никнейм</label>
-                    {{ form.username }}
+                    <input type="text" name="username" class="form-control" id="id_username" value="{{ form.username.value|default_if_none:'' }}" required>
                 </div>
                 
                 <div class="input_block">
                     <label for="id_password">Пароль</label>
-                    {{ form.password }}
+                    <input type="password" name="password" class="form-control" id="id_password" value="{{ form.password.value|default_if_none:'' }}" required>
                 </div>
 
                <div class="input_block captcha-block">

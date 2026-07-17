@@ -8,8 +8,7 @@ body, html {
     padding: 0;
     font-family: 'Ubuntu';
     background: var(--background-color);
-    /*scrollbar-width: none;*/
-    /*overflow: hidden;*/
+    scrollbar-width: none;
 }
 
 /* MENTION: ИКОНКИ */
@@ -109,12 +108,13 @@ button {
     .profile_menu_mobile {
         display: flex;
         flex-direction: column;
-        gap: 1.2rem;
+        gap: 2rem;
         position: fixed;
         top: 3.8rem;
         right: 0;
         width: 80%;
-        height: fit-content;
+        /*height: fit-content;*/
+        min-height: 23.5rem;
         padding: 4% 0;
         background: var(--block-color);
         border-radius: 5px;
@@ -207,11 +207,11 @@ button {
     .theme-toggle, .reader-toggle, .reset_reader_mobile {
         background: var(--element-color);
         border-radius: 5px;
-        padding: 6px 10px;
+        padding: 6px 12px 6px 10px;
     }
 
     .theme-toggle {
-        padding: 2% 3% 2% 2% !important;
+        padding: 6px 12px 6px 10px !important;
     }
 
     .reader-toggle {
@@ -222,7 +222,7 @@ button {
     .links_block {
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 1.5rem;
         margin: 0 4%;
     }
 
@@ -231,6 +231,10 @@ button {
         /*padding-left: 10px;*/
         display: flex;
         gap: 2%
+    }
+
+    .link h3, .exit_mobile h3 {
+        text-decoration: underline dotted;
     }
 
     .page_container {
@@ -331,6 +335,9 @@ button {
         transform: scale(0.7);
         transform-origin: top right;
         z-index: 2;
+        width: fit-content;
+        height: fit-content;
+
     }
 
     .profile_menu.show {
@@ -341,6 +348,8 @@ button {
     .menu_item {
         display: flex;
         width: fit-content;
+        min-height: 3.6rem;
+        align-items: center;
     }
 
     .menu_item a, .menu_item button {
@@ -354,6 +363,7 @@ button {
 
     .menu_item a {
         display: flex;
+        min-width: 8.5rem;
     }
 
     .menu_item p {

@@ -162,40 +162,10 @@ class ChapterAdmin(admin.ModelAdmin):
 
     inlines = [ChapterImageInline]
 
-    # def response_change(self, request, obj):
-    #     """Обрабатываем массовую загрузку изображений"""
-    #     if 'upload_images' in request.POST:
-    #         # Обрабатываем загруженные файлы
-    #         files = request.FILES.getlist('images')
-    #         if files:
-    #             # Получаем следующий номер страницы
-    #             existing_pages = ChapterImage.objects.filter(chapter=obj)
-    #             if existing_pages.exists():
-    #                 next_page_number = existing_pages.aggregate(
-    #                     models.Max('page_number')
-    #                 )['page_number__max'] + 1
-    #             else:
-    #                 next_page_number = 1
-    #
-    #             # Сохраняем все файлы
-    #             success_count = 0
-    #             for i, file in enumerate(files):
-    #                 try:
-    #                     ChapterImage.objects.create(
-    #                         chapter=obj,
-    #                         page_number=next_page_number + i,
-    #                         page_image=file
-    #                     )
-    #                     success_count += 1
-    #                 except Exception as e:
-    #                     messages.error(request, f'Ошибка при загрузке файла {file.name}: {str(e)}')
-    #
-    #             if success_count > 0:
-    #                 messages.success(request, f'Успешно загружено {success_count} изображений')
-    #
-    #         return HttpResponseRedirect(request.path)
-    #
-    #     return super().response_change(request, obj)
+    class Media:
+        css = {
+            'all': ('css/chapter_bottom_bar.css',)
+        }
 
     def response_change(self, request, obj):
         """Обрабатываем массовую загрузку изображений"""
@@ -259,12 +229,20 @@ class ChapterAdmin(admin.ModelAdmin):
 
         # Или использовать action с подтверждением для всех записей
 
+    @admin.action(description="Удалить ВСЕ изображения у выбранных глав")
+    def delete_all_selected(self, request, queryset):
+        """Удалить все изображения для выделенных в списке глав"""
+        # queryset содержит все объекты Chapter, которые вы отметили галочкой
 
-    def delete_all_selected(self):
-        """Удалить все объекты модели"""
-        ChapterImage.objects.filter(chapter=self).delete()
+        # Оптимизированный запрос: удаляем все картинки, где глава входит в выбранный список
+        deleted_count, _ = ChapterImage.objects.filter(chapter__in=queryset).delete()
 
-    delete_all_selected.short_description = "Удалить ВСЕ записи"
+        # Опционально: выводим сообщение об успешном удалении
+        self.message_user(
+            request,
+            f"Успешно удалено {deleted_count} изображений для выбранных глав.",
+            messages.SUCCESS
+        )
 
 @admin.register(Staff)
 class StaffAdmin(admin.ModelAdmin):
@@ -272,4 +250,5 @@ class StaffAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['author', 'manga', 'chapter', 'page', 'text']
+    list_display = ['author', 'manga', 'chapter', 'page', 'created_at', 'text']
+    readonly_fields = ['created_at']
